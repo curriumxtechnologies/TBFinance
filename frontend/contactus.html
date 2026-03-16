@@ -1,0 +1,505 @@
+<!doctype html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+      name="viewport"
+    />
+    <title>Contact Us | THEBRAVE FINANCE</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="images/favicon-16x16.png"
+    />
+    <link rel="manifest" href="images/site.webmanifest" />
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1152d4",
+              "emerald-accent": "#10b981",
+              "background-light": "#f6f6f8",
+              "background-dark": "#101622",
+              "surface-dark": "#192233",
+              "border-dark": "#324467",
+            },
+            fontFamily: {
+              display: ["Manrope"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Manrope", sans-serif;
+      }
+      .glass-panel {
+        background: rgba(25, 34, 51, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(50, 68, 103, 0.5);
+      }
+      .lucide {
+        width: 1em;
+        height: 1em;
+        stroke-width: 1.5;
+        display: inline-block;
+        vertical-align: middle;
+        fill: none;
+      }
+      /* mobile menu styles */
+      .mobile-menu-open {
+        overflow: hidden;
+      }
+      #mobileNav {
+        transition:
+          transform 0.3s ease-in-out,
+          opacity 0.2s,
+          visibility 0.2s;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased font-display min-h-screen flex flex-col"
+  >
+    <!-- Top Navigation Bar with mobile menu -->
+    <header
+      class="sticky top-0 z-50 w-full border-b border-border-dark bg-background-dark/80 backdrop-blur-md"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <!-- logo -->
+          <div class="flex items-center gap-3">
+            <img
+              src="images/TBF-LOGO.png"
+              alt="The Brave Finance Logo"
+              class="w-8 h-8 object-contain"
+            />
+            <h2
+              class="text-white text-xl font-extrabold tracking-tight whitespace-nowrap"
+            >
+              THEBRAVE <span class="text-primary">FINANCE</span>
+            </h2>
+          </div>
+
+          <!-- desktop navigation (hidden on mobile) -->
+          <nav class="hidden md:flex items-center gap-8">
+            <a
+              class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+              href="index.html"
+              >Home</a
+            >
+            <a
+              class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+              href="aboutus.html"
+              >About</a
+            >
+            <a
+              class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+              href="services.html"
+              >Services</a
+            >
+            <a
+              class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+              href="vip.html"
+              >VIP Signals</a
+            >
+            <a
+              class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+              href="recovery.html"
+              >Recovery</a
+            >
+            <a
+              class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+              href="contactus.html"
+              >Contact</a
+            >
+          </nav>
+
+          <!-- right side: login/register + hamburger (mobile) -->
+          <div class="flex items-center gap-2 sm:gap-3">
+            <!-- desktop login/register (hidden on xs, visible sm) -->
+            <a
+              href="login.html"
+              class="hidden sm:flex px-4 py-2 text-sm font-bold text-white bg-surface-dark hover:bg-slate-700 rounded-lg transition-all items-center justify-center"
+              >Login</a
+            >
+            <a
+              href="register.html"
+              class="hidden sm:flex px-5 py-2 text-sm font-bold text-white bg-primary hover:bg-blue-700 rounded-lg transition-all shadow-lg shadow-primary/20 items-center justify-center"
+              >Register</a
+            >
+
+            <!-- mobile hamburger button -->
+            <button
+              id="menuToggle"
+              class="block md:hidden p-2 text-slate-300 hover:text-white focus:outline-none"
+              aria-label="menu"
+            >
+              <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- mobile menu drawer (hidden by default) -->
+      <div
+        id="mobileNav"
+        class="absolute inset-x-0 top-16 bg-surface-dark border-b border-border-dark shadow-xl md:hidden invisible opacity-0 -translate-y-full transition-all duration-300 ease-in-out z-50"
+      >
+        <nav class="flex flex-col px-6 py-6 space-y-4 text-base">
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="index.html"
+            >Home</a
+          >
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="aboutus.html"
+            >About</a
+          >
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="services.html"
+            >Services</a
+          >
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="vip.html"
+            >VIP Signals</a
+          >
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="recovery.html"
+            >Recovery</a
+          >
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="contactus.html"
+            >Contact</a
+          >
+          <div class="flex flex-col sm:hidden pt-4 gap-3">
+            <a
+              href="login.html"
+              class="w-full text-center px-4 py-3 text-sm font-bold text-white bg-surface-dark border border-border-dark rounded-lg"
+              >Login</a
+            >
+            <a
+              href="register.html"
+              class="w-full text-center px-5 py-3 text-sm font-bold text-white bg-primary rounded-lg shadow-lg shadow-primary/20"
+              >Register</a
+            >
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main class="flex-grow">
+      <!-- Hero Section -->
+      <section class="relative py-16 sm:py-20 px-6">
+        <div class="absolute inset-0 z-0 overflow-hidden">
+          <div
+            class="absolute -top-24 -left-24 h-96 w-96 rounded-full bg-primary/10 blur-3xl"
+          ></div>
+          <div
+            class="absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-primary/10 blur-3xl"
+          ></div>
+        </div>
+        <div class="relative z-10 mx-auto max-w-5xl text-center">
+          <span
+            class="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-primary mb-6"
+            >Support Center</span
+          >
+          <h1
+            class="mb-6 text-3xl sm:text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white"
+          >
+            Get in Touch with Our Experts
+          </h1>
+          <p
+            class="mx-auto max-w-2xl text-base sm:text-lg text-slate-600 dark:text-slate-400"
+          >
+            We're here to help you navigate your financial future with
+            integrated solutions and 24/7 dedicated support.
+          </p>
+        </div>
+      </section>
+
+      <!-- Main Content Grid -->
+      <section
+        class="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 pb-24 lg:grid-cols-2"
+      >
+        <!-- Left Column: Contact Form -->
+        <div
+          class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 p-6 sm:p-8 shadow-sm backdrop-blur-sm"
+        >
+          <h3 class="text-xl sm:text-2xl font-bold mb-6 sm:mb-8">
+            Send us a message
+          </h3>
+          <form class="space-y-6">
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div class="space-y-2">
+                <label
+                  class="text-sm font-semibold text-slate-700 dark:text-slate-300"
+                  >Full Name</label
+                >
+                <input
+                  class="w-full rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                  placeholder="John Doe"
+                  type="text"
+                />
+              </div>
+              <div class="space-y-2">
+                <label
+                  class="text-sm font-semibold text-slate-700 dark:text-slate-300"
+                  >Email Address</label
+                >
+                <input
+                  class="w-full rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                  placeholder="john@example.com"
+                  type="email"
+                />
+              </div>
+            </div>
+            <div class="space-y-2">
+              <label
+                class="text-sm font-semibold text-slate-700 dark:text-slate-300"
+                >Subject</label
+              >
+              <select
+                class="w-full rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+              >
+                <option>General Inquiry</option>
+                <option>Technical Support</option>
+                <option>Business Partnerships</option>
+                <option>Account Management</option>
+              </select>
+            </div>
+            <div class="space-y-2">
+              <label
+                class="text-sm font-semibold text-slate-700 dark:text-slate-300"
+                >Message</label
+              >
+              <textarea
+                class="w-full rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                placeholder="How can we help you today?"
+                rows="5"
+              ></textarea>
+            </div>
+            <button
+              class="w-full rounded-lg bg-primary py-4 text-sm font-bold text-white transition-all hover:bg-primary/90"
+              type="submit"
+            >
+              Send Message
+            </button>
+          </form>
+        </div>
+
+        <!-- Right Column: Support Info & FAQ -->
+        <div class="space-y-8">
+          <!-- Support Channels -->
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div
+              class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6"
+            >
+              <i data-lucide="mail" class="text-primary w-8 h-8 mb-4"></i>
+              <h4 class="font-bold text-lg mb-2">Email Support</h4>
+              <p class="text-sm text-slate-500 mb-4">
+                Expect a response within 24 hours.
+              </p>
+              <a
+                class="text-primary font-semibold hover:underline"
+                href="mailto:support@thebrave.com"
+                >support@thebrave.com</a
+              >
+            </div>
+
+            <div
+              class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6"
+            >
+              <i
+                data-lucide="message-circle"
+                class="text-green-500 w-8 h-8 mb-4"
+              ></i>
+              <h4 class="font-bold text-lg mb-2">WhatsApp Us</h4>
+              <p class="text-sm text-slate-500 mb-4">
+                Live chat with our agents.
+              </p>
+              <button
+                class="flex items-center gap-2 rounded-lg bg-green-500/10 px-4 py-2 text-sm font-bold text-green-500 transition-colors hover:bg-green-500 hover:text-white"
+              >
+                Chat Now
+              </button>
+            </div>
+          </div>
+
+          <!-- FAQ Preview -->
+          <div
+            class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8"
+          >
+            <h3 class="text-lg sm:text-xl font-bold mb-6">
+              Frequently Asked Questions
+            </h3>
+            <div class="space-y-4">
+              <div
+                class="group cursor-pointer border-b border-slate-100 dark:border-slate-800 pb-4"
+              >
+                <div class="flex items-center justify-between">
+                  <p class="font-medium">How do I verify my account?</p>
+                  <i
+                    data-lucide="chevron-down"
+                    class="text-slate-400 group-hover:text-primary w-5 h-5 transition-colors"
+                  ></i>
+                </div>
+              </div>
+              <div
+                class="group cursor-pointer border-b border-slate-100 dark:border-slate-800 pb-4"
+              >
+                <div class="flex items-center justify-between">
+                  <p class="font-medium">What are the transaction limits?</p>
+                  <i
+                    data-lucide="chevron-down"
+                    class="text-slate-400 group-hover:text-primary w-5 h-5 transition-colors"
+                  ></i>
+                </div>
+              </div>
+              <div
+                class="group cursor-pointer border-b border-slate-100 dark:border-slate-800 pb-4"
+              >
+                <div class="flex items-center justify-between">
+                  <p class="font-medium">Is my data secure with THEBRAVE?</p>
+                  <i
+                    data-lucide="chevron-down"
+                    class="text-slate-400 group-hover:text-primary w-5 h-5 transition-colors"
+                  ></i>
+                </div>
+              </div>
+            </div>
+            <button class="mt-6 text-sm font-bold text-primary hover:underline">
+              View all FAQs →
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-background-dark border-t border-border-dark pt-16 pb-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-16"
+        >
+          <div class="col-span-2 space-y-6">
+            <div class="flex items-center gap-3">
+              <i data-lucide="shield-heart" class="text-primary w-8 h-8"></i>
+              <h2 class="text-white text-xl font-extrabold tracking-tight">
+                THEBRAVE FINANCE
+              </h2>
+            </div>
+            <p class="text-slate-500 text-sm max-w-sm leading-relaxed">
+              Forging trust in digital finance through transparency, security,
+              and world-class financial expertise. Your bridge to global
+              markets.
+            </p>
+            <div class="flex gap-4">
+              <a
+                class="w-10 h-10 rounded-full bg-surface-dark flex items-center justify-center text-slate-400 hover:text-primary transition-colors border border-border-dark"
+                href="#"
+                ><i data-lucide="globe" class="w-5 h-5"></i
+              ></a>
+              <a
+                class="w-10 h-10 rounded-full bg-surface-dark flex items-center justify-center text-slate-400 hover:text-primary transition-colors border border-border-dark"
+                href="#"
+                ><i data-lucide="share-2" class="w-5 h-5"></i
+              ></a>
+              <a
+                class="w-10 h-10 rounded-full bg-surface-dark flex items-center justify-center text-slate-400 hover:text-primary transition-colors border border-border-dark"
+                href="#"
+                ><i data-lucide="mail" class="w-5 h-5"></i
+              ></a>
+            </div>
+          </div>
+          <div>
+            <h6 class="text-white font-bold mb-6">Company</h6>
+            <ul class="space-y-4 text-sm text-slate-500">
+              <li>
+                <a
+                  class="hover:text-primary transition-colors"
+                  href="aboutus.html"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a
+                  class="hover:text-primary transition-colors"
+                  href="privacy.html"
+                  >Privacy Policy</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="t&c.html"
+                  >Terms of Service</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h6 class="text-white font-bold mb-6">Support</h6>
+            <ul class="space-y-4 text-sm text-slate-500">
+              <li>
+                <a
+                  class="hover:text-primary transition-colors"
+                  href="contactus.html"
+                  >Contact Support</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="pt-8 border-t border-border-dark text-center">
+          <p class="text-slate-500 text-sm mt-8">
+            © 2000 TheBrave Finance Integrated Services. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/menu.js"></script>
+
+    <!-- Final Lucide icons call -->
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

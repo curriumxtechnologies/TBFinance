@@ -1,0 +1,744 @@
+<!doctype html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+      name="viewport"
+    />
+    <title>About Us | THEBRAVE FINANCE</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="images/favicon-16x16.png"
+    />
+    <link rel="manifest" href="images/site.webmanifest" />
+    <!-- Lucide Icons (self-hosted via CDN sprite) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1152d4",
+              accent: "#10b981" /* Emerald accent as requested */,
+              "background-light": "#f6f6f8",
+              "background-dark": "#101622",
+              "surface-dark": "#192233",
+              "border-dark": "#324467",
+            },
+            fontFamily: {
+              display: ["Manrope", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Manrope", sans-serif;
+      }
+      .emerald-glow {
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
+      }
+      /* mobile menu styles */
+      .mobile-menu-open {
+        overflow: hidden;
+      }
+      #mobileNav {
+        transition:
+          transform 0.3s ease-in-out,
+          opacity 0.2s,
+          visibility 0.2s;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased"
+  >
+    <!-- Top Navigation Bar (mobile‑adapted) -->
+    <header
+      class="sticky top-0 z-50 w-full border-b border-border-dark bg-background-dark/80 backdrop-blur-md"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <!-- logo -->
+          <div class="flex items-center gap-3">
+            <img
+              src="images/TBF-LOGO.png"
+              alt="The Brave Finance Logo"
+              class="w-8 h-8 object-contain"
+            />
+            <h2
+              class="text-white text-xl font-extrabold tracking-tight whitespace-nowrap"
+            >
+              THEBRAVE <span class="text-primary">FINANCE</span>
+            </h2>
+          </div>
+
+          <!-- desktop navigation (hidden on mobile) -->
+          <nav class="hidden md:flex items-center gap-8">
+            <a
+              class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+              href="index.html"
+              >Home</a
+            >
+            <a
+              class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+              href="aboutus.html"
+              >About</a
+            >
+            <a
+              class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+              href="services.html"
+              >Services</a
+            >
+            <a
+              class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+              href="vip.html"
+              >VIP Signals</a
+            >
+            <a
+              class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+              href="recovery.html"
+              >Recovery</a
+            >
+            <a
+              class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+              href="contactus.html"
+              >Contact</a
+            >
+          </nav>
+
+          <!-- right side: login/register + hamburger (mobile) -->
+          <div class="flex items-center gap-2 sm:gap-3">
+            <!-- desktop login/register (hidden on xs, visible sm) -->
+            <a
+              href="login.html"
+              class="hidden sm:flex px-4 py-2 text-sm font-bold text-white bg-surface-dark hover:bg-slate-700 rounded-lg transition-all items-center justify-center"
+              >Login</a
+            >
+            <a
+              href="register.html"
+              class="hidden sm:flex px-5 py-2 text-sm font-bold text-white bg-primary hover:bg-blue-700 rounded-lg transition-all shadow-lg shadow-primary/20 items-center justify-center"
+              >Register</a
+            >
+
+            <!-- mobile hamburger button -->
+            <button
+              id="menuToggle"
+              class="block md:hidden p-2 text-slate-300 hover:text-white focus:outline-none"
+              aria-label="menu"
+            >
+              <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- mobile menu drawer (hidden by default) -->
+      <div
+        id="mobileNav"
+        class="absolute inset-x-0 top-16 bg-surface-dark border-b border-border-dark shadow-xl md:hidden invisible opacity-0 -translate-y-full transition-all duration-300 ease-in-out z-50"
+      >
+        <nav class="flex flex-col px-6 py-6 space-y-4 text-base">
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="index.html"
+            >Home</a
+          >
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="aboutus.html"
+            >About</a
+          >
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="services.html"
+            >Services</a
+          >
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="vip.html"
+            >VIP Signals</a
+          >
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="recovery.html"
+            >Recovery</a
+          >
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="contactus.html"
+            >Contact</a
+          >
+          <div class="flex flex-col sm:hidden pt-4 gap-3">
+            <a
+              href="login.html"
+              class="w-full text-center px-4 py-3 text-sm font-bold text-white bg-surface-dark border border-border-dark rounded-lg"
+              >Login</a
+            >
+            <a
+              href="register.html"
+              class="w-full text-center px-5 py-3 text-sm font-bold text-white bg-primary rounded-lg shadow-lg shadow-primary/20"
+              >Register</a
+            >
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <!-- Hero Section -->
+      <section class="relative py-20 overflow-hidden">
+        <div
+          class="absolute inset-0 bg-gradient-to-br from-background-dark via-[#1a2333] to-background-dark -z-10"
+        ></div>
+        <div
+          class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none"
+          style="
+            background-image: radial-gradient(
+              circle at 2px 2px,
+              #10b981 1px,
+              transparent 0
+            );
+            background-size: 40px 40px;
+          "
+        ></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex flex-col lg:flex-row items-center gap-12">
+            <div class="lg:w-1/2 space-y-6">
+              <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-bold uppercase tracking-widest"
+              >
+                <span class="relative flex h-2 w-2">
+                  <span
+                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"
+                  ></span>
+                  <span
+                    class="relative inline-flex rounded-full h-2 w-2 bg-accent"
+                  ></span>
+                </span>
+                Legacy of Excellence
+              </div>
+              <h1
+                class="text-4xl lg:text-6xl font-black text-white leading-tight"
+              >
+                Redefining the
+                <span
+                  class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent"
+                  >Financial Landscape</span
+                >
+              </h1>
+              <p class="text-slate-400 text-lg max-w-xl">
+                THEBRAVE FINANCE is a premier fintech leader providing
+                integrated financial solutions with precision, integrity, and
+                institutional-grade expertise.
+              </p>
+              <div class="flex items-center gap-4 pt-4">
+                <div class="flex flex-col">
+                  <span class="text-3xl font-bold text-white">$4.2B+</span>
+                  <span class="text-xs text-slate-500 uppercase font-semibold"
+                    >Assets Managed</span
+                  >
+                </div>
+                <div class="h-10 w-px bg-slate-800 mx-4"></div>
+                <div class="flex flex-col">
+                  <span class="text-3xl font-bold text-white">25+</span>
+                  <span class="text-xs text-slate-500 uppercase font-semibold"
+                    >Global Markets</span
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="lg:w-1/2 relative">
+              <div
+                class="rounded-2xl overflow-hidden shadow-2xl border border-slate-800 relative z-10"
+              >
+                <img
+                  alt="Modern skyscraper architectural detail"
+                  class="w-full h-full object-cover aspect-video lg:aspect-square"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9548reVwY84fRhHtmeb7RodV_umlJsL9xEl0GptmoXrsvr4-NUek0G-jParztAVs7Ze43bHh6SMEoCKgK7tW84Bz8AF7dq5jrXlMW4pEJ6id9PIMb9d718bIRj39MyGhk2DxNbjcz5GGrznEhOhznNf3IqqMrqiLHhv54oY2lJ2_IJNQiitOMuum6GUQEnCEs-nGTwMKoErm49RBFDrglTxBA_E3V186dW1uIL_PK5XA2teQBqX8m2OGukAHt1kaT9i9KgYT-8NE"
+                />
+              </div>
+              <div
+                class="absolute -bottom-6 -right-6 w-64 h-64 bg-primary/20 rounded-full blur-3xl -z-0"
+              ></div>
+              <div
+                class="absolute -top-6 -left-6 w-48 h-48 bg-accent/10 rounded-full blur-3xl -z-0"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Company Introduction -->
+      <section class="py-24 bg-slate-50 dark:bg-background-dark/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="order-2 lg:order-1">
+              <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-4 pt-8">
+                  <div
+                    class="h-48 rounded-xl bg-slate-200 dark:bg-slate-800 flex items-center justify-center p-4"
+                  >
+                    <img
+                      alt="Professional team meeting"
+                      class="w-full h-full object-cover rounded-lg"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5jiPaYvrHDZi0Gn-VRDlZNQC73AyToKGHw8ul-LF5_1fqjJc2D0KtflxflDqgPZC6CRFyXxGUrJfDSwungUx-wF8hH6FRPqVHx53RnR1SFTpc-_0_D4p86DH5uZaMsw4AXGujkTtt2-om89LLuvF9qyB5WjzqWaizGiqJWgx4QUSZVzbblIbcm4TWV2-KeNCHGJ6MHGCWz0a7bjJz3ubwHDvVTxn1OzwmidxsB4Dq3pbVR3otSdYwrlDiRjA7WV4-z_FDkJbtJ_Y"
+                    />
+                  </div>
+                  <div
+                    class="h-64 rounded-xl bg-slate-200 dark:bg-slate-800 overflow-hidden"
+                  >
+                    <img
+                      alt="Corporate boardroom"
+                      class="w-full h-full object-cover"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUhHAXUacq80RO20PdmNJ6Z7ncFrnHypVD7Lr_aRfvjzgIY6-21z081Wke1VRBabaDj9YXKKR8XJEqg2VmhXSas3nxHx2FwLyZYiGCfzzSKPsSXkyUzSZ0cIoWTWLpLG4QDhDJbfumXWp2GD3AsTfH6TByX7w5Y6dNeJrdCyMG6ydHIaYfCoqwQd68ROHMgFc4gAFA-gbLb92HG_2UN1ZthTei17dJ0eBXZUdyCMh8yZ6my6i6X2jyHh-atk2ObvhdymmKHbR9NR4"
+                    />
+                  </div>
+                </div>
+                <div class="space-y-4">
+                  <div
+                    class="h-64 rounded-xl bg-slate-200 dark:bg-slate-800 overflow-hidden"
+                  >
+                    <img
+                      alt="Financial data analytics"
+                      class="w-full h-full object-cover"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5LMD3R836SM8SUH_8_ZL8XGVuAQ8cRgmMxeOfZ5VkgwdLelYawEHzPGBNoPPMqEmMCKO_AFvU2FXCYtfG8NmX6xJqTeJ1vaok2H2XQSh0CYaAk8BMYYOTuDOuMOCZM26h0xZ2j6fvafQEG9GiGLEmx2HJoh0VWE4mOPTUkgUlGQ6U0EaEDQ_sKPZ_ytAxYFMznTy4O00DKjrqcSssWn7vXyYZ5eoiLMhpFlrFIHSfAZIO8z4XIFdScKUHRRIglKlBJfiPDeY10FU"
+                    />
+                  </div>
+                  <div
+                    class="h-48 rounded-xl bg-slate-200 dark:bg-slate-800 flex items-center justify-center p-4"
+                  >
+                    <img
+                      alt="Business handshake"
+                      class="w-full h-full object-cover rounded-lg"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCEYSbNM75FiAhQCzX6o21fVQVolQkVUdVbtfFA9b5QXb1I2Re8Sb8ObBEqD9RgFQY_9ZUdj2l62Ijkg0UHwd1NpH-FFoHXfGsvFNaURSlakX1w5fPEXmSBAuFEhfU69Zk9KLt6vGKD6eV09N9Fx8CbKvn5UlqUFVLxkAiTlHMKjDQVKtOtbDTzbfJLOKcdQ2GT0BsUI3o5Zcm3eOBB9hhHoeWgYhIhOYGA1CwtpYejmPPRayKTJlPjVvhGEvi51jXX44EmNY0yd4"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="order-1 lg:order-2 space-y-8">
+              <div>
+                <h2
+                  class="text-primary font-bold uppercase tracking-widest text-sm mb-2"
+                >
+                  Our Heritage
+                </h2>
+                <h3
+                  class="text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white leading-tight"
+                >
+                  Decades of Expertise in Global Markets
+                </h3>
+              </div>
+              <p
+                class="text-slate-600 dark:text-slate-400 leading-relaxed text-lg"
+              >
+                Founded on the principles of trust and technological innovation,
+                THEBRAVE FINANCE has evolved from a boutique advisory firm into
+                a global integrated services leader. We blend traditional
+                financial wisdom with cutting-edge fintech solutions to deliver
+                unparalleled value to our institutional and private clients.
+              </p>
+              <ul class="space-y-4">
+                <li class="flex items-start gap-3">
+                  <span class="material-symbols-outlined text-accent"
+                    >verified</span
+                  >
+                  <span
+                    class="text-slate-700 dark:text-slate-300 font-medium italic"
+                    >"Precision in execution, integrity in every
+                    interaction."</span
+                  >
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="material-symbols-outlined text-accent"
+                    >verified</span
+                  >
+                  <span
+                    class="text-slate-700 dark:text-slate-300 font-medium italic"
+                    >"Leveraging AI to navigate complex market
+                    volatilities."</span
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mission & Vision -->
+      <section class="py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid md:grid-cols-2 gap-8">
+            <div
+              class="p-10 rounded-2xl bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 relative overflow-hidden group"
+            >
+              <span class="material-symbols-outlined text-5xl text-primary mb-6"
+                >flag</span
+              >
+              <h4 class="text-2xl font-bold text-white mb-4">Our Mission</h4>
+              <p class="text-slate-400 leading-relaxed">
+                To empower our clients through innovative financial technologies
+                and personalized strategic guidance, ensuring sustainable growth
+                and wealth preservation in an ever-changing global economy.
+              </p>
+              <div
+                class="absolute -bottom-10 -right-10 opacity-5 group-hover:opacity-10 transition-opacity"
+              >
+                <span
+                  class="material-symbols-outlined text-[150px] text-primary"
+                  >flag</span
+                >
+              </div>
+            </div>
+            <div
+              class="p-10 rounded-2xl bg-gradient-to-br from-accent/10 to-transparent border border-accent/20 relative overflow-hidden group"
+            >
+              <span class="material-symbols-outlined text-5xl text-accent mb-6"
+                >visibility</span
+              >
+              <h4 class="text-2xl font-bold text-white mb-4">Our Vision</h4>
+              <p class="text-slate-400 leading-relaxed">
+                To be the world's most trusted partner in fintech-driven
+                financial services, setting the gold standard for transparency,
+                efficiency, and client-centric innovation.
+              </p>
+              <div
+                class="absolute -bottom-10 -right-10 opacity-5 group-hover:opacity-10 transition-opacity"
+              >
+                <span class="material-symbols-outlined text-[150px] text-accent"
+                  >visibility</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Experience in Financial Markets -->
+      <section class="py-24 bg-background-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-16">
+            <h2
+              class="text-primary font-bold uppercase tracking-widest text-sm mb-2"
+            >
+              Market Presence
+            </h2>
+            <h3 class="text-4xl font-extrabold text-white">
+              Global Reach. Local Insight.
+            </h3>
+          </div>
+          <div class="grid md:grid-cols-3 gap-8">
+            <div
+              class="bg-slate-900/50 p-8 rounded-xl border border-slate-800 hover:border-accent/50 transition-all group"
+            >
+              <div
+                class="size-12 rounded-lg bg-accent/10 flex items-center justify-center text-accent mb-6 group-hover:bg-accent group-hover:text-white transition-all"
+              >
+                <span class="material-symbols-outlined">trending_up</span>
+              </div>
+              <h5 class="text-xl font-bold text-white mb-3">
+                Wealth Management
+              </h5>
+              <p class="text-slate-400 text-sm leading-relaxed">
+                Bespoke investment strategies utilizing quant-driven models and
+                real-time market sentiment analysis.
+              </p>
+            </div>
+            <div
+              class="bg-slate-900/50 p-8 rounded-xl border border-slate-800 hover:border-primary/50 transition-all group"
+            >
+              <div
+                class="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:bg-primary group-hover:text-white transition-all"
+              >
+                <span class="material-symbols-outlined">account_balance</span>
+              </div>
+              <h5 class="text-xl font-bold text-white mb-3">
+                Institutional Banking
+              </h5>
+              <p class="text-slate-400 text-sm leading-relaxed">
+                Full-spectrum liquidity management and structural finance for
+                corporations and government entities.
+              </p>
+            </div>
+            <div
+              class="bg-slate-900/50 p-8 rounded-xl border border-slate-800 hover:border-accent/50 transition-all group"
+            >
+              <div
+                class="size-12 rounded-lg bg-accent/10 flex items-center justify-center text-accent mb-6 group-hover:bg-accent group-hover:text-white transition-all"
+              >
+                <span class="material-symbols-outlined">currency_bitcoin</span>
+              </div>
+              <h5 class="text-xl font-bold text-white mb-3">Digital Assets</h5>
+              <p class="text-slate-400 text-sm leading-relaxed">
+                Secure, compliant gateways to the decentralized economy with
+                institutional-grade custody solutions.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Why Clients Trust Us -->
+      <section class="py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="bg-primary rounded-3xl overflow-hidden relative">
+            <div
+              class="absolute inset-0 opacity-10"
+              style="
+                background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDtnSCf4Jj159fb274yDpJ6UyZtNpLhJFE1dKszepUzNWMloMyyQjR6iW0Xw-dYHfHkKiwuqH24yopOhqX2zVtxN1WcVbOYeyxD4QtHIoTxKierFOizsvhTiX9GGcj1OnRI1ktKX4f70VOgghewmQJCzzn7LV0hKTqZH2duhquTIHMvZHZPQLrexSW-Zgam6E70lHoRQtyZcY9wJmZQ9DlP3e9KOVnKusx0rNc_r5WLAalUEgRrdOWWOwzLUfx0P_BKD95byeapjqE&quot;);
+              "
+            ></div>
+            <div class="grid lg:grid-cols-2 gap-0">
+              <div
+                class="p-12 lg:p-20 flex flex-col justify-center space-y-8 z-10"
+              >
+                <h3 class="text-3xl lg:text-4xl font-extrabold text-white">
+                  Why Clients Trust Us
+                </h3>
+                <div class="space-y-6">
+                  <div class="flex gap-4">
+                    <div
+                      class="size-10 shrink-0 rounded-full bg-white/20 flex items-center justify-center"
+                    >
+                      <span class="material-symbols-outlined text-white"
+                        >shield</span
+                      >
+                    </div>
+                    <div>
+                      <h6 class="text-white font-bold text-lg">
+                        Uncompromising Security
+                      </h6>
+                      <p class="text-white/70 text-sm">
+                        Military-grade encryption and multi-layer verification
+                        protocols for all transactions.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex gap-4">
+                    <div
+                      class="size-10 shrink-0 rounded-full bg-white/20 flex items-center justify-center"
+                    >
+                      <span class="material-symbols-outlined text-white"
+                        >bolt</span
+                      >
+                    </div>
+                    <div>
+                      <h6 class="text-white font-bold text-lg">
+                        Real-time Analytics
+                      </h6>
+                      <p class="text-white/70 text-sm">
+                        Dynamic dashboarding with instantaneous data refreshing
+                        from 200+ sources.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex gap-4">
+                    <div
+                      class="size-10 shrink-0 rounded-full bg-white/20 flex items-center justify-center"
+                    >
+                      <span class="material-symbols-outlined text-white"
+                        >support_agent</span
+                      >
+                    </div>
+                    <div>
+                      <h6 class="text-white font-bold text-lg">
+                        Elite Support
+                      </h6>
+                      <p class="text-white/70 text-sm">
+                        Dedicated account managers available 24/7 for our
+                        premium clientele.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="hidden lg:block relative">
+                <img
+                  alt="High-tech interface"
+                  class="absolute inset-0 h-full w-full object-cover"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyce1oXIiyx5FbT_IuK_MGFPsoEEhWkYqJv06J1-gQV2NUx-Wu4mWXJJpE5HPB-5GnaL86F0hpjTzS8NUbP2Yo9I-X1UfYnWjT5BCwSYLdGNg4cw9pRRyug_xH_9zVg-nFhX8eecKMewzdPLGb6fDHt4myrhRA2j_aUbjD7iBMSgU3PnmlQOylhpNBH0lxOzVqUjja5b36k5kiFPzwc8g5J5RfEtam1TwaWRVuutQlYXiejR_KNMpLK7SaRNbBIe98RKipZFkQOCs"
+                />
+                <div
+                  class="absolute inset-0 bg-primary/40 backdrop-blur-sm"
+                ></div>
+                <div
+                  class="absolute inset-0 flex items-center justify-center p-12"
+                >
+                  <div
+                    class="bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-2xl text-white text-center"
+                  >
+                    <p class="text-2xl font-light italic mb-4">
+                      "THEBRAVE provided the stability and innovation we needed
+                      to expand our portfolio across Asian markets."
+                    </p>
+                    <span class="font-bold text-accent"
+                      >— Marcus Chen, CEO of Horizon Global</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section class="py-20 text-center">
+        <div class="max-w-3xl mx-auto px-4">
+          <h3 class="text-3xl font-bold mb-6">
+            Ready to secure your financial future?
+          </h3>
+          <p class="text-slate-400 mb-10">
+            Join thousands of institutional investors and private clients who
+            trust THEBRAVE FINANCE for their wealth management needs.
+          </p>
+          <div
+            class="flex flex-col sm:flex-row items-center justify-center gap-4"
+          >
+            <a
+              href="register.html"
+              class="w-full sm:w-auto bg-accent text-white px-8 py-4 rounded-xl font-bold hover:bg-accent/90 transition-all text-lg inline-block text-center"
+              >Open an Account</a
+            >
+            <a
+              href="https://wa.me/234XXXXXXXXXX"
+              class="w-full sm:w-auto bg-slate-800 text-white px-8 py-4 rounded-xl font-bold hover:bg-slate-700 transition-all text-lg inline-block text-center"
+              >Contact Advisory</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-background-dark border-t border-border-dark pt-16 pb-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-16"
+        >
+          <div class="col-span-2 space-y-6">
+            <div class="flex items-center gap-3">
+              <i data-lucide="shield-heart" class="text-primary w-8 h-8"></i>
+              <h2 class="text-white text-xl font-extrabold tracking-tight">
+                THEBRAVE FINANCE
+              </h2>
+            </div>
+            <p class="text-slate-500 text-sm max-w-sm leading-relaxed">
+              Forging trust in digital finance through transparency, security,
+              and world-class financial expertise. Your bridge to global
+              markets.
+            </p>
+            <div class="flex gap-4">
+              <a
+                class="w-10 h-10 rounded-full bg-surface-dark flex items-center justify-center text-slate-400 hover:text-primary transition-colors border border-border-dark"
+                href="#"
+                ><i data-lucide="globe" class="w-5 h-5"></i
+              ></a>
+              <a
+                class="w-10 h-10 rounded-full bg-surface-dark flex items-center justify-center text-slate-400 hover:text-primary transition-colors border border-border-dark"
+                href="#"
+                ><i data-lucide="share-2" class="w-5 h-5"></i
+              ></a>
+              <a
+                class="w-10 h-10 rounded-full bg-surface-dark flex items-center justify-center text-slate-400 hover:text-primary transition-colors border border-border-dark"
+                href="#"
+                ><i data-lucide="mail" class="w-5 h-5"></i
+              ></a>
+            </div>
+          </div>
+          <div>
+            <h6 class="text-white font-bold mb-6">Company</h6>
+            <ul class="space-y-4 text-sm text-slate-500">
+              <li>
+                <a
+                  class="hover:text-primary transition-colors"
+                  href="aboutus.html"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a
+                  class="hover:text-primary transition-colors"
+                  href="privacy.html"
+                  >Privacy Policy</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="t&c.html"
+                  >Terms of Service</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h6 class="text-white font-bold mb-6">Support</h6>
+            <ul class="space-y-4 text-sm text-slate-500">
+              <li>
+                <a
+                  class="hover:text-primary transition-colors"
+                  href="contactus.html"
+                  >Contact Support</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="pt-8 border-t border-border-dark text-center">
+          <p class="text-slate-500 text-sm mt-8">
+            © 2000 TheBrave Finance Integrated Services. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/menu.js"></script>
+
+    <!-- Final Lucide icons call -->
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

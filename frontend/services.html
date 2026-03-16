@@ -1,0 +1,612 @@
+<!doctype html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+      name="viewport"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="images/favicon-16x16.png"
+    />
+    <link rel="manifest" href="images/site.webmanifest" />
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1152d4",
+              "emerald-accent": "#10b981",
+              "background-light": "#f6f6f8",
+              "background-dark": "#101622",
+              "surface-dark": "#192233",
+              "border-dark": "#324467",
+            },
+            fontFamily: {
+              display: ["Manrope", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Manrope", sans-serif;
+      }
+      .glass-panel {
+        background: rgba(25, 34, 51, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(50, 68, 103, 0.5);
+      }
+      .lucide {
+        width: 1em;
+        height: 1em;
+        stroke-width: 1.5;
+        display: inline-block;
+        vertical-align: middle;
+        fill: none;
+      }
+      /* mobile menu styles */
+      .mobile-menu-open {
+        overflow: hidden;
+      }
+      #mobileNav {
+        transition:
+          transform 0.3s ease-in-out,
+          opacity 0.2s,
+          visibility 0.2s;
+      }
+    </style>
+    <title>Services | THEBRAVE FINANCE</title>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col"
+  >
+    <!-- Top Navigation Bar - Sticky Header with mobile menu -->
+    <header
+      class="sticky top-0 z-50 w-full border-b border-border-dark bg-background-dark/80 backdrop-blur-md"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <!-- logo -->
+          <div class="flex items-center gap-3">
+            <img
+              src="images/TBF-LOGO.png"
+              alt="The Brave Finance Logo"
+              class="w-8 h-8 object-contain"
+            />
+            <h2
+              class="text-white text-xl font-extrabold tracking-tight whitespace-nowrap"
+            >
+              THEBRAVE <span class="text-primary">FINANCE</span>
+            </h2>
+          </div>
+
+          <!-- desktop navigation (hidden on mobile) -->
+          <nav class="hidden md:flex items-center gap-8">
+            <a
+              class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+              href="index.html"
+              >Home</a
+            >
+            <a
+              class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+              href="aboutus.html"
+              >About</a
+            >
+            <a
+              class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+              href="services.html"
+              >Services</a
+            >
+            <a
+              class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+              href="vip.html"
+              >VIP Signals</a
+            >
+            <a
+              class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+              href="recovery.html"
+              >Recovery</a
+            >
+            <a
+              class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+              href="contactus.html"
+              >Contact</a
+            >
+          </nav>
+
+          <!-- right side: login/register + hamburger (mobile) -->
+          <div class="flex items-center gap-2 sm:gap-3">
+            <!-- desktop login/register (hidden on xs, visible sm) -->
+            <a
+              href="login.html"
+              class="hidden sm:flex px-4 py-2 text-sm font-bold text-white bg-surface-dark hover:bg-slate-700 rounded-lg transition-all items-center justify-center"
+              >Login</a
+            >
+            <a
+              href="register.html"
+              class="hidden sm:flex px-5 py-2 text-sm font-bold text-white bg-primary hover:bg-blue-700 rounded-lg transition-all shadow-lg shadow-primary/20 items-center justify-center"
+              >Register</a
+            >
+
+            <!-- mobile hamburger button -->
+            <button
+              id="menuToggle"
+              class="block md:hidden p-2 text-slate-300 hover:text-white focus:outline-none"
+              aria-label="menu"
+            >
+              <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- mobile menu drawer (hidden by default) -->
+      <div
+        id="mobileNav"
+        class="absolute inset-x-0 top-16 bg-surface-dark border-b border-border-dark shadow-xl md:hidden invisible opacity-0 -translate-y-full transition-all duration-300 ease-in-out z-50"
+      >
+        <nav class="flex flex-col px-6 py-6 space-y-4 text-base">
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="index.html"
+            >Home</a
+          >
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="aboutus.html"
+            >About</a
+          >
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="services.html"
+            >Services</a
+          >
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="vip.html"
+            >VIP Signals</a
+          >
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="recovery.html"
+            >Recovery</a
+          >
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="contactus.html"
+            >Contact</a
+          >
+          <div class="flex flex-col sm:hidden pt-4 gap-3">
+            <a
+              href="login.html"
+              class="w-full text-center px-4 py-3 text-sm font-bold text-white bg-surface-dark border border-border-dark rounded-lg"
+              >Login</a
+            >
+            <a
+              href="register.html"
+              class="w-full text-center px-5 py-3 text-sm font-bold text-white bg-primary rounded-lg shadow-lg shadow-primary/20"
+              >Register</a
+            >
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1">
+      <!-- Hero Section -->
+      <div class="px-6 md:px-20 lg:px-40 pt-16 pb-12">
+        <div class="max-w-[960px] mx-auto">
+          <div class="flex flex-wrap justify-between items-end gap-6 mb-12">
+            <div class="flex flex-col gap-4 max-w-2xl">
+              <span
+                class="text-primary font-bold tracking-widest text-xs uppercase"
+                >Premium Fintech Solutions</span
+              >
+              <h1
+                class="text-slate-900 dark:text-white text-4xl md:text-5xl font-black leading-tight tracking-[-0.033em]"
+              >
+                Our Integrated Services
+              </h1>
+              <p
+                class="text-slate-600 dark:text-slate-400 text-lg font-normal leading-relaxed"
+              >
+                We provide a comprehensive suite of institutional-grade
+                financial services designed to optimize your trading performance
+                and secure your digital assets.
+              </p>
+            </div>
+            <a
+              href="register.html"
+              class="flex min-w-[140px] cursor-pointer items-center justify-center rounded-xl h-12 px-6 bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white text-sm font-bold transition-all hover:bg-slate-300 dark:hover:bg-slate-700"
+            >
+              <span class="truncate">Get Started</span>
+            </a>
+          </div>
+
+          <!-- Services Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Card 1: MT5 Account Access -->
+            <div
+              class="group flex flex-col bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden hover:border-primary/50 transition-all p-6"
+            >
+              <div
+                class="mb-6 overflow-hidden rounded-lg aspect-video bg-slate-100 dark:bg-slate-800 relative"
+              >
+                <div
+                  class="absolute inset-0 flex items-center justify-center text-primary/20"
+                >
+                  <span class="material-symbols-outlined text-6xl"
+                    >monitoring</span
+                  >
+                </div>
+                <div
+                  class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                  style="
+                    background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDkaxNkCyVCV_9q01fox2qiPNGEaG7OqWAwcQie5Rs5bRLsWzkHMkiSxhbby6IDTa6qWe0bwixFBj86UnutYu41qWzsn9E3oT5NCXtaAbmXUT78HSyBWIvzfGeGGT0jd7Vo7eCyxUHZa4wWlke_vse13MQU24VueKCCX6hlg8ELJzZ3OmZx9j6Fx6IUZxMaTc0quJao77F_-O_A_ocrwuB4Ly3HXMZ74SkvNk7JzDlSr19Ck5R5oc2X1yFtLLsv2alRd1FKbvfkvWU&quot;);
+                  "
+                ></div>
+              </div>
+              <div class="flex items-center gap-3 mb-3">
+                <span class="material-symbols-outlined text-primary"
+                  >terminal</span
+                >
+                <h3 class="text-slate-900 dark:text-white text-xl font-bold">
+                  MT5 Account Access
+                </h3>
+              </div>
+              <p
+                class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6"
+              >
+                High-performance trading infrastructure offering ultra-low
+                latency and direct market access for professional MetaTrader 5
+                users.
+              </p>
+            </div>
+
+            <!-- Card 2: Managed Trading Assistance -->
+            <div
+              class="group flex flex-col bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden hover:border-primary/50 transition-all p-6"
+            >
+              <div
+                class="mb-6 overflow-hidden rounded-lg aspect-video bg-slate-100 dark:bg-slate-800 relative"
+              >
+                <div
+                  class="absolute inset-0 flex items-center justify-center text-primary/20"
+                >
+                  <span class="material-symbols-outlined text-6xl"
+                    >query_stats</span
+                  >
+                </div>
+                <div
+                  class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                  style="
+                    background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuATs02Mpl3NKNazvv9hG_CbZsR3DrRAv9TiK0X_OP391NgC2NDrfVIUotg02AxS7BoZ0h4B_GfH6Dl2ty1T8dFzWgeZR4fPwmMULU063XPRPIppSHDfDQMcc_r5xL8Biv5o25jmR7gRU5CL3Iktsf3JqSGZT-MmI6H-7SlX2fb1OlKBEeW8jtUGzRSWCeYAsTPuPNrNQ2vfSOhLnnFRmbmARe9u5bgQpNdl_UZbpNPtIaUgokZ_0Ym5qpwGLBDYb7EwtdVN55ADWW8&quot;);
+                  "
+                ></div>
+              </div>
+              <div class="flex items-center gap-3 mb-3">
+                <span class="material-symbols-outlined text-primary"
+                  >diversity_3</span
+                >
+                <h3 class="text-slate-900 dark:text-white text-xl font-bold">
+                  Managed Trading
+                </h3>
+              </div>
+              <p
+                class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6"
+              >
+                Expert-led portfolio management services designed to optimize
+                your investment returns while strictly adhering to your risk
+                tolerance.
+              </p>
+            </div>
+
+            <!-- Card 3: VIP Trading Signals -->
+            <div
+              class="group flex flex-col bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden hover:border-primary/50 transition-all p-6"
+            >
+              <div
+                class="mb-6 overflow-hidden rounded-lg aspect-video bg-slate-100 dark:bg-slate-800 relative"
+              >
+                <div
+                  class="absolute inset-0 flex items-center justify-center text-primary/20"
+                >
+                  <span class="material-symbols-outlined text-6xl"
+                    >campaign</span
+                  >
+                </div>
+                <div
+                  class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                  style="
+                    background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDDLOAtZ1395N9XyHMSKXRy2-MLRkWZLp4YS2bB-ZioWW41MLwTjufHupDfkFMzkWoQ4A-I-s-lMkvuauAek6xGzCrLHduJPUJVQmrY7U0c7A7k1TZYwY1zsPjeKRF2TTRDeCa3iGYtIt3W1DEEXrvxphcgMEgN-HBQx6EAPjVqQB_8zkpCk1BCnpu2XjLnLFnn4RAjZSxa9qaV48QeyO4HmxRifWGZX2kQ9RrX5r8Q2asLY7ukAoh5lfndyVZpqALvv9frcCOgejc&quot;);
+                  "
+                ></div>
+              </div>
+              <div class="flex items-center gap-3 mb-3">
+                <span class="material-symbols-outlined text-primary"
+                  >verified</span
+                >
+                <h3 class="text-slate-900 dark:text-white text-xl font-bold">
+                  VIP Trading Signals
+                </h3>
+              </div>
+              <p
+                class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6"
+              >
+                Real-time, high-accuracy trading signals generated by advanced
+                AI algorithms and seasoned market analysts.
+              </p>
+            </div>
+
+            <!-- Card 4: Fund Recovery Assistance -->
+            <div
+              class="group flex flex-col bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden hover:border-primary/50 transition-all p-6"
+            >
+              <div
+                class="mb-6 overflow-hidden rounded-lg aspect-video bg-slate-100 dark:bg-slate-800 relative"
+              >
+                <div
+                  class="absolute inset-0 flex items-center justify-center text-primary/20"
+                >
+                  <span class="material-symbols-outlined text-6xl"
+                    >lock_reset</span
+                  >
+                </div>
+                <div
+                  class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                  style="
+                    background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuB1kOia2ioVZLgLERvm37M_SwxkodfNfIOTku6yPp6Hb1vgcgMGUy1f1Bx-Z7cskY7rQUKw3GdhYLVy-aDMCyVFfxd3dojcUbmIF7Q4CSwDLyXK1SiWoMEqqunbHBdIHMlqpQggC31xhat3RH7cic92l0HTz8avuqadbXWfKZbw_sCp7cZMIhn92ogwkGvP80CZ1C7E_qOCHcvLmexO1EKqqKr5tbYew91nrYALagXanWy1boYUvCH0C0hux3cJY3iv0CFt1SqDHC4&quot;);
+                  "
+                ></div>
+              </div>
+              <div class="flex items-center gap-3 mb-3">
+                <span class="material-symbols-outlined text-primary"
+                  >security</span
+                >
+                <h3 class="text-slate-900 dark:text-white text-xl font-bold">
+                  Fund Recovery
+                </h3>
+              </div>
+              <p
+                class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6"
+              >
+                Professional aid in retrieving lost or inaccessible digital
+                assets using forensic blockchain analysis and legal assistance.
+              </p>
+            </div>
+
+            <!-- Card 5: Client Support (spans 2 columns on lg) -->
+            <div
+              class="group flex flex-col bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden hover:border-primary/50 transition-all p-6 lg:col-span-2"
+            >
+              <div class="flex flex-col md:flex-row gap-6">
+                <div
+                  class="w-full md:w-1/2 overflow-hidden rounded-lg aspect-video md:aspect-square bg-slate-100 dark:bg-slate-800 relative"
+                >
+                  <div
+                    class="absolute inset-0 flex items-center justify-center text-primary/20"
+                  >
+                    <span class="material-symbols-outlined text-6xl"
+                      >headset_mic</span
+                    >
+                  </div>
+                  <div
+                    class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                    style="
+                      background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDO-3lWrQBQBvjJOMrFYw699re9EXLE48kpsbF2FDvDja0OnUdyDpdKPX61VJFXPJR_MmfpdeZwaqrWrOkav7O11VD3GryPqvdYxS1M1BV4j0oDHAvgy__WjPkS_4JCSbtnvU4WV07MFjGiDM1lyusSYjKdBZCqZBostTI2bUmAqxC_57_RQfTmULoRcc99EJtBq9HyqTpc8FwTn0Vif_cUWkD0LU3tFb4pTB79vAxLTaExjZ4bpLEVYLSOwpxyMF4BnbU_g9Q_pH0&quot;);
+                    "
+                  ></div>
+                </div>
+                <div class="w-full md:w-1/2 flex flex-col">
+                  <div class="flex items-center gap-3 mb-3">
+                    <span class="material-symbols-outlined text-primary"
+                      >support_agent</span
+                    >
+                    <h3
+                      class="text-slate-900 dark:text-white text-xl font-bold"
+                    >
+                      24/7 Priority Support
+                    </h3>
+                  </div>
+                  <p
+                    class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6"
+                  >
+                    Dedicated concierge assistance for all your financial
+                    inquiries. Our experts are available around the clock to
+                    ensure your trading experience is seamless and secure.
+                  </p>
+                  <div class="mt-auto space-y-4">
+                    <div
+                      class="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400"
+                    >
+                      <span
+                        class="material-symbols-outlined text-primary text-base"
+                        >check_circle</span
+                      >
+                      Live chat response in &lt; 2 minutes
+                    </div>
+                    <div
+                      class="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400"
+                    >
+                      <span
+                        class="material-symbols-outlined text-primary text-base"
+                        >check_circle</span
+                      >
+                      Multilingual expert advisors
+                    </div>
+                    <a
+                      href="https://wa.me/234XXXXXXXXXX"
+                      class="flex items-center gap-2 text-primary text-sm font-bold hover:gap-3 transition-all pt-2"
+                    >
+                      Learn More
+                      <span class="material-symbols-outlined text-sm"
+                        >arrow_forward</span
+                      >
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Call to Action -->
+      <div class="bg-primary/5 dark:bg-slate-900 py-16 px-6">
+        <div class="max-w-[720px] mx-auto text-center flex flex-col gap-8">
+          <div class="flex flex-col gap-4">
+            <h2
+              class="text-slate-900 dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em]"
+            >
+              Ready to elevate your trading?
+            </h2>
+            <p
+              class="text-slate-600 dark:text-slate-400 text-lg font-normal leading-normal"
+            >
+              Join thousands of elite clients using our integrated fintech
+              services today. Secure your financial future with THEBRAVE
+              FINANCE.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-4 justify-center">
+            <a
+              href="register.html"
+              class="flex min-w-[180px] cursor-pointer items-center justify-center rounded-xl h-14 px-8 bg-primary text-white text-base font-bold transition-all hover:scale-[1.02]"
+            >
+              <span class="truncate">Open Account</span>
+            </a>
+            <a
+              href="https://wa.me/234XXXXXXXXXX"
+              class="flex min-w-[180px] cursor-pointer items-center justify-center rounded-xl h-14 px-8 bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white text-base font-bold transition-all hover:bg-slate-300 dark:hover:bg-slate-700"
+            >
+              <span class="truncate">Contact Sales</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-background-dark border-t border-border-dark pt-16 pb-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-16"
+        >
+          <div class="col-span-2 space-y-6">
+            <div class="flex items-center gap-3">
+              <i data-lucide="shield-heart" class="text-primary w-8 h-8"></i>
+              <h2 class="text-white text-xl font-extrabold tracking-tight">
+                THEBRAVE FINANCE
+              </h2>
+            </div>
+            <p class="text-slate-500 text-sm max-w-sm leading-relaxed">
+              Forging trust in digital finance through transparency, security,
+              and world-class financial expertise. Your bridge to global
+              markets.
+            </p>
+            <div class="flex gap-4">
+              <a
+                class="w-10 h-10 rounded-full bg-surface-dark flex items-center justify-center text-slate-400 hover:text-primary transition-colors border border-border-dark"
+                href="#"
+                ><i data-lucide="globe" class="w-5 h-5"></i
+              ></a>
+              <a
+                class="w-10 h-10 rounded-full bg-surface-dark flex items-center justify-center text-slate-400 hover:text-primary transition-colors border border-border-dark"
+                href="#"
+                ><i data-lucide="share-2" class="w-5 h-5"></i
+              ></a>
+              <a
+                class="w-10 h-10 rounded-full bg-surface-dark flex items-center justify-center text-slate-400 hover:text-primary transition-colors border border-border-dark"
+                href="#"
+                ><i data-lucide="mail" class="w-5 h-5"></i
+              ></a>
+            </div>
+          </div>
+          <div>
+            <h6 class="text-white font-bold mb-6">Company</h6>
+            <ul class="space-y-4 text-sm text-slate-500">
+              <li>
+                <a
+                  class="hover:text-primary transition-colors"
+                  href="aboutus.html"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a
+                  class="hover:text-primary transition-colors"
+                  href="privacy.html"
+                  >Privacy Policy</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="t&c.html"
+                  >Terms of Service</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h6 class="text-white font-bold mb-6">Support</h6>
+            <ul class="space-y-4 text-sm text-slate-500">
+              <li>
+                <a
+                  class="hover:text-primary transition-colors"
+                  href="contactus.html"
+                  >Contact Support</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="pt-8 border-t border-border-dark text-center">
+          <p class="text-slate-500 text-sm mt-8">
+            © 2000 TheBrave Finance Integrated Services. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/menu.js"></script>
+
+    <!-- Final Lucide icons call -->
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
