@@ -387,8 +387,8 @@
               </p>
             </div>
 
-            <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-              <div class="xl:col-span-2 space-y-6">
+            <div class="grid grid-cols-1 gap-6">
+              <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 items-start">
                 <section>
                   <h3
                     class="text-white font-bold text-sm uppercase tracking-widest flex items-center gap-2 mb-4"
@@ -400,9 +400,10 @@
                   <div
                     class="bg-surface-dark border border-border-dark rounded-2xl p-4 sm:p-6 space-y-3"
                   >
-                    <a
-                      href="profile.html"
-                      class="flex items-center justify-between gap-3 rounded-2xl bg-background-dark border border-border-dark p-4 hover:border-primary hover:bg-primary/5 transition-all"
+                    <button
+                      id="openEditProfileModal"
+                      type="button"
+                      class="w-full flex items-center justify-between gap-3 rounded-2xl bg-background-dark border border-border-dark p-4 hover:border-primary hover:bg-primary/5 transition-all text-left"
                     >
                       <div class="flex items-center gap-3">
                         <div
@@ -418,7 +419,7 @@
                         </div>
                       </div>
                       <i data-lucide="chevron-right" class="icon"></i>
-                    </a>
+                    </button>
 
                     <a
                       href="deposit-history.html"
@@ -503,6 +504,141 @@
       </div>
     </div>
 
+    <div
+      id="editProfileModal"
+      class="fixed inset-0 z-[70] hidden items-center justify-center p-4"
+    >
+      <div
+        id="editProfileBackdrop"
+        class="absolute inset-0 bg-black/60 backdrop-blur-sm"
+      ></div>
+
+      <div
+        class="relative w-full max-w-2xl rounded-2xl border border-border-dark bg-surface-dark shadow-2xl"
+      >
+        <div
+          class="flex items-center justify-between gap-4 border-b border-border-dark px-4 sm:px-6 py-4"
+        >
+          <div>
+            <h3 class="text-white text-lg sm:text-xl font-bold">
+              Edit Profile
+            </h3>
+            <p class="text-slate-400 text-sm mt-1">
+              Update your personal information
+            </p>
+          </div>
+
+          <button
+            id="closeEditProfileModal"
+            type="button"
+            class="h-10 w-10 rounded-xl bg-background-dark border border-border-dark text-slate-400 hover:text-white hover:border-primary hover:bg-primary/10 transition-all flex items-center justify-center"
+          >
+            <i data-lucide="x" class="icon"></i>
+          </button>
+        </div>
+
+        <form class="p-4 sm:p-6 lg:p-8 space-y-5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
+            <div class="space-y-2">
+              <label
+                for="editFirstName"
+                class="text-xs font-bold text-slate-400 uppercase tracking-wider"
+              >
+                First Name
+              </label>
+              <input
+                id="editFirstName"
+                type="text"
+                value="Alexander"
+                class="w-full bg-background-dark border border-border-dark rounded-xl text-white text-sm py-3 px-4 focus:border-primary focus:ring-0"
+              />
+            </div>
+
+            <div class="space-y-2">
+              <label
+                for="editLastName"
+                class="text-xs font-bold text-slate-400 uppercase tracking-wider"
+              >
+                Last Name
+              </label>
+              <input
+                id="editLastName"
+                type="text"
+                value="Brave"
+                class="w-full bg-background-dark border border-border-dark rounded-xl text-white text-sm py-3 px-4 focus:border-primary focus:ring-0"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
+            <div class="space-y-2">
+              <label
+                for="editEmail"
+                class="text-xs font-bold text-slate-400 uppercase tracking-wider"
+              >
+                Email Address
+              </label>
+              <input
+                id="editEmail"
+                type="email"
+                value="a.brave@thebrave.com"
+                class="w-full bg-background-dark border border-border-dark rounded-xl text-white text-sm py-3 px-4 focus:border-primary focus:ring-0"
+              />
+            </div>
+
+            <div class="space-y-2">
+              <label
+                for="editPhone"
+                class="text-xs font-bold text-slate-400 uppercase tracking-wider"
+              >
+                Phone Number
+              </label>
+              <input
+                id="editPhone"
+                type="text"
+                value="+1 (555) 123-4567"
+                class="w-full bg-background-dark border border-border-dark rounded-xl text-white text-sm py-3 px-4 focus:border-primary focus:ring-0"
+              />
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label
+              for="editDob"
+              class="text-xs font-bold text-slate-400 uppercase tracking-wider"
+            >
+              Date of Birth
+            </label>
+            <input
+              id="editDob"
+              type="text"
+              value="June 15, 1985"
+              class="w-full bg-background-dark border border-border-dark rounded-xl text-white text-sm py-3 px-4 focus:border-primary focus:ring-0"
+            />
+          </div>
+
+          <div
+            class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-3 pt-2"
+          >
+            <button
+              id="cancelEditProfile"
+              type="button"
+              class="px-5 py-3 rounded-xl border border-border-dark bg-background-dark text-white text-sm font-semibold hover:border-primary hover:bg-primary/10 transition-all"
+            >
+              Cancel
+            </button>
+
+            <button
+              type="submit"
+              class="px-5 py-3 rounded-xl bg-primary text-white text-sm font-semibold hover:opacity-90 transition-all"
+            >
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <script>
       (function () {
         const menuToggle = document.getElementById("menuToggle");
@@ -510,6 +646,18 @@
         const closeSidebar = document.getElementById("closeSidebar");
         const sidebarOverlay = document.getElementById("sidebarOverlay");
         const body = document.body;
+
+        const editProfileModal = document.getElementById("editProfileModal");
+        const openEditProfileModal = document.getElementById(
+          "openEditProfileModal",
+        );
+        const closeEditProfileModal = document.getElementById(
+          "closeEditProfileModal",
+        );
+        const cancelEditProfile = document.getElementById("cancelEditProfile");
+        const editProfileBackdrop = document.getElementById(
+          "editProfileBackdrop",
+        );
 
         function openSidebar() {
           mobileSidebar.classList.add("open");
@@ -523,6 +671,20 @@
           body.classList.remove("mobile-menu-open");
         }
 
+        function openEditModal() {
+          if (!editProfileModal) return;
+          editProfileModal.classList.remove("hidden");
+          editProfileModal.classList.add("flex");
+          body.classList.add("mobile-menu-open");
+        }
+
+        function closeEditModal() {
+          if (!editProfileModal) return;
+          editProfileModal.classList.add("hidden");
+          editProfileModal.classList.remove("flex");
+          body.classList.remove("mobile-menu-open");
+        }
+
         if (menuToggle && mobileSidebar && closeSidebar && sidebarOverlay) {
           menuToggle.addEventListener("click", openSidebar);
           closeSidebar.addEventListener("click", closeSidebarFunc);
@@ -531,16 +693,38 @@
           mobileSidebar.querySelectorAll("a").forEach((link) => {
             link.addEventListener("click", closeSidebarFunc);
           });
+        }
 
-          document.addEventListener("keydown", (e) => {
-            if (
-              e.key === "Escape" &&
-              mobileSidebar.classList.contains("open")
-            ) {
+        if (openEditProfileModal) {
+          openEditProfileModal.addEventListener("click", openEditModal);
+        }
+
+        if (closeEditProfileModal) {
+          closeEditProfileModal.addEventListener("click", closeEditModal);
+        }
+
+        if (cancelEditProfile) {
+          cancelEditProfile.addEventListener("click", closeEditModal);
+        }
+
+        if (editProfileBackdrop) {
+          editProfileBackdrop.addEventListener("click", closeEditModal);
+        }
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") {
+            if (mobileSidebar && mobileSidebar.classList.contains("open")) {
               closeSidebarFunc();
             }
-          });
-        }
+
+            if (
+              editProfileModal &&
+              !editProfileModal.classList.contains("hidden")
+            ) {
+              closeEditModal();
+            }
+          }
+        });
 
         lucide.createIcons();
       })();
