@@ -2,7 +2,10 @@
 <html class="dark" lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+      name="viewport"
+    />
     <title>VIP Subscription Management | TheBrave Finance</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
@@ -13,6 +16,24 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="images/favicon-16x16.png"
+    />
+    <link rel="manifest" href="images/site.webmanifest" />
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -40,11 +61,9 @@
         },
       };
     </script>
-    <style type="text/tailwindcss">
-      @layer base {
-        body {
-          font-family: "Manrope", sans-serif;
-        }
+    <style>
+      body {
+        font-family: "Manrope", sans-serif;
       }
       .glass-panel {
         background: rgba(21, 28, 44, 0.7);
@@ -61,14 +80,117 @@
         background: #243049;
         border-radius: 10px;
       }
+      /* mobile menu styles - left sliding drawer */
+      .mobile-menu-open {
+        overflow: hidden;
+      }
+      #mobileSidebar {
+        transition: transform 0.3s ease-in-out;
+        transform: translateX(-100%);
+      }
+      #mobileSidebar.open {
+        transform: translateX(0);
+      }
+      #sidebarOverlay {
+        transition: opacity 0.3s ease-in-out;
+        opacity: 0;
+        pointer-events: none;
+      }
+      #sidebarOverlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
     </style>
   </head>
   <body
     class="bg-background-dark text-slate-100 font-display transition-colors duration-300 antialiased overflow-hidden"
   >
+    <!-- Mobile Sidebar Overlay -->
+    <div
+      id="sidebarOverlay"
+      class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"
+    ></div>
+
+    <!-- Mobile Sidebar (slides from left) -->
+    <aside
+      id="mobileSidebar"
+      class="fixed top-0 left-0 h-full w-64 bg-surface-dark border-r border-border-dark flex flex-col z-50 lg:hidden transform -translate-x-full transition-transform duration-300 ease-in-out"
+    >
+      <div class="p-6 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-emerald-accent text-3xl"
+            >shield_with_heart</span
+          >
+          <h2
+            class="text-white text-lg font-extrabold tracking-tight uppercase"
+          >
+            THEBRAVE
+          </h2>
+        </div>
+        <button id="closeSidebar" class="text-slate-400 hover:text-white p-1">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <nav class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto">
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="dashboard.html"
+        >
+          <span class="material-symbols-outlined text-[20px]">dashboard</span>
+          Dashboard
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="deposit.html"
+        >
+          <span class="material-symbols-outlined text-[20px]"
+            >account_balance_wallet</span
+          >
+          Deposit
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="deposit-history.html"
+        >
+          <span class="material-symbols-outlined text-[20px]">history</span>
+          Deposit History
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-emerald-accent/10 text-emerald-accent border border-emerald-accent/20 transition-all"
+          href="vip-sub.html"
+        >
+          <span class="material-symbols-outlined text-[20px]">verified</span>
+          VIP Subscription
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="recovery-request.html"
+        >
+          <span class="material-symbols-outlined text-[20px]">security</span>
+          Recovery Requests
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="profile.html"
+        >
+          <span class="material-symbols-outlined text-[20px]">person</span>
+          Profile
+        </a>
+      </nav>
+      <div class="p-4 border-t border-border-dark">
+        <button
+          class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
+        >
+          <span class="material-symbols-outlined text-[20px]">logout</span>
+          Logout
+        </button>
+      </div>
+    </aside>
+
     <div class="flex h-screen overflow-hidden">
+      <!-- Desktop Sidebar (hidden on mobile) -->
       <aside
-        class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex flex-col hidden lg:flex"
+        class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex-col hidden lg:flex"
       >
         <div class="p-6 flex items-center gap-3">
           <span class="material-symbols-outlined text-emerald-accent text-3xl"
@@ -85,14 +207,14 @@
         >
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-            href="#"
+            href="dashboard.html"
           >
             <span class="material-symbols-outlined text-[20px]">dashboard</span>
             Dashboard
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-            href="#"
+            href="deposit.html"
           >
             <span class="material-symbols-outlined text-[20px]"
               >account_balance_wallet</span
@@ -101,28 +223,28 @@
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-            href="#"
+            href="deposit-history.html"
           >
             <span class="material-symbols-outlined text-[20px]">history</span>
             Deposit History
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-emerald-accent/10 text-emerald-accent border border-emerald-accent/20 transition-all"
-            href="#"
+            href="vip-sub.html"
           >
             <span class="material-symbols-outlined text-[20px]">verified</span>
             VIP Subscription
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-            href="#"
+            href="recovery-request.html"
           >
             <span class="material-symbols-outlined text-[20px]">security</span>
             Recovery Requests
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-            href="#"
+            href="profile.html"
           >
             <span class="material-symbols-outlined text-[20px]">person</span>
             Profile
@@ -137,16 +259,26 @@
           </button>
         </div>
       </aside>
+
       <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         <header
-          class="h-16 flex-shrink-0 border-b border-border-dark bg-surface-dark/50 backdrop-blur-md px-6 flex items-center justify-between"
+          class="h-16 flex-shrink-0 border-b border-border-dark bg-surface-dark/50 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between"
         >
-          <div class="flex items-center text-sm font-medium">
-            <span class="text-slate-500">Home</span>
-            <span class="mx-2 text-slate-600">/</span>
-            <span class="text-white">VIP Subscription</span>
+          <div class="flex items-center gap-3">
+            <!-- Mobile menu button -->
+            <button
+              id="menuToggle"
+              class="block lg:hidden p-2 text-slate-400 hover:text-white transition-colors"
+            >
+              <span class="material-symbols-outlined text-2xl">menu</span>
+            </button>
+            <div class="flex items-center text-xs sm:text-sm font-medium">
+              <span class="text-slate-500">Home</span>
+              <span class="mx-2 text-slate-600">/</span>
+              <span class="text-white">VIP Subscription</span>
+            </div>
           </div>
-          <div class="flex items-center gap-6">
+          <div class="flex items-center gap-4 sm:gap-6">
             <button
               class="relative text-slate-400 hover:text-white transition-colors"
             >
@@ -155,190 +287,228 @@
                 class="absolute top-0 right-0 h-2.5 w-2.5 bg-rose-500 rounded-full border-2 border-surface-dark"
               ></span>
             </button>
-            <div class="h-8 w-px bg-border-dark"></div>
-            <button class="flex items-center gap-3 group">
+            <div class="h-8 w-px bg-border-dark hidden sm:block"></div>
+            <button class="flex items-center gap-2 sm:gap-3 group">
               <div class="text-right hidden sm:block">
                 <p
-                  class="text-sm font-bold text-white group-hover:text-emerald-accent transition-colors"
+                  class="text-xs sm:text-sm font-bold text-white group-hover:text-emerald-accent transition-colors"
                 >
                   Alexander Brave
                 </p>
                 <p
-                  class="text-[11px] text-slate-500 uppercase tracking-widest font-bold"
+                  class="text-[10px] sm:text-[11px] text-slate-500 uppercase tracking-widest font-bold"
                 >
                   Pro Trader
                 </p>
               </div>
               <div
-                class="h-10 w-10 rounded-full bg-emerald-accent/20 border border-emerald-accent/30 overflow-hidden flex items-center justify-center"
+                class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-emerald-accent/20 border border-emerald-accent/30 overflow-hidden flex items-center justify-center"
               >
-                <span class="material-symbols-outlined text-emerald-accent"
+                <span
+                  class="material-symbols-outlined text-emerald-accent text-lg sm:text-xl"
                   >person</span
                 >
               </div>
             </button>
           </div>
         </header>
+
         <main
-          class="flex-1 overflow-y-auto custom-scrollbar bg-background-dark p-6 lg:p-8 space-y-8"
+          class="flex-1 overflow-y-auto custom-scrollbar bg-background-dark p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8"
         >
+          <!-- Current Plan Banner -->
           <div
-            class="p-8 rounded-2xl bg-gradient-to-br from-surface-dark to-background-dark border border-border-dark flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden"
+            class="p-5 sm:p-8 rounded-2xl bg-gradient-to-br from-surface-dark to-background-dark border border-border-dark flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden"
           >
             <div
               class="absolute -right-12 -top-12 opacity-[0.03] pointer-events-none"
             >
-              <span class="material-symbols-outlined text-[240px]"
+              <span
+                class="material-symbols-outlined text-[180px] sm:text-[240px]"
                 >verified</span
               >
             </div>
             <div class="relative z-10">
-              <div class="flex items-center gap-3 mb-2">
+              <div class="flex items-center gap-2 sm:gap-3 mb-2">
                 <span
-                  class="px-3 py-1 bg-emerald-accent text-white text-[10px] font-black rounded-full uppercase tracking-widest"
+                  class="px-2 sm:px-3 py-0.5 sm:py-1 bg-emerald-accent text-white text-[8px] sm:text-[10px] font-black rounded-full uppercase tracking-widest"
                   >Active</span
                 >
                 <span
-                  class="text-slate-500 text-xs font-bold uppercase tracking-widest"
+                  class="text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-widest"
                   >Current Plan</span
                 >
               </div>
               <h1
-                class="text-4xl lg:text-5xl font-black text-white tracking-tight italic"
+                class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight italic"
               >
                 VIP <span class="text-emerald-accent">ELITE</span>
               </h1>
-              <div class="mt-4 flex items-center gap-2 text-slate-400">
-                <span class="material-symbols-outlined text-sm">event</span>
-                <p class="text-sm font-medium">
+              <div class="mt-3 sm:mt-4 flex items-center gap-2 text-slate-400">
+                <span class="material-symbols-outlined text-xs sm:text-sm"
+                  >event</span
+                >
+                <p class="text-xs sm:text-sm font-medium">
                   Expires on:
                   <span class="text-white font-bold">Oct 24, 2024</span>
                 </p>
               </div>
             </div>
-            <div class="flex flex-col sm:flex-row gap-4 relative z-10">
+            <div
+              class="flex flex-col sm:flex-row gap-3 sm:gap-4 relative z-10 w-full sm:w-auto"
+            >
               <button
-                class="px-8 py-4 bg-emerald-accent text-white text-sm font-extrabold rounded-xl shadow-lg shadow-emerald-accent/20 hover:bg-emerald-accent/90 transition-all flex items-center justify-center gap-2"
+                class="px-5 sm:px-8 py-3 sm:py-4 bg-emerald-accent text-white text-xs sm:text-sm font-extrabold rounded-xl shadow-lg shadow-emerald-accent/20 hover:bg-emerald-accent/90 transition-all flex items-center justify-center gap-2"
               >
-                <span class="material-symbols-outlined">upgrade</span>
+                <span class="material-symbols-outlined text-base sm:text-lg"
+                  >upgrade</span
+                >
                 Upgrade Plan
               </button>
               <button
-                class="px-8 py-4 bg-emerald-accent/10 border border-emerald-accent/30 text-emerald-accent text-sm font-extrabold rounded-xl hover:bg-emerald-accent/20 transition-all flex items-center justify-center gap-2"
+                class="px-5 sm:px-8 py-3 sm:py-4 bg-emerald-accent/10 border border-emerald-accent/30 text-emerald-accent text-xs sm:text-sm font-extrabold rounded-xl hover:bg-emerald-accent/20 transition-all flex items-center justify-center gap-2"
               >
-                <span class="material-symbols-outlined">autorenew</span>
+                <span class="material-symbols-outlined text-base sm:text-lg"
+                  >autorenew</span
+                >
                 Renew Subscription
               </button>
             </div>
           </div>
+
+          <!-- Active Perks -->
           <div>
             <h3
-              class="text-white font-bold text-sm uppercase tracking-widest mb-6 flex items-center gap-2"
+              class="text-white font-bold text-xs sm:text-sm uppercase tracking-widest mb-4 sm:mb-6 flex items-center gap-2"
             >
-              <span class="h-px w-8 bg-emerald-accent"></span> Your Active Perks
+              <span class="h-px w-6 sm:w-8 bg-emerald-accent"></span> Your
+              Active Perks
             </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
+            >
               <div
-                class="p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors group"
+                class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors group"
               >
                 <div
-                  class="h-12 w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-4 group-hover:scale-110 transition-transform"
+                  class="h-8 w-8 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-3 sm:mb-4 group-hover:scale-110 transition-transform"
                 >
-                  <span class="material-symbols-outlined text-2xl"
+                  <span class="material-symbols-outlined text-xl sm:text-2xl"
                     >sensors</span
                   >
                 </div>
-                <h4 class="text-white font-bold mb-1">Real-time Signals</h4>
-                <p class="text-slate-400 text-xs leading-relaxed">
+                <h4 class="text-white font-bold text-sm sm:text-base mb-1">
+                  Real-time Signals
+                </h4>
+                <p
+                  class="text-slate-400 text-[10px] sm:text-xs leading-relaxed"
+                >
                   Instant access to high-probability trade setups across all
                   markets.
                 </p>
               </div>
               <div
-                class="p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors group"
+                class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors group"
               >
                 <div
-                  class="h-12 w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-4 group-hover:scale-110 transition-transform"
+                  class="h-8 w-8 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-3 sm:mb-4 group-hover:scale-110 transition-transform"
                 >
-                  <span class="material-symbols-outlined text-2xl"
+                  <span class="material-symbols-outlined text-xl sm:text-2xl"
                     >support_agent</span
                   >
                 </div>
-                <h4 class="text-white font-bold mb-1">Priority Support</h4>
-                <p class="text-slate-400 text-xs leading-relaxed">
+                <h4 class="text-white font-bold text-sm sm:text-base mb-1">
+                  Priority Support
+                </h4>
+                <p
+                  class="text-slate-400 text-[10px] sm:text-xs leading-relaxed"
+                >
                   Dedicated account manager available 24/7 for technical
                   assistance.
                 </p>
               </div>
               <div
-                class="p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors group"
+                class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors group"
               >
                 <div
-                  class="h-12 w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-4 group-hover:scale-110 transition-transform"
+                  class="h-8 w-8 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-3 sm:mb-4 group-hover:scale-110 transition-transform"
                 >
-                  <span class="material-symbols-outlined text-2xl"
+                  <span class="material-symbols-outlined text-xl sm:text-2xl"
                     >video_library</span
                   >
                 </div>
-                <h4 class="text-white font-bold mb-1">Weekly Webinars</h4>
-                <p class="text-slate-400 text-xs leading-relaxed">
+                <h4 class="text-white font-bold text-sm sm:text-base mb-1">
+                  Weekly Webinars
+                </h4>
+                <p
+                  class="text-slate-400 text-[10px] sm:text-xs leading-relaxed"
+                >
                   Live education sessions and market analysis with our lead
                   traders.
                 </p>
               </div>
               <div
-                class="p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors group"
+                class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors group"
               >
                 <div
-                  class="h-12 w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-4 group-hover:scale-110 transition-transform"
+                  class="h-8 w-8 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-3 sm:mb-4 group-hover:scale-110 transition-transform"
                 >
-                  <span class="material-symbols-outlined text-2xl"
+                  <span class="material-symbols-outlined text-xl sm:text-2xl"
                     >menu_book</span
                   >
                 </div>
-                <h4 class="text-white font-bold mb-1">Market Reports</h4>
-                <p class="text-slate-400 text-xs leading-relaxed">
+                <h4 class="text-white font-bold text-sm sm:text-base mb-1">
+                  Market Reports
+                </h4>
+                <p
+                  class="text-slate-400 text-[10px] sm:text-xs leading-relaxed"
+                >
                   In-depth institutional-grade daily and weekly technical
                   reports.
                 </p>
               </div>
             </div>
           </div>
-          <div class="space-y-4">
+
+          <!-- Subscription History -->
+          <div class="space-y-3 sm:space-y-4">
             <h3
-              class="text-white font-bold text-sm uppercase tracking-widest flex items-center gap-2"
+              class="text-white font-bold text-xs sm:text-sm uppercase tracking-widest flex items-center gap-2"
             >
-              <span class="h-px w-8 bg-border-dark"></span> Subscription History
+              <span class="h-px w-6 sm:w-8 bg-border-dark"></span> Subscription
+              History
             </h3>
+
+            <!-- Desktop Table View (hidden on mobile) -->
             <div
-              class="bg-surface-dark border border-border-dark rounded-2xl overflow-hidden"
+              class="hidden sm:block bg-surface-dark border border-border-dark rounded-2xl overflow-hidden"
             >
               <div class="overflow-x-auto">
                 <table class="w-full text-left">
                   <thead>
                     <tr class="border-b border-border-dark bg-white/5">
                       <th
-                        class="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest"
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest"
                       >
                         Plan Name
                       </th>
                       <th
-                        class="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest"
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest"
                       >
                         Term
                       </th>
                       <th
-                        class="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest"
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest"
                       >
                         Amount Paid
                       </th>
                       <th
-                        class="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest"
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest"
                       >
                         Date
                       </th>
                       <th
-                        class="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest text-right"
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest text-right"
                       >
                         Status
                       </th>
@@ -346,88 +516,115 @@
                   </thead>
                   <tbody class="divide-y divide-border-dark">
                     <tr class="hover:bg-white/5 transition-colors">
-                      <td class="px-6 py-4">
-                        <div class="flex items-center gap-3">
+                      <td class="px-4 sm:px-6 py-3 sm:py-4">
+                        <div class="flex items-center gap-2 sm:gap-3">
                           <div
-                            class="h-8 w-8 rounded bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
+                            class="h-6 w-6 sm:h-8 sm:w-8 rounded bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
                           >
-                            <span class="material-symbols-outlined text-sm"
+                            <span
+                              class="material-symbols-outlined text-xs sm:text-sm"
                               >stars</span
                             >
                           </div>
-                          <span class="text-sm font-bold text-white"
+                          <span class="text-xs sm:text-sm font-bold text-white"
                             >VIP Elite</span
                           >
                         </div>
                       </td>
-                      <td class="px-6 py-4 text-sm text-slate-400">Monthly</td>
-                      <td class="px-6 py-4 text-sm font-bold text-white">
+                      <td
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-slate-400"
+                      >
+                        Monthly
+                      </td>
+                      <td
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-bold text-white"
+                      >
                         $499.00
                       </td>
-                      <td class="px-6 py-4 text-sm text-slate-400">
+                      <td
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-slate-400"
+                      >
                         Sep 24, 2024
                       </td>
-                      <td class="px-6 py-4 text-right">
+                      <td class="px-4 sm:px-6 py-3 sm:py-4 text-right">
                         <span
-                          class="px-2 py-0.5 bg-emerald-accent/10 text-emerald-accent text-[10px] font-black rounded border border-emerald-accent/20 uppercase"
+                          class="px-1.5 sm:px-2 py-0.5 bg-emerald-accent/10 text-emerald-accent text-[8px] sm:text-[10px] font-black rounded border border-emerald-accent/20 uppercase"
                           >Completed</span
                         >
                       </td>
                     </tr>
                     <tr class="hover:bg-white/5 transition-colors">
-                      <td class="px-6 py-4">
-                        <div class="flex items-center gap-3">
+                      <td class="px-4 sm:px-6 py-3 sm:py-4">
+                        <div class="flex items-center gap-2 sm:gap-3">
                           <div
-                            class="h-8 w-8 rounded bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
+                            class="h-6 w-6 sm:h-8 sm:w-8 rounded bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
                           >
-                            <span class="material-symbols-outlined text-sm"
+                            <span
+                              class="material-symbols-outlined text-xs sm:text-sm"
                               >stars</span
                             >
                           </div>
-                          <span class="text-sm font-bold text-white"
+                          <span class="text-xs sm:text-sm font-bold text-white"
                             >VIP Elite</span
                           >
                         </div>
                       </td>
-                      <td class="px-6 py-4 text-sm text-slate-400">Monthly</td>
-                      <td class="px-6 py-4 text-sm font-bold text-white">
+                      <td
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-slate-400"
+                      >
+                        Monthly
+                      </td>
+                      <td
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-bold text-white"
+                      >
                         $499.00
                       </td>
-                      <td class="px-6 py-4 text-sm text-slate-400">
+                      <td
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-slate-400"
+                      >
                         Aug 24, 2024
                       </td>
-                      <td class="px-6 py-4 text-right">
+                      <td class="px-4 sm:px-6 py-3 sm:py-4 text-right">
                         <span
-                          class="px-2 py-0.5 bg-emerald-accent/10 text-emerald-accent text-[10px] font-black rounded border border-emerald-accent/20 uppercase"
+                          class="px-1.5 sm:px-2 py-0.5 bg-emerald-accent/10 text-emerald-accent text-[8px] sm:text-[10px] font-black rounded border border-emerald-accent/20 uppercase"
                           >Completed</span
                         >
                       </td>
                     </tr>
                     <tr class="hover:bg-white/5 transition-colors">
-                      <td class="px-6 py-4">
-                        <div class="flex items-center gap-3">
+                      <td class="px-4 sm:px-6 py-3 sm:py-4">
+                        <div class="flex items-center gap-2 sm:gap-3">
                           <div
-                            class="h-8 w-8 rounded bg-primary/10 flex items-center justify-center text-primary"
+                            class="h-6 w-6 sm:h-8 sm:w-8 rounded bg-primary/10 flex items-center justify-center text-primary"
                           >
-                            <span class="material-symbols-outlined text-sm"
+                            <span
+                              class="material-symbols-outlined text-xs sm:text-sm"
                               >workspace_premium</span
                             >
                           </div>
-                          <span class="text-sm font-bold text-white"
+                          <span class="text-xs sm:text-sm font-bold text-white"
                             >VIP Standard</span
                           >
                         </div>
                       </td>
-                      <td class="px-6 py-4 text-sm text-slate-400">Monthly</td>
-                      <td class="px-6 py-4 text-sm font-bold text-white">
+                      <td
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-slate-400"
+                      >
+                        Monthly
+                      </td>
+                      <td
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-bold text-white"
+                      >
                         $249.00
                       </td>
-                      <td class="px-6 py-4 text-sm text-slate-400">
+                      <td
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-slate-400"
+                      >
                         Jul 24, 2024
                       </td>
-                      <td class="px-6 py-4 text-right">
+                      <td class="px-4 sm:px-6 py-3 sm:py-4 text-right">
                         <span
-                          class="px-2 py-0.5 bg-emerald-accent/10 text-emerald-accent text-[10px] font-black rounded border border-emerald-accent/20 uppercase"
+                          class="px-1.5 sm:px-2 py-0.5 bg-emerald-accent/10 text-emerald-accent text-[8px] sm:text-[10px] font-black rounded border border-emerald-accent/20 uppercase"
                           >Completed</span
                         >
                       </td>
@@ -436,9 +633,156 @@
                 </table>
               </div>
             </div>
+
+            <!-- Mobile Card View (visible only on mobile) -->
+            <div class="block sm:hidden space-y-3">
+              <!-- Subscription Card 1 -->
+              <div
+                class="bg-surface-dark border border-border-dark rounded-xl p-4"
+              >
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="h-8 w-8 rounded bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
+                    >
+                      <span class="material-symbols-outlined text-sm"
+                        >stars</span
+                      >
+                    </div>
+                    <div>
+                      <div class="text-sm font-bold text-white">VIP Elite</div>
+                      <div class="text-xs text-slate-400">Monthly</div>
+                    </div>
+                  </div>
+                  <span
+                    class="px-2 py-0.5 bg-emerald-accent/10 text-emerald-accent text-[9px] font-black rounded border border-emerald-accent/20 uppercase"
+                    >Completed</span
+                  >
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-slate-400">Amount:</span>
+                  <span class="text-white font-bold">$499.00</span>
+                </div>
+                <div class="flex justify-between items-center text-sm mt-1">
+                  <span class="text-slate-400">Date:</span>
+                  <span class="text-white">Sep 24, 2024</span>
+                </div>
+              </div>
+
+              <!-- Subscription Card 2 -->
+              <div
+                class="bg-surface-dark border border-border-dark rounded-xl p-4"
+              >
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="h-8 w-8 rounded bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
+                    >
+                      <span class="material-symbols-outlined text-sm"
+                        >stars</span
+                      >
+                    </div>
+                    <div>
+                      <div class="text-sm font-bold text-white">VIP Elite</div>
+                      <div class="text-xs text-slate-400">Monthly</div>
+                    </div>
+                  </div>
+                  <span
+                    class="px-2 py-0.5 bg-emerald-accent/10 text-emerald-accent text-[9px] font-black rounded border border-emerald-accent/20 uppercase"
+                    >Completed</span
+                  >
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-slate-400">Amount:</span>
+                  <span class="text-white font-bold">$499.00</span>
+                </div>
+                <div class="flex justify-between items-center text-sm mt-1">
+                  <span class="text-slate-400">Date:</span>
+                  <span class="text-white">Aug 24, 2024</span>
+                </div>
+              </div>
+
+              <!-- Subscription Card 3 -->
+              <div
+                class="bg-surface-dark border border-border-dark rounded-xl p-4"
+              >
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="h-8 w-8 rounded bg-primary/10 flex items-center justify-center text-primary"
+                    >
+                      <span class="material-symbols-outlined text-sm"
+                        >workspace_premium</span
+                      >
+                    </div>
+                    <div>
+                      <div class="text-sm font-bold text-white">
+                        VIP Standard
+                      </div>
+                      <div class="text-xs text-slate-400">Monthly</div>
+                    </div>
+                  </div>
+                  <span
+                    class="px-2 py-0.5 bg-emerald-accent/10 text-emerald-accent text-[9px] font-black rounded border border-emerald-accent/20 uppercase"
+                    >Completed</span
+                  >
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-slate-400">Amount:</span>
+                  <span class="text-white font-bold">$249.00</span>
+                </div>
+                <div class="flex justify-between items-center text-sm mt-1">
+                  <span class="text-slate-400">Date:</span>
+                  <span class="text-white">Jul 24, 2024</span>
+                </div>
+              </div>
+            </div>
           </div>
         </main>
       </div>
     </div>
+
+    <!-- Mobile menu JavaScript -->
+    <script>
+      (function () {
+        // Sidebar functionality
+        const menuToggle = document.getElementById("menuToggle");
+        const mobileSidebar = document.getElementById("mobileSidebar");
+        const closeSidebar = document.getElementById("closeSidebar");
+        const sidebarOverlay = document.getElementById("sidebarOverlay");
+        const body = document.body;
+
+        function openSidebar() {
+          mobileSidebar.classList.add("open");
+          sidebarOverlay.classList.add("open");
+          body.classList.add("mobile-menu-open");
+        }
+
+        function closeSidebarFunc() {
+          mobileSidebar.classList.remove("open");
+          sidebarOverlay.classList.remove("open");
+          body.classList.remove("mobile-menu-open");
+        }
+
+        if (menuToggle && mobileSidebar && closeSidebar && sidebarOverlay) {
+          menuToggle.addEventListener("click", openSidebar);
+          closeSidebar.addEventListener("click", closeSidebarFunc);
+          sidebarOverlay.addEventListener("click", closeSidebarFunc);
+
+          mobileSidebar.querySelectorAll("a").forEach((link) => {
+            link.addEventListener("click", closeSidebarFunc);
+          });
+
+          document.addEventListener("keydown", (e) => {
+            if (
+              e.key === "Escape" &&
+              mobileSidebar.classList.contains("open")
+            ) {
+              closeSidebarFunc();
+            }
+          });
+        }
+      })();
+    </script>
   </body>
 </html>

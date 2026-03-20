@@ -2,7 +2,10 @@
 <html class="dark" lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+      name="viewport"
+    />
     <title>Dashboard | TheBrave Finance</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
@@ -13,6 +16,24 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="images/favicon-16x16.png"
+    />
+    <link rel="manifest" href="images/site.webmanifest" />
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -40,11 +61,9 @@
         },
       };
     </script>
-    <style type="text/tailwindcss">
-      @layer base {
-        body {
-          font-family: "Manrope", sans-serif;
-        }
+    <style>
+      body {
+        font-family: "Manrope", sans-serif;
       }
       .glass-panel {
         background: rgba(21, 28, 44, 0.7);
@@ -61,14 +80,117 @@
         background: #243049;
         border-radius: 10px;
       }
+      /* mobile menu styles - left sliding drawer */
+      .mobile-menu-open {
+        overflow: hidden;
+      }
+      #mobileSidebar {
+        transition: transform 0.3s ease-in-out;
+        transform: translateX(-100%);
+      }
+      #mobileSidebar.open {
+        transform: translateX(0);
+      }
+      #sidebarOverlay {
+        transition: opacity 0.3s ease-in-out;
+        opacity: 0;
+        pointer-events: none;
+      }
+      #sidebarOverlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
     </style>
   </head>
   <body
     class="bg-background-dark text-slate-100 font-display transition-colors duration-300 antialiased overflow-hidden"
   >
+    <!-- Mobile Sidebar Overlay -->
+    <div
+      id="sidebarOverlay"
+      class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"
+    ></div>
+
+    <!-- Mobile Sidebar (slides from left) -->
+    <aside
+      id="mobileSidebar"
+      class="fixed top-0 left-0 h-full w-64 bg-surface-dark border-r border-border-dark flex flex-col z-50 lg:hidden transform -translate-x-full transition-transform duration-300 ease-in-out"
+    >
+      <div class="p-6 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-emerald-accent text-3xl"
+            >shield_with_heart</span
+          >
+          <h2
+            class="text-white text-lg font-extrabold tracking-tight uppercase"
+          >
+            THEBRAVE
+          </h2>
+        </div>
+        <button id="closeSidebar" class="text-slate-400 hover:text-white p-1">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <nav class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto">
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20 transition-all"
+          href="#"
+        >
+          <span class="material-symbols-outlined">dashboard</span>
+          Dashboard
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="deposit.html"
+        >
+          <span class="material-symbols-outlined text-[20px]"
+            >account_balance_wallet</span
+          >
+          Deposit
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="deposit-history.html"
+        >
+          <span class="material-symbols-outlined text-[20px]">history</span>
+          Deposit History
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="vip-sub.html"
+        >
+          <span class="material-symbols-outlined text-[20px]">verified</span>
+          VIP Subscription
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="recovery-request.html"
+        >
+          <span class="material-symbols-outlined text-[20px]">security</span>
+          Recovery Requests
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="profile.html"
+        >
+          <span class="material-symbols-outlined text-[20px]">person</span>
+          Profile
+        </a>
+      </nav>
+      <div class="p-4 border-t border-border-dark">
+        <button
+          class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
+        >
+          <span class="material-symbols-outlined text-[20px]">logout</span>
+          Logout
+        </button>
+      </div>
+    </aside>
+
     <div class="flex h-screen overflow-hidden">
+      <!-- Desktop Sidebar (hidden on mobile) -->
       <aside
-        class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex flex-col hidden lg:flex"
+        class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex-col hidden lg:flex"
       >
         <div class="p-6 flex items-center gap-3">
           <span class="material-symbols-outlined text-emerald-accent text-3xl"
@@ -85,7 +207,7 @@
         >
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20 transition-all"
-            href="#"
+            href="user-dashboard.html"
           >
             <span class="material-symbols-outlined">dashboard</span>
             Dashboard
@@ -137,16 +259,26 @@
           </button>
         </div>
       </aside>
+
       <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         <header
-          class="h-16 flex-shrink-0 border-b border-border-dark bg-surface-dark/50 backdrop-blur-md px-6 flex items-center justify-between"
+          class="h-16 flex-shrink-0 border-b border-border-dark bg-surface-dark/50 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between"
         >
-          <div class="flex items-center text-sm font-medium">
-            <span class="text-slate-500">Home</span>
-            <span class="mx-2 text-slate-600">/</span>
-            <span class="text-white">Dashboard</span>
+          <div class="flex items-center gap-3">
+            <!-- Mobile menu button -->
+            <button
+              id="menuToggle"
+              class="block lg:hidden p-2 text-slate-400 hover:text-white transition-colors"
+            >
+              <span class="material-symbols-outlined text-2xl">menu</span>
+            </button>
+            <div class="flex items-center text-xs sm:text-sm font-medium">
+              <span class="text-slate-500">Home</span>
+              <span class="mx-2 text-slate-600">/</span>
+              <span class="text-white">Dashboard</span>
+            </div>
           </div>
-          <div class="flex items-center gap-6">
+          <div class="flex items-center gap-4 sm:gap-6">
             <button
               class="relative text-slate-400 hover:text-white transition-colors"
             >
@@ -155,44 +287,50 @@
                 class="absolute top-0 right-0 h-2.5 w-2.5 bg-rose-500 rounded-full border-2 border-surface-dark"
               ></span>
             </button>
-            <div class="h-8 w-px bg-border-dark"></div>
-            <button class="flex items-center gap-3 group">
+            <div class="h-8 w-px bg-border-dark hidden sm:block"></div>
+            <button class="flex items-center gap-2 sm:gap-3 group">
               <div class="text-right hidden sm:block">
                 <p
-                  class="text-sm font-bold text-white group-hover:text-primary transition-colors"
+                  class="text-xs sm:text-sm font-bold text-white group-hover:text-primary transition-colors"
                 >
                   Alexander Brave
                 </p>
                 <p
-                  class="text-[11px] text-slate-500 uppercase tracking-widest font-bold"
+                  class="text-[10px] sm:text-[11px] text-slate-500 uppercase tracking-widest font-bold"
                 >
                   Pro Trader
                 </p>
               </div>
               <div
-                class="h-10 w-10 rounded-full bg-primary/20 border border-primary/30 overflow-hidden flex items-center justify-center"
+                class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/20 border border-primary/30 overflow-hidden flex items-center justify-center"
               >
-                <span class="material-symbols-outlined text-primary"
+                <span
+                  class="material-symbols-outlined text-primary text-lg sm:text-xl"
                   >person</span
                 >
               </div>
             </button>
           </div>
         </header>
+
         <main
-          class="flex-1 overflow-y-auto custom-scrollbar bg-background-dark p-6 lg:p-8 space-y-8"
+          class="flex-1 overflow-y-auto custom-scrollbar bg-background-dark p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8"
         >
           <div>
-            <h1 class="text-2xl font-bold text-white">
+            <h1 class="text-xl sm:text-2xl font-bold text-white">
               Welcome back, Alexander
             </h1>
-            <p class="text-slate-400 text-sm mt-1">
+            <p class="text-slate-400 text-xs sm:text-sm mt-1">
               Here is what's happening with your accounts today.
             </p>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <!-- Stats Grid -->
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
+          >
             <div
-              class="p-6 rounded-2xl bg-surface-dark border border-border-dark flex flex-col justify-between"
+              class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark flex flex-col justify-between"
             >
               <div>
                 <p
@@ -200,7 +338,7 @@
                 >
                   Account Balance
                 </p>
-                <h3 class="text-3xl font-black text-emerald-accent">
+                <h3 class="text-2xl sm:text-3xl font-black text-emerald-accent">
                   $12,450.00
                 </h3>
               </div>
@@ -210,8 +348,9 @@
                 Deposit Now
               </button>
             </div>
+
             <div
-              class="p-6 rounded-2xl bg-surface-dark border border-border-dark"
+              class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark"
             >
               <p
                 class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-4"
@@ -219,22 +358,23 @@
                 Assigned MT5 Details
               </p>
               <div class="space-y-2">
-                <div class="flex justify-between text-sm">
+                <div class="flex justify-between text-xs sm:text-sm">
                   <span class="text-slate-400">Login ID:</span>
                   <span class="text-white font-mono">882941</span>
                 </div>
-                <div class="flex justify-between text-sm">
+                <div class="flex justify-between text-xs sm:text-sm">
                   <span class="text-slate-400">Server:</span>
                   <span class="text-white">TheBrave-Live</span>
                 </div>
-                <div class="flex justify-between text-sm">
+                <div class="flex justify-between text-xs sm:text-sm">
                   <span class="text-slate-400">Account Type:</span>
                   <span class="text-primary font-bold">ECN Elite</span>
                 </div>
               </div>
             </div>
+
             <div
-              class="p-6 rounded-2xl bg-surface-dark border border-border-dark flex flex-col"
+              class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark flex flex-col"
             >
               <div class="flex justify-between items-start mb-4">
                 <p
@@ -248,7 +388,7 @@
                 >
               </div>
               <div class="flex-1">
-                <p class="text-slate-300 text-sm">
+                <p class="text-slate-300 text-xs sm:text-sm">
                   Expires in: <span class="text-white font-bold">24 days</span>
                 </p>
               </div>
@@ -262,17 +402,22 @@
                 >
               </a>
             </div>
+
             <div
-              class="p-6 rounded-2xl bg-surface-dark border border-border-dark"
+              class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark"
             >
               <p
                 class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2"
               >
                 Recent Deposits
               </p>
-              <h3 class="text-2xl font-bold text-white mb-2">$3,200.00</h3>
-              <p class="text-[11px] text-slate-500">Last 30 days performance</p>
-              <div class="mt-3 flex items-end gap-1 h-10">
+              <h3 class="text-xl sm:text-2xl font-bold text-white mb-2">
+                $3,200.00
+              </h3>
+              <p class="text-[10px] sm:text-[11px] text-slate-500">
+                Last 30 days performance
+              </p>
+              <div class="mt-3 flex items-end gap-1 h-8 sm:h-10">
                 <div class="flex-1 bg-border-dark rounded-t h-[40%]"></div>
                 <div class="flex-1 bg-border-dark rounded-t h-[60%]"></div>
                 <div class="flex-1 bg-primary/40 rounded-t h-[80%]"></div>
@@ -285,66 +430,72 @@
               </div>
             </div>
           </div>
+
+          <!-- Quick Actions and Activity -->
           <div class="grid lg:grid-cols-12 gap-6">
             <div class="lg:col-span-8 space-y-6">
               <h4
-                class="text-white font-bold text-sm uppercase tracking-widest"
+                class="text-white font-bold text-xs sm:text-sm uppercase tracking-widest"
               >
                 Quick Actions
               </h4>
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                 <button
-                  class="p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-primary transition-all text-center group"
+                  class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-primary transition-all text-center group"
                 >
                   <span
-                    class="material-symbols-outlined text-primary mb-2 block text-3xl group-hover:scale-110 transition-transform"
+                    class="material-symbols-outlined text-primary mb-2 block text-2xl sm:text-3xl group-hover:scale-110 transition-transform"
                     >add_card</span
                   >
-                  <span class="text-xs font-bold text-slate-300"
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-300"
                     >Fund Account</span
                   >
                 </button>
                 <button
-                  class="p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-emerald-accent transition-all text-center group"
+                  class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-emerald-accent transition-all text-center group"
                 >
                   <span
-                    class="material-symbols-outlined text-emerald-accent mb-2 block text-3xl group-hover:scale-110 transition-transform"
+                    class="material-symbols-outlined text-emerald-accent mb-2 block text-2xl sm:text-3xl group-hover:scale-110 transition-transform"
                     >auto_graph</span
                   >
-                  <span class="text-xs font-bold text-slate-300"
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-300"
                     >Join VIP Room</span
                   >
                 </button>
                 <button
-                  class="p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-primary transition-all text-center group"
+                  class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-primary transition-all text-center group"
                 >
                   <span
-                    class="material-symbols-outlined text-primary mb-2 block text-3xl group-hover:scale-110 transition-transform"
+                    class="material-symbols-outlined text-primary mb-2 block text-2xl sm:text-3xl group-hover:scale-110 transition-transform"
                     >health_and_safety</span
                   >
-                  <span class="text-xs font-bold text-slate-300"
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-300"
                     >Request Recovery</span
                   >
                 </button>
                 <button
-                  class="p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-slate-300 transition-all text-center group"
+                  class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-slate-300 transition-all text-center group"
                 >
                   <span
-                    class="material-symbols-outlined text-slate-400 mb-2 block text-3xl group-hover:scale-110 transition-transform"
+                    class="material-symbols-outlined text-slate-400 mb-2 block text-2xl sm:text-3xl group-hover:scale-110 transition-transform"
                     >headset_mic</span
                   >
-                  <span class="text-xs font-bold text-slate-300"
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-300"
                     >Contact Support</span
                   >
                 </button>
               </div>
+
+              <!-- Recent Activity -->
               <div
                 class="bg-surface-dark border border-border-dark rounded-2xl overflow-hidden"
               >
                 <div
-                  class="px-6 py-4 border-b border-border-dark flex justify-between items-center"
+                  class="px-4 sm:px-6 py-4 border-b border-border-dark flex justify-between items-center"
                 >
-                  <h4 class="text-white font-bold">Recent Activity</h4>
+                  <h4 class="text-white font-bold text-sm sm:text-base">
+                    Recent Activity
+                  </h4>
                   <button
                     class="text-primary text-xs font-bold hover:underline"
                   >
@@ -352,174 +503,147 @@
                   </button>
                 </div>
                 <div class="divide-y divide-border-dark">
-                  <div class="px-6 py-4 flex items-center gap-4">
+                  <div
+                    class="px-4 sm:px-6 py-4 flex items-center gap-3 sm:gap-4"
+                  >
                     <div
-                      class="h-10 w-10 rounded-full bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
+                      class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
                     >
-                      <span class="material-symbols-outlined text-lg"
+                      <span class="material-symbols-outlined text-sm sm:text-lg"
                         >check_circle</span
                       >
                     </div>
                     <div class="flex-1 min-w-0">
-                      <p class="text-sm font-bold text-white truncate">
+                      <p
+                        class="text-xs sm:text-sm font-bold text-white truncate"
+                      >
                         Deposit of $500 confirmed
                       </p>
-                      <p class="text-xs text-slate-500">
+                      <p class="text-[10px] sm:text-xs text-slate-500">
                         Transaction ID: #TRX882941
                       </p>
                     </div>
-                    <span class="text-[11px] text-slate-500 whitespace-nowrap"
+                    <span
+                      class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap"
                       >2 hours ago</span
                     >
                   </div>
-                  <div class="px-6 py-4 flex items-center gap-4">
+                  <div
+                    class="px-4 sm:px-6 py-4 flex items-center gap-3 sm:gap-4"
+                  >
                     <div
-                      class="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary"
+                      class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary"
                     >
-                      <span class="material-symbols-outlined text-lg"
+                      <span class="material-symbols-outlined text-sm sm:text-lg"
                         >bolt</span
                       >
                     </div>
                     <div class="flex-1 min-w-0">
-                      <p class="text-sm font-bold text-white truncate">
+                      <p
+                        class="text-xs sm:text-sm font-bold text-white truncate"
+                      >
                         New VIP signal available
                       </p>
-                      <p class="text-xs text-slate-500">
+                      <p class="text-[10px] sm:text-xs text-slate-500">
                         Gold (XAUUSD) - Buy Entry
                       </p>
                     </div>
-                    <span class="text-[11px] text-slate-500 whitespace-nowrap"
+                    <span
+                      class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap"
                       >4 hours ago</span
                     >
                   </div>
-                  <div class="px-6 py-4 flex items-center gap-4">
+                  <div
+                    class="px-4 sm:px-6 py-4 flex items-center gap-3 sm:gap-4"
+                  >
                     <div
-                      class="h-10 w-10 rounded-full bg-slate-500/10 flex items-center justify-center text-slate-400"
+                      class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-slate-500/10 flex items-center justify-center text-slate-400"
                     >
-                      <span class="material-symbols-outlined text-lg"
+                      <span class="material-symbols-outlined text-sm sm:text-lg"
                         >settings_account_box</span
                       >
                     </div>
                     <div class="flex-1 min-w-0">
-                      <p class="text-sm font-bold text-white truncate">
+                      <p
+                        class="text-xs sm:text-sm font-bold text-white truncate"
+                      >
                         Profile updated
                       </p>
-                      <p class="text-xs text-slate-500">
+                      <p class="text-[10px] sm:text-xs text-slate-500">
                         Security preferences modified
                       </p>
                     </div>
-                    <span class="text-[11px] text-slate-500 whitespace-nowrap"
+                    <span
+                      class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap"
                       >Yesterday</span
                     >
                   </div>
-                  <div class="px-6 py-4 flex items-center gap-4">
+                  <div
+                    class="px-4 sm:px-6 py-4 flex items-center gap-3 sm:gap-4"
+                  >
                     <div
-                      class="h-10 w-10 rounded-full bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
+                      class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
                     >
-                      <span class="material-symbols-outlined text-lg"
+                      <span class="material-symbols-outlined text-sm sm:text-lg"
                         >verified_user</span
                       >
                     </div>
                     <div class="flex-1 min-w-0">
-                      <p class="text-sm font-bold text-white truncate">
+                      <p
+                        class="text-xs sm:text-sm font-bold text-white truncate"
+                      >
                         KYC Verification Successful
                       </p>
-                      <p class="text-xs text-slate-500">
+                      <p class="text-[10px] sm:text-xs text-slate-500">
                         Tier 2 access granted
                       </p>
                     </div>
-                    <span class="text-[11px] text-slate-500 whitespace-nowrap"
+                    <span
+                      class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap"
                       >2 days ago</span
                     >
                   </div>
                 </div>
               </div>
             </div>
+
             <div class="lg:col-span-4 space-y-6">
               <h4
-                class="text-white font-bold text-sm uppercase tracking-widest"
+                class="text-white font-bold text-xs sm:text-sm uppercase tracking-widest"
               >
-                Announcements
+                Trading Tips
               </h4>
+
               <div class="space-y-4">
                 <div
-                  class="p-6 rounded-2xl bg-gradient-to-br from-primary/20 to-surface-dark border border-primary/30 relative overflow-hidden group"
+                  class="p-5 rounded-2xl bg-gradient-to-br from-primary/10 to-surface-dark border border-primary/20"
                 >
-                  <div
-                    class="absolute -right-4 -top-4 text-primary opacity-10 group-hover:rotate-12 transition-transform"
-                  >
-                    <span class="material-symbols-outlined text-8xl"
-                      >campaign</span
-                    >
-                  </div>
-                  <span
-                    class="px-2 py-0.5 bg-primary text-white text-[10px] font-black rounded uppercase mb-4 inline-block"
-                    >Upcoming</span
-                  >
-                  <h5 class="text-white font-bold mb-2">
-                    Weekly Market Outlook
+                  <h5 class="text-white font-bold text-sm mb-2">
+                    Risk Management
                   </h5>
-                  <p class="text-slate-400 text-sm mb-4">
-                    Join our lead analyst for a deep dive into next week's
-                    liquidity zones.
+                  <p class="text-slate-400 text-xs">
+                    Never risk more than 2% of your account on a single trade.
                   </p>
-                  <div class="flex items-center justify-between">
-                    <div
-                      class="flex items-center gap-2 text-xs text-primary font-bold"
-                    >
-                      <span class="material-symbols-outlined text-sm"
-                        >schedule</span
-                      >
-                      Starting in 2 hours
-                    </div>
-                    <button
-                      class="px-3 py-1.5 bg-primary text-white text-xs font-bold rounded-lg shadow-lg shadow-primary/20"
-                    >
-                      Join Webinar
-                    </button>
-                  </div>
                 </div>
+
                 <div
-                  class="p-6 rounded-2xl bg-surface-dark border border-border-dark"
+                  class="p-5 rounded-2xl bg-surface-dark border border-border-dark"
                 >
-                  <div class="flex items-center gap-3 mb-3">
-                    <div
-                      class="h-2 w-2 rounded-full bg-emerald-accent animate-pulse"
-                    ></div>
-                    <h5 class="text-white font-bold text-sm">System Update</h5>
-                  </div>
-                  <p class="text-slate-400 text-sm leading-relaxed">
-                    New Recovery Protocol established. Our fund retrieval
-                    systems now support direct Polygon (MATIC) network traces.
+                  <h5 class="text-white font-bold text-sm mb-2">
+                    Market Structure
+                  </h5>
+                  <p class="text-slate-400 text-xs">
+                    Always trade in the direction of the higher timeframe trend.
                   </p>
-                  <hr class="my-4 border-border-dark" />
-                  <a
-                    class="text-xs text-slate-500 font-bold flex items-center gap-1 hover:text-white transition-colors uppercase tracking-widest"
-                    href="#"
-                  >
-                    Read Full Update
-                    <span class="material-symbols-outlined text-sm"
-                      >open_in_new</span
-                    >
-                  </a>
                 </div>
+
                 <div
-                  class="p-4 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-between"
+                  class="p-5 rounded-2xl bg-surface-dark border border-border-dark"
                 >
-                  <div class="flex items-center gap-3">
-                    <span class="material-symbols-outlined text-primary"
-                      >download</span
-                    >
-                    <div class="text-[11px]">
-                      <p class="text-white font-bold">Desktop MT5</p>
-                      <p class="text-slate-500">v5.0.32 (64-bit)</p>
-                    </div>
-                  </div>
-                  <button
-                    class="material-symbols-outlined text-slate-400 hover:text-white"
-                  >
-                    download_for_offline
-                  </button>
+                  <h5 class="text-white font-bold text-sm mb-2">Discipline</h5>
+                  <p class="text-slate-400 text-xs">
+                    Avoid overtrading. Stick to your strategy.
+                  </p>
                 </div>
               </div>
             </div>
@@ -527,5 +651,8 @@
         </main>
       </div>
     </div>
+
+    <!-- Mobile menu JavaScript -->
+    <script src="js/dashmenu.js"></script>
   </body>
 </html>

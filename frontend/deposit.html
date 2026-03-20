@@ -2,7 +2,10 @@
 <html class="dark" lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+      name="viewport"
+    />
     <title>Deposit | TheBrave Finance</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
@@ -13,6 +16,24 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="images/favicon-16x16.png"
+    />
+    <link rel="manifest" href="images/site.webmanifest" />
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -40,11 +61,9 @@
         },
       };
     </script>
-    <style type="text/tailwindcss">
-      @layer base {
-        body {
-          font-family: "Manrope", sans-serif;
-        }
+    <style>
+      body {
+        font-family: "Manrope", sans-serif;
       }
       .glass-panel {
         background: rgba(21, 28, 44, 0.7);
@@ -61,14 +80,117 @@
         background: #243049;
         border-radius: 10px;
       }
+      /* mobile menu styles - left sliding drawer */
+      .mobile-menu-open {
+        overflow: hidden;
+      }
+      #mobileSidebar {
+        transition: transform 0.3s ease-in-out;
+        transform: translateX(-100%);
+      }
+      #mobileSidebar.open {
+        transform: translateX(0);
+      }
+      #sidebarOverlay {
+        transition: opacity 0.3s ease-in-out;
+        opacity: 0;
+        pointer-events: none;
+      }
+      #sidebarOverlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
     </style>
   </head>
   <body
     class="bg-background-dark text-slate-100 font-display transition-colors duration-300 antialiased overflow-hidden"
   >
+    <!-- Mobile Sidebar Overlay -->
+    <div
+      id="sidebarOverlay"
+      class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"
+    ></div>
+
+    <!-- Mobile Sidebar (slides from left) -->
+    <aside
+      id="mobileSidebar"
+      class="fixed top-0 left-0 h-full w-64 bg-surface-dark border-r border-border-dark flex flex-col z-50 lg:hidden transform -translate-x-full transition-transform duration-300 ease-in-out"
+    >
+      <div class="p-6 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-emerald-accent text-3xl"
+            >shield_with_heart</span
+          >
+          <h2
+            class="text-white text-lg font-extrabold tracking-tight uppercase"
+          >
+            THEBRAVE
+          </h2>
+        </div>
+        <button id="closeSidebar" class="text-slate-400 hover:text-white p-1">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <nav class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto">
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="user-dashboard.html"
+        >
+          <span class="material-symbols-outlined text-[20px]">dashboard</span>
+          Dashboard
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20 transition-all"
+          href="deposit.html"
+        >
+          <span class="material-symbols-outlined text-[20px]"
+            >account_balance_wallet</span
+          >
+          Deposit
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="deposit-history.html"
+        >
+          <span class="material-symbols-outlined text-[20px]">history</span>
+          Deposit History
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="vip-sub.html"
+        >
+          <span class="material-symbols-outlined text-[20px]">verified</span>
+          VIP Subscription
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="recovery-request.html"
+        >
+          <span class="material-symbols-outlined text-[20px]">security</span>
+          Recovery Requests
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="profile.html"
+        >
+          <span class="material-symbols-outlined text-[20px]">person</span>
+          Profile
+        </a>
+      </nav>
+      <div class="p-4 border-t border-border-dark">
+        <button
+          class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
+        >
+          <span class="material-symbols-outlined text-[20px]">logout</span>
+          Logout
+        </button>
+      </div>
+    </aside>
+
     <div class="flex h-screen overflow-hidden">
+      <!-- Desktop Sidebar (hidden on mobile) -->
       <aside
-        class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex flex-col hidden lg:flex"
+        class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex-col hidden lg:flex"
       >
         <div class="p-6 flex items-center gap-3">
           <span class="material-symbols-outlined text-emerald-accent text-3xl"
@@ -85,14 +207,14 @@
         >
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-            href="#"
+            href="user-dashboard.html"
           >
             <span class="material-symbols-outlined text-[20px]">dashboard</span>
             Dashboard
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20 transition-all"
-            href="#"
+            href="deposit.html"
           >
             <span class="material-symbols-outlined text-[20px]"
               >account_balance_wallet</span
@@ -101,28 +223,28 @@
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-            href="#"
+            href="deposit-history.html"
           >
             <span class="material-symbols-outlined text-[20px]">history</span>
             Deposit History
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-            href="#"
+            href="vip-sub.html"
           >
             <span class="material-symbols-outlined text-[20px]">verified</span>
             VIP Subscription
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-            href="#"
+            href="recovery-request.html"
           >
             <span class="material-symbols-outlined text-[20px]">security</span>
             Recovery Requests
           </a>
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-            href="#"
+            href="profile.html"
           >
             <span class="material-symbols-outlined text-[20px]">person</span>
             Profile
@@ -137,16 +259,26 @@
           </button>
         </div>
       </aside>
+
       <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         <header
-          class="h-16 flex-shrink-0 border-b border-border-dark bg-surface-dark/50 backdrop-blur-md px-6 flex items-center justify-between"
+          class="h-16 flex-shrink-0 border-b border-border-dark bg-surface-dark/50 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between"
         >
-          <div class="flex items-center text-sm font-medium">
-            <span class="text-slate-500">Home</span>
-            <span class="mx-2 text-slate-600">/</span>
-            <span class="text-white">Deposit</span>
+          <div class="flex items-center gap-3">
+            <!-- Mobile menu button -->
+            <button
+              id="menuToggle"
+              class="block lg:hidden p-2 text-slate-400 hover:text-white transition-colors"
+            >
+              <span class="material-symbols-outlined text-2xl">menu</span>
+            </button>
+            <div class="flex items-center text-xs sm:text-sm font-medium">
+              <span class="text-slate-500">Home</span>
+              <span class="mx-2 text-slate-600">/</span>
+              <span class="text-white">Deposit</span>
+            </div>
           </div>
-          <div class="flex items-center gap-6">
+          <div class="flex items-center gap-4 sm:gap-6">
             <button
               class="relative text-slate-400 hover:text-white transition-colors"
             >
@@ -155,45 +287,53 @@
                 class="absolute top-0 right-0 h-2.5 w-2.5 bg-rose-500 rounded-full border-2 border-surface-dark"
               ></span>
             </button>
-            <div class="h-8 w-px bg-border-dark"></div>
-            <button class="flex items-center gap-3 group">
+            <div class="h-8 w-px bg-border-dark hidden sm:block"></div>
+            <button class="flex items-center gap-2 sm:gap-3 group">
               <div class="text-right hidden sm:block">
                 <p
-                  class="text-sm font-bold text-white group-hover:text-primary transition-colors"
+                  class="text-xs sm:text-sm font-bold text-white group-hover:text-primary transition-colors"
                 >
                   Alexander Brave
                 </p>
                 <p
-                  class="text-[11px] text-slate-500 uppercase tracking-widest font-bold"
+                  class="text-[10px] sm:text-[11px] text-slate-500 uppercase tracking-widest font-bold"
                 >
                   Pro Trader
                 </p>
               </div>
               <div
-                class="h-10 w-10 rounded-full bg-primary/20 border border-primary/30 overflow-hidden flex items-center justify-center"
+                class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/20 border border-primary/30 overflow-hidden flex items-center justify-center"
               >
-                <span class="material-symbols-outlined text-primary"
+                <span
+                  class="material-symbols-outlined text-primary text-lg sm:text-xl"
                   >person</span
                 >
               </div>
             </button>
           </div>
         </header>
+
         <main
-          class="flex-1 overflow-y-auto custom-scrollbar bg-background-dark p-6 lg:p-12"
+          class="flex-1 overflow-y-auto custom-scrollbar bg-background-dark p-4 sm:p-6 lg:p-12"
         >
-          <div class="max-w-4xl mx-auto space-y-10">
+          <div class="max-w-4xl mx-auto space-y-6 sm:space-y-10">
             <section class="space-y-2">
-              <h1 class="text-3xl font-black text-white">Fund Your Account</h1>
+              <h1 class="text-2xl sm:text-3xl font-black text-white">
+                Fund Your Account
+              </h1>
               <div class="flex items-center gap-2 text-emerald-accent">
-                <span class="material-symbols-outlined text-lg">info</span>
-                <p class="text-sm font-medium">
+                <span class="material-symbols-outlined text-base sm:text-lg"
+                  >info</span
+                >
+                <p class="text-xs sm:text-sm font-medium">
                   Most deposits are processed within 1-2 hours after
                   confirmation.
                 </p>
               </div>
             </section>
-            <div class="grid md:grid-cols-2 gap-4">
+
+            <!-- Info Cards -->
+            <div class="grid sm:grid-cols-2 gap-4">
               <div
                 class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex gap-3"
               >
@@ -205,12 +345,11 @@
                   <p
                     class="text-xs font-bold text-amber-500 uppercase tracking-wider mb-1"
                   >
-                    Bank Transfer Note
+                    Crypto Transfer Note
                   </p>
                   <p class="text-xs text-slate-300 leading-relaxed">
-                    Ensure you include your unique
-                    <span class="text-white font-bold">Account ID</span> as the
-                    payment reference to avoid processing delays.
+                    Ensure you send the correct cryptocurrency on the selected
+                    network to avoid permanent loss of funds.
                   </p>
                 </div>
               </div>
@@ -234,6 +373,7 @@
                 </div>
               </div>
             </div>
+
             <div class="space-y-4">
               <h4
                 class="text-white font-bold text-sm uppercase tracking-widest"
@@ -241,7 +381,7 @@
                 Select Method
               </h4>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <label class="relative cursor-pointer group">
+                <label class="relative cursor-pointer group md:col-span-2">
                   <input
                     checked=""
                     class="peer sr-only"
@@ -255,9 +395,9 @@
                       <div
                         class="h-12 w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
                       >
-                        <span class="material-symbols-outlined text-3xl"
-                          >currency_bitcoin</span
-                        >
+                        <span class="material-symbols-outlined text-3xl">
+                          currency_bitcoin
+                        </span>
                       </div>
                       <div
                         class="h-5 w-5 rounded-full border-2 border-border-dark peer-checked:bg-emerald-accent peer-checked:border-emerald-accent flex items-center justify-center"
@@ -266,50 +406,23 @@
                       </div>
                     </div>
                     <h5 class="text-white font-bold text-lg">Crypto</h5>
-                    <p class="text-slate-500 text-sm">
-                      USDT (TRC20, ERC20), BTC, ETH
-                    </p>
-                  </div>
-                </label>
-                <label class="relative cursor-pointer group">
-                  <input class="peer sr-only" name="method" type="radio" />
-                  <div
-                    class="p-6 rounded-2xl bg-surface-dark border border-border-dark peer-checked:border-emerald-accent peer-checked:ring-1 peer-checked:ring-emerald-accent transition-all"
-                  >
-                    <div class="flex justify-between items-center mb-4">
-                      <div
-                        class="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary"
-                      >
-                        <span class="material-symbols-outlined text-3xl"
-                          >account_balance</span
-                        >
-                      </div>
-                      <div
-                        class="h-5 w-5 rounded-full border-2 border-border-dark flex items-center justify-center"
-                      >
-                        <div
-                          class="h-2 w-2 bg-white rounded-full opacity-0"
-                        ></div>
-                      </div>
-                    </div>
-                    <h5 class="text-white font-bold text-lg">Bank Transfer</h5>
-                    <p class="text-slate-500 text-sm">
-                      International Wire &amp; SEPA
-                    </p>
+                    <p class="text-slate-500 text-sm">USDT, BTC</p>
                   </div>
                 </label>
               </div>
             </div>
+
+            <!-- Deposit Form -->
             <div
-              class="bg-surface-dark border border-border-dark rounded-3xl p-8"
+              class="bg-surface-dark border border-border-dark rounded-2xl sm:rounded-3xl p-4 sm:p-8"
             >
               <form
                 action="#"
-                class="space-y-8"
+                class="space-y-6 sm:space-y-8"
                 method="POST"
                 onsubmit="return false;"
               >
-                <div class="grid md:grid-cols-2 gap-8">
+                <div class="grid sm:grid-cols-2 gap-6 sm:gap-8">
                   <div class="space-y-2">
                     <label
                       class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1"
@@ -322,7 +435,7 @@
                         <span class="text-slate-400 font-bold">$</span>
                       </div>
                       <input
-                        class="block w-full pl-8 pr-24 py-4 bg-background-dark border-border-dark rounded-xl focus:ring-emerald-accent focus:border-emerald-accent text-white font-bold text-lg placeholder:text-slate-700"
+                        class="block w-full pl-8 pr-20 sm:pr-24 py-3 sm:py-4 bg-background-dark border-border-dark rounded-xl focus:ring-emerald-accent focus:border-emerald-accent text-white font-bold text-base sm:text-lg placeholder:text-slate-700"
                         placeholder="0.00"
                         type="number"
                       />
@@ -330,7 +443,7 @@
                         class="absolute inset-y-0 right-0 flex items-center pr-1"
                       >
                         <select
-                          class="h-10 bg-surface-dark border-none rounded-lg text-sm font-bold text-white focus:ring-0 mr-1 cursor-pointer"
+                          class="h-8 sm:h-10 bg-surface-dark border-none rounded-lg text-xs sm:text-sm font-bold text-white focus:ring-0 mr-1 cursor-pointer"
                         >
                           <option>USD</option>
                           <option>EUR</option>
@@ -346,68 +459,64 @@
                     >
                     <div class="relative">
                       <select
-                        class="block w-full px-4 py-4 bg-background-dark border-border-dark rounded-xl focus:ring-emerald-accent focus:border-emerald-accent text-white font-medium appearance-none"
+                        class="block w-full px-4 py-3 sm:py-4 bg-background-dark border-border-dark rounded-xl focus:ring-emerald-accent focus:border-emerald-accent text-white font-medium appearance-none text-sm sm:text-base"
                       >
                         <option>USDT (TRC20)</option>
-                        <option>USDT (ERC20)</option>
+                        <option>USDT (BEP20)</option>
                         <option>Bitcoin (BTC)</option>
-                        <option>Ethereum (ETH)</option>
                       </select>
-                      <div
-                        class="absolute inset-y-0 right-4 flex items-center pointer-events-none"
-                      >
-                        <span class="material-symbols-outlined text-slate-500"
-                          >expand_more</span
-                        >
-                      </div>
                     </div>
                   </div>
-                  <div class="md:col-span-2 space-y-2">
+                  <div class="sm:col-span-2 space-y-2">
                     <label
                       class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1"
                       >Transaction ID / Hash</label
                     >
                     <input
-                      class="block w-full px-4 py-4 bg-background-dark border-border-dark rounded-xl focus:ring-emerald-accent focus:border-emerald-accent text-white font-mono text-sm placeholder:text-slate-700"
+                      class="block w-full px-4 py-3 sm:py-4 bg-background-dark border-border-dark rounded-xl focus:ring-emerald-accent focus:border-emerald-accent text-white font-mono text-xs sm:text-sm placeholder:text-slate-700"
                       placeholder="Enter your transaction reference number"
                       type="text"
                     />
                   </div>
-                  <div class="md:col-span-2 space-y-2">
+                  <div class="sm:col-span-2 space-y-2">
                     <label
                       class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1"
                       >Proof of Payment</label
                     >
                     <div
-                      class="border-2 border-dashed border-border-dark rounded-2xl p-10 flex flex-col items-center justify-center bg-background-dark/50 hover:bg-background-dark transition-colors cursor-pointer group"
+                      class="border-2 border-dashed border-border-dark rounded-xl sm:rounded-2xl p-6 sm:p-10 flex flex-col items-center justify-center bg-background-dark/50 hover:bg-background-dark transition-colors cursor-pointer group"
                     >
                       <div
-                        class="h-14 w-14 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-emerald-accent group-hover:bg-emerald-accent/10 transition-all mb-4"
+                        class="h-10 w-10 sm:h-14 sm:w-14 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-emerald-accent group-hover:bg-emerald-accent/10 transition-all mb-4"
                       >
-                        <span class="material-symbols-outlined text-3xl"
+                        <span
+                          class="material-symbols-outlined text-2xl sm:text-3xl"
                           >upload_file</span
                         >
                       </div>
-                      <p class="text-white font-bold text-sm mb-1">
+                      <p class="text-white font-bold text-xs sm:text-sm mb-1">
                         Click to upload or drag and drop
                       </p>
-                      <p class="text-slate-500 text-xs">
+                      <p class="text-slate-500 text-[10px] sm:text-xs">
                         Receipt, screenshot or PDF (Max 5MB)
                       </p>
                     </div>
                   </div>
                 </div>
                 <button
-                  class="w-full py-5 bg-emerald-accent hover:bg-emerald-500 text-white font-black rounded-2xl shadow-xl shadow-emerald-500/20 transition-all transform active:scale-[0.98] flex items-center justify-center gap-3"
+                  class="w-full py-4 sm:py-5 bg-emerald-accent hover:bg-emerald-500 text-white font-black rounded-xl sm:rounded-2xl shadow-xl shadow-emerald-500/20 transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 sm:gap-3 text-sm sm:text-base"
                   type="submit"
                 >
-                  <span class="material-symbols-outlined">send</span>
+                  <span class="material-symbols-outlined text-lg sm:text-xl"
+                    >send</span
+                  >
                   SUBMIT DEPOSIT
                 </button>
               </form>
             </div>
-            <div class="text-center pt-4">
-              <p class="text-slate-500 text-sm">
+
+            <div class="text-center pt-2 sm:pt-4">
+              <p class="text-slate-500 text-xs sm:text-sm">
                 Need help with your deposit?
                 <a class="text-primary font-bold hover:underline" href="#"
                   >Contact Support</a
@@ -418,5 +527,8 @@
         </main>
       </div>
     </div>
+
+    <!-- Mobile menu JavaScript -->
+    <script src="js/dashmenu.js"></script>
   </body>
 </html>
