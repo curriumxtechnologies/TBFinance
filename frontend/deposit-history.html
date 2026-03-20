@@ -949,79 +949,58 @@
       </div>
     </div>
 
+    <!-- Detail Panel Overlay -->
+    <div id="panelOverlay" class="fixed inset-0 bg-black/50 z-40"></div>
+
+    <!-- Bottom Detail Panel -->
+    <div
+      id="detailPanel"
+      class="fixed bottom-0 left-0 right-0 z-50 bg-surface-dark border-t border-border-dark rounded-t-2xl p-4 sm:p-6 max-h-[85vh] overflow-y-auto"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-white text-lg font-bold">Transaction Details</h3>
+        <button id="closePanel" class="text-slate-400 hover:text-white">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div id="panelContent"></div>
+    </div>
+
     <!-- Mobile menu JavaScript -->
     <script>
-      (function () {
-        // Sidebar functionality
-        const menuToggle = document.getElementById("menuToggle");
-        const mobileSidebar = document.getElementById("mobileSidebar");
-        const closeSidebar = document.getElementById("closeSidebar");
-        const sidebarOverlay = document.getElementById("sidebarOverlay");
-        const body = document.body;
+      // Bottom panel functionality
+      const panelOverlay = document.getElementById("panelOverlay");
+      const detailPanel = document.getElementById("detailPanel");
+      const closePanel = document.getElementById("closePanel");
+      const panelContent = document.getElementById("panelContent");
 
-        function openSidebar() {
-          mobileSidebar.classList.add("open");
-          sidebarOverlay.classList.add("open");
-          body.classList.add("mobile-menu-open");
-        }
+      function closePanelFunc() {
+        detailPanel.classList.remove("open");
+        panelOverlay.classList.remove("open");
+        body.classList.remove("mobile-menu-open"); // Just in case
+      }
 
-        function closeSidebarFunc() {
-          mobileSidebar.classList.remove("open");
-          sidebarOverlay.classList.remove("open");
-          body.classList.remove("mobile-menu-open");
-        }
+      if (panelOverlay && detailPanel && closePanel) {
+        closePanel.addEventListener("click", closePanelFunc);
+        panelOverlay.addEventListener("click", closePanelFunc);
 
-        if (menuToggle && mobileSidebar && closeSidebar && sidebarOverlay) {
-          menuToggle.addEventListener("click", openSidebar);
-          closeSidebar.addEventListener("click", closeSidebarFunc);
-          sidebarOverlay.addEventListener("click", closeSidebarFunc);
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && detailPanel.classList.contains("open")) {
+            closePanelFunc();
+          }
+        });
+      }
 
-          mobileSidebar.querySelectorAll("a").forEach((link) => {
-            link.addEventListener("click", closeSidebarFunc);
-          });
+      // Make showTransactionDetails available globally
+      window.showTransactionDetails = function (id) {
+        // In a real app, you'd fetch data based on ID
+        // For demo, we'll show different content based on ID
+        let content = "";
 
-          document.addEventListener("keydown", (e) => {
-            if (
-              e.key === "Escape" &&
-              mobileSidebar.classList.contains("open")
-            ) {
-              closeSidebarFunc();
-            }
-          });
-        }
-
-        // Bottom panel functionality
-        const panelOverlay = document.getElementById("panelOverlay");
-        const detailPanel = document.getElementById("detailPanel");
-        const closePanel = document.getElementById("closePanel");
-        const panelContent = document.getElementById("panelContent");
-
-        function closePanelFunc() {
-          detailPanel.classList.remove("open");
-          panelOverlay.classList.remove("open");
-          body.classList.remove("mobile-menu-open"); // Just in case
-        }
-
-        if (panelOverlay && detailPanel && closePanel) {
-          closePanel.addEventListener("click", closePanelFunc);
-          panelOverlay.addEventListener("click", closePanelFunc);
-
-          document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape" && detailPanel.classList.contains("open")) {
-              closePanelFunc();
-            }
-          });
-        }
-
-        // Make showTransactionDetails available globally
-        window.showTransactionDetails = function (id) {
-          // In a real app, you'd fetch data based on ID
-          // For demo, we'll show different content based on ID
-          let content = "";
-
-          switch (id) {
-            case 1:
-              content = `
+        switch (id) {
+          case 1:
+            content = `
             <div class="space-y-4">
               <div class="flex justify-between items-center pb-2 border-b border-border-dark">
                 <span class="text-slate-400 text-sm">Transaction ID</span>
@@ -1061,9 +1040,9 @@
               </div>
             </div>
           `;
-              break;
-            case 2:
-              content = `
+            break;
+          case 2:
+            content = `
             <div class="space-y-4">
               <div class="flex justify-between items-center pb-2 border-b border-border-dark">
                 <span class="text-slate-400 text-sm">Transaction ID</span>
@@ -1103,9 +1082,9 @@
               </div>
             </div>
           `;
-              break;
-            case 3:
-              content = `
+            break;
+          case 3:
+            content = `
             <div class="space-y-4">
               <div class="flex justify-between items-center pb-2 border-b border-border-dark">
                 <span class="text-slate-400 text-sm">Transaction ID</span>
@@ -1141,9 +1120,9 @@
               </div>
             </div>
           `;
-              break;
-            case 4:
-              content = `
+            break;
+          case 4:
+            content = `
             <div class="space-y-4">
               <div class="flex justify-between items-center pb-2 border-b border-border-dark">
                 <span class="text-slate-400 text-sm">Transaction ID</span>
@@ -1183,18 +1162,18 @@
               </div>
             </div>
           `;
-              break;
-            default:
-              content =
-                '<p class="text-slate-400">Transaction details not found</p>';
-          }
+            break;
+          default:
+            content =
+              '<p class="text-slate-400">Transaction details not found</p>';
+        }
 
-          panelContent.innerHTML = content;
-          detailPanel.classList.add("open");
-          panelOverlay.classList.add("open");
-          body.classList.add("mobile-menu-open");
-        };
-      })();
+        panelContent.innerHTML = content;
+        detailPanel.classList.add("open");
+        panelOverlay.classList.add("open");
+        body.classList.add("mobile-menu-open");
+      };
     </script>
+    <script src="js/dashmenu.js"></script>
   </body>
 </html>
