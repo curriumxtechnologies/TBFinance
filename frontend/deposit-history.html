@@ -9,11 +9,7 @@
     <title>Deposit History | TheBrave Finance</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link
@@ -34,6 +30,8 @@
       href="images/favicon-16x16.png"
     />
     <link rel="manifest" href="images/site.webmanifest" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -61,67 +59,87 @@
         },
       };
     </script>
+
     <style>
       body {
         font-family: "Manrope", sans-serif;
       }
+
       .glass-panel {
         background: rgba(21, 28, 44, 0.7);
         backdrop-filter: blur(12px);
         border: 1px solid rgba(36, 48, 73, 0.5);
       }
+
       .custom-scrollbar::-webkit-scrollbar {
         width: 4px;
       }
+
       .custom-scrollbar::-webkit-scrollbar-track {
         background: transparent;
       }
+
       .custom-scrollbar::-webkit-scrollbar-thumb {
         background: #243049;
         border-radius: 10px;
       }
+
       input[type="date"]::-webkit-calendar-picker-indicator {
         filter: invert(1);
       }
-      /* mobile menu styles - left sliding drawer */
+
       .mobile-menu-open {
         overflow: hidden;
       }
+
       #mobileSidebar {
         transition: transform 0.3s ease-in-out;
         transform: translateX(-100%);
       }
+
       #mobileSidebar.open {
         transform: translateX(0);
       }
+
       #sidebarOverlay {
         transition: opacity 0.3s ease-in-out;
         opacity: 0;
         pointer-events: none;
       }
+
       #sidebarOverlay.open {
         opacity: 1;
         pointer-events: auto;
       }
-      /* bottom slide panel for transaction details */
+
       #detailPanel {
         transition: transform 0.3s ease-in-out;
         transform: translateY(100%);
       }
+
       #detailPanel.open {
         transform: translateY(0);
       }
+
       #panelOverlay {
         transition: opacity 0.3s ease-in-out;
         opacity: 0;
         pointer-events: none;
       }
+
       #panelOverlay.open {
         opacity: 1;
         pointer-events: auto;
       }
+
+      .lucide {
+        width: 20px;
+        height: 20px;
+        stroke-width: 2;
+      }
     </style>
   </head>
+
   <body
     class="bg-background-dark text-slate-100 font-display transition-colors duration-300 antialiased overflow-hidden"
   >
@@ -131,7 +149,7 @@
       class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"
     ></div>
 
-    <!-- Mobile Sidebar (slides from left) -->
+    <!-- Mobile Sidebar -->
     <aside
       id="mobileSidebar"
       class="fixed top-0 left-0 h-full w-64 bg-surface-dark border-r border-border-dark flex flex-col z-50 lg:hidden transform -translate-x-full transition-transform duration-300 ease-in-out"
@@ -149,68 +167,74 @@
             TBF
           </h2>
         </div>
+
         <button id="closeSidebar" class="text-slate-400 hover:text-white p-1">
-          <span class="material-symbols-outlined">close</span>
+          <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
+
       <nav class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto">
         <a
           class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
           href="user-dashboard.html"
         >
-          <span class="material-symbols-outlined">dashboard</span>
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
           Dashboard
         </a>
+
         <a
           class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
           href="deposit.html"
         >
-          <span class="material-symbols-outlined text-[20px]"
-            >account_balance_wallet</span
-          >
+          <i data-lucide="wallet" class="w-5 h-5"></i>
           Deposit
         </a>
+
         <a
           class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20 transition-all"
           href="deposit-history.html"
         >
-          <span class="material-symbols-outlined text-[20px]">history</span>
+          <i data-lucide="history" class="w-5 h-5"></i>
           Deposit History
         </a>
+
         <a
           class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
           href="vip-sub.html"
         >
-          <span class="material-symbols-outlined text-[20px]">verified</span>
+          <i data-lucide="badge-check" class="w-5 h-5"></i>
           VIP Subscription
         </a>
+
         <a
           class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
           href="recovery-request.html"
         >
-          <span class="material-symbols-outlined text-[20px]">security</span>
+          <i data-lucide="shield-check" class="w-5 h-5"></i>
           Recovery Requests
         </a>
+
         <a
           class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
           href="profile.html"
         >
-          <span class="material-symbols-outlined text-[20px]">person</span>
+          <i data-lucide="user" class="w-5 h-5"></i>
           Profile
         </a>
       </nav>
+
       <div class="p-4 border-t border-border-dark">
         <button
           class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
         >
-          <span class="material-symbols-outlined text-[20px]">logout</span>
+          <i data-lucide="log-out" class="w-5 h-5"></i>
           Logout
         </button>
       </div>
     </aside>
 
     <div class="flex h-screen overflow-hidden">
-      <!-- Desktop Sidebar (hidden on mobile) -->
+      <!-- Desktop Sidebar -->
       <aside
         class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex-col hidden lg:flex"
       >
@@ -226,6 +250,7 @@
             TBF
           </h2>
         </div>
+
         <nav
           class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto"
         >
@@ -233,52 +258,56 @@
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
             href="user-dashboard.html"
           >
-            <span class="material-symbols-outlined">dashboard</span>
+            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
             Dashboard
           </a>
+
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
             href="deposit.html"
           >
-            <span class="material-symbols-outlined text-[20px]"
-              >account_balance_wallet</span
-            >
+            <i data-lucide="wallet" class="w-5 h-5"></i>
             Deposit
           </a>
+
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20 transition-all"
             href="deposit-history.html"
           >
-            <span class="material-symbols-outlined text-[20px]">history</span>
+            <i data-lucide="history" class="w-5 h-5"></i>
             Deposit History
           </a>
+
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
             href="vip-sub.html"
           >
-            <span class="material-symbols-outlined text-[20px]">verified</span>
+            <i data-lucide="badge-check" class="w-5 h-5"></i>
             VIP Subscription
           </a>
+
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
             href="recovery-request.html"
           >
-            <span class="material-symbols-outlined text-[20px]">security</span>
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
             Recovery Requests
           </a>
+
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
             href="profile.html"
           >
-            <span class="material-symbols-outlined text-[20px]">person</span>
+            <i data-lucide="user" class="w-5 h-5"></i>
             Profile
           </a>
         </nav>
+
         <div class="p-4 border-t border-border-dark">
           <button
             class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
           >
-            <span class="material-symbols-outlined text-[20px]">logout</span>
+            <i data-lucide="log-out" class="w-5 h-5"></i>
             Logout
           </button>
         </div>
@@ -289,21 +318,23 @@
           class="h-16 flex-shrink-0 border-b border-border-dark bg-surface-dark/50 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between"
         >
           <div class="flex items-center gap-3">
-            <!-- Mobile menu button -->
             <button
               id="menuToggle"
               class="block lg:hidden p-2 text-slate-400 hover:text-white transition-colors"
             >
-              <span class="material-symbols-outlined text-2xl">menu</span>
+              <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
+
             <div class="flex items-center text-xs sm:text-sm font-medium">
               <span class="text-slate-500">Home</span>
               <span class="mx-2 text-slate-600">/</span>
               <span class="text-white">Deposit History</span>
             </div>
           </div>
+
           <div class="flex items-center gap-4 sm:gap-6">
             <div class="h-8 w-px bg-border-dark hidden sm:block"></div>
+
             <a href="profile.html">
               <button class="flex items-center gap-2 sm:gap-3 group">
                 <div class="text-right hidden sm:block">
@@ -318,13 +349,14 @@
                     Pro Trader
                   </p>
                 </div>
+
                 <div
                   class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/20 border border-primary/30 overflow-hidden flex items-center justify-center"
                 >
-                  <span
-                    class="material-symbols-outlined text-primary text-lg sm:text-xl"
-                    >person</span
-                  >
+                  <i
+                    data-lucide="user"
+                    class="w-4 h-4 sm:w-5 sm:h-5 text-primary"
+                  ></i>
                 </div>
               </button>
             </a>
@@ -347,6 +379,7 @@
                   Manage and track your funding transactions.
                 </p>
               </div>
+
               <div
                 class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto"
               >
@@ -364,6 +397,7 @@
                     $42,850.00
                   </h3>
                 </div>
+
                 <div
                   class="p-3 sm:p-4 rounded-2xl bg-surface-dark border border-border-dark flex-1 sm:flex-none sm:min-w-[160px]"
                 >
@@ -386,10 +420,10 @@
                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4"
               >
                 <div class="relative min-w-0">
-                  <span
-                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-lg"
-                    >search</span
-                  >
+                  <i
+                    data-lucide="search"
+                    class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 w-4 h-4"
+                  ></i>
                   <input
                     class="w-full bg-background-dark border-border-dark text-xs sm:text-sm rounded-xl pl-10 pr-3 py-2 sm:py-2.5 focus:border-primary focus:ring-0 text-slate-300"
                     placeholder="Search ID..."
@@ -431,7 +465,7 @@
               </div>
             </div>
 
-            <!-- Desktop Table View (hidden on mobile) - Action column removed -->
+            <!-- Desktop Table View -->
             <div
               class="hidden sm:block bg-surface-dark border border-border-dark rounded-2xl overflow-hidden"
             >
@@ -468,8 +502,8 @@
                       </th>
                     </tr>
                   </thead>
+
                   <tbody class="divide-y divide-border-dark">
-                    <!-- Table rows - Action column removed -->
                     <tr
                       class="hover:bg-white/[0.02] transition-colors cursor-pointer"
                       onclick="showTransactionDetails(1)"
@@ -482,6 +516,7 @@
                           10:30 AM
                         </div>
                       </td>
+
                       <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <div class="flex items-center gap-2 group">
                           <span
@@ -489,32 +524,35 @@
                             >#TRX-992144</span
                           >
                           <button
-                            class="material-symbols-outlined text-slate-600 hover:text-primary text-sm opacity-0 group-hover:opacity-100 transition-all"
+                            class="text-slate-600 hover:text-primary opacity-0 group-hover:opacity-100 transition-all"
                           >
-                            content_copy
+                            <i data-lucide="copy" class="w-4 h-4"></i>
                           </button>
                         </div>
                       </td>
+
                       <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <span class="text-xs sm:text-sm font-bold text-white"
                           >$1,500.00</span
                         >
                       </td>
+
                       <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <div class="flex items-center gap-2">
                           <div
                             class="h-6 w-6 sm:h-7 sm:w-7 rounded bg-amber-500/10 flex items-center justify-center"
                           >
-                            <span
-                              class="material-symbols-outlined text-amber-500 text-xs sm:text-sm"
-                              >currency_bitcoin</span
-                            >
+                            <i
+                              data-lucide="bitcoin"
+                              class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500"
+                            ></i>
                           </div>
                           <span class="text-[10px] sm:text-xs text-slate-300"
                             >Bitcoin</span
                           >
                         </div>
                       </td>
+
                       <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <span
                           class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-bold uppercase tracking-wider bg-emerald-accent/10 text-emerald-accent border border-emerald-accent/20"
@@ -522,6 +560,7 @@
                         >
                       </td>
                     </tr>
+
                     <tr
                       class="hover:bg-white/[0.02] transition-colors cursor-pointer"
                       onclick="showTransactionDetails(2)"
@@ -534,6 +573,7 @@
                           03:45 PM
                         </div>
                       </td>
+
                       <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <div class="flex items-center gap-2 group">
                           <span
@@ -541,32 +581,35 @@
                             >#TRX-992138</span
                           >
                           <button
-                            class="material-symbols-outlined text-slate-600 hover:text-primary text-sm opacity-0 group-hover:opacity-100 transition-all"
+                            class="text-slate-600 hover:text-primary opacity-0 group-hover:opacity-100 transition-all"
                           >
-                            content_copy
+                            <i data-lucide="copy" class="w-4 h-4"></i>
                           </button>
                         </div>
                       </td>
+
                       <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <span class="text-xs sm:text-sm font-bold text-white"
                           >$250.00</span
                         >
                       </td>
+
                       <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <div class="flex items-center gap-2">
                           <div
                             class="h-6 w-6 sm:h-7 sm:w-7 rounded bg-emerald-accent/10 flex items-center justify-center"
                           >
-                            <span
-                              class="material-symbols-outlined text-emerald-accent text-xs sm:text-sm"
-                              >monetization_on</span
-                            >
+                            <i
+                              data-lucide="coins"
+                              class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-accent"
+                            ></i>
                           </div>
                           <span class="text-[10px] sm:text-xs text-slate-300"
                             >USDT (TRC20)</span
                           >
                         </div>
                       </td>
+
                       <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <span
                           class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-bold uppercase tracking-wider bg-amber-400/10 text-amber-400 border border-amber-400/20"
@@ -574,6 +617,7 @@
                         >
                       </td>
                     </tr>
+
                     <tr
                       class="hover:bg-white/[0.02] transition-colors cursor-pointer"
                       onclick="showTransactionDetails(3)"
@@ -586,6 +630,7 @@
                           09:15 AM
                         </div>
                       </td>
+
                       <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <div class="flex items-center gap-2 group">
                           <span
@@ -593,32 +638,35 @@
                             >#TRX-992122</span
                           >
                           <button
-                            class="material-symbols-outlined text-slate-600 hover:text-primary text-sm opacity-0 group-hover:opacity-100 transition-all"
+                            class="text-slate-600 hover:text-primary opacity-0 group-hover:opacity-100 transition-all"
                           >
-                            content_copy
+                            <i data-lucide="copy" class="w-4 h-4"></i>
                           </button>
                         </div>
                       </td>
+
                       <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <span class="text-xs sm:text-sm font-bold text-white"
                           >$5,000.00</span
                         >
                       </td>
+
                       <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <div class="flex items-center gap-2">
                           <div
                             class="h-6 w-6 sm:h-7 sm:w-7 rounded bg-primary/10 flex items-center justify-center"
                           >
-                            <span
-                              class="material-symbols-outlined text-primary text-xs sm:text-sm"
-                              >account_balance</span
-                            >
+                            <i
+                              data-lucide="landmark"
+                              class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary"
+                            ></i>
                           </div>
                           <span class="text-[10px] sm:text-xs text-slate-300"
                             >Bank Wire</span
                           >
                         </div>
                       </td>
+
                       <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <span
                           class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-bold uppercase tracking-wider bg-rose-500/10 text-rose-500 border border-rose-500/20"
@@ -626,6 +674,7 @@
                         >
                       </td>
                     </tr>
+
                     <tr
                       class="hover:bg-white/[0.02] transition-colors cursor-pointer"
                       onclick="showTransactionDetails(4)"
@@ -638,6 +687,7 @@
                           11:00 AM
                         </div>
                       </td>
+
                       <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <div class="flex items-center gap-2 group">
                           <span
@@ -645,32 +695,35 @@
                             >#TRX-992085</span
                           >
                           <button
-                            class="material-symbols-outlined text-slate-600 hover:text-primary text-sm opacity-0 group-hover:opacity-100 transition-all"
+                            class="text-slate-600 hover:text-primary opacity-0 group-hover:opacity-100 transition-all"
                           >
-                            content_copy
+                            <i data-lucide="copy" class="w-4 h-4"></i>
                           </button>
                         </div>
                       </td>
+
                       <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <span class="text-xs sm:text-sm font-bold text-white"
                           >$10,000.00</span
                         >
                       </td>
+
                       <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <div class="flex items-center gap-2">
                           <div
                             class="h-6 w-6 sm:h-7 sm:w-7 rounded bg-emerald-accent/10 flex items-center justify-center"
                           >
-                            <span
-                              class="material-symbols-outlined text-emerald-accent text-xs sm:text-sm"
-                              >monetization_on</span
-                            >
+                            <i
+                              data-lucide="coins"
+                              class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-accent"
+                            ></i>
                           </div>
                           <span class="text-[10px] sm:text-xs text-slate-300"
                             >USDT (ERC20)</span
                           >
                         </div>
                       </td>
+
                       <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <span
                           class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-bold uppercase tracking-wider bg-emerald-accent/10 text-emerald-accent border border-emerald-accent/20"
@@ -681,6 +734,7 @@
                   </tbody>
                 </table>
               </div>
+
               <!-- Pagination -->
               <div
                 class="px-4 sm:px-6 py-3 sm:py-4 bg-background-dark/30 border-t border-border-dark flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4"
@@ -689,15 +743,18 @@
                   >Showing <span class="text-white">1-4</span> of
                   <span class="text-white">45</span> transactions</span
                 >
+
                 <div class="flex items-center gap-2">
                   <button
                     class="flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-lg bg-surface-dark border border-border-dark text-slate-400 hover:text-white hover:border-primary transition-all disabled:opacity-50"
                     disabled
                   >
-                    <span class="material-symbols-outlined text-base sm:text-lg"
-                      >chevron_left</span
-                    >
+                    <i
+                      data-lucide="chevron-left"
+                      class="w-4 h-4 sm:w-5 sm:h-5"
+                    ></i>
                   </button>
+
                   <div class="flex items-center gap-1">
                     <button
                       class="h-7 w-7 sm:h-8 sm:w-8 rounded-lg bg-primary text-white text-xs font-bold"
@@ -721,20 +778,21 @@
                       5
                     </button>
                   </div>
+
                   <button
                     class="flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-lg bg-surface-dark border border-border-dark text-slate-400 hover:text-white hover:border-primary transition-all"
                   >
-                    <span class="material-symbols-outlined text-base sm:text-lg"
-                      >chevron_right</span
-                    >
+                    <i
+                      data-lucide="chevron-right"
+                      class="w-4 h-4 sm:w-5 sm:h-5"
+                    ></i>
                   </button>
                 </div>
               </div>
             </div>
 
-            <!-- Mobile Card View (visible only on mobile) - Info button remains for details -->
+            <!-- Mobile Card View -->
             <div class="block sm:hidden space-y-3">
-              <!-- Transaction Card 1 -->
               <div
                 class="bg-surface-dark border border-border-dark rounded-xl p-4 cursor-pointer"
                 onclick="showTransactionDetails(1)"
@@ -748,39 +806,42 @@
                       #TRX-992144
                     </div>
                   </div>
+
                   <span
                     class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-emerald-accent/10 text-emerald-accent border border-emerald-accent/20"
                     >Approved</span
                   >
                 </div>
+
                 <div class="flex justify-between items-center">
                   <div class="flex items-center gap-2">
                     <div
                       class="h-8 w-8 rounded bg-amber-500/10 flex items-center justify-center"
                     >
-                      <span
-                        class="material-symbols-outlined text-amber-500 text-base"
-                        >currency_bitcoin</span
-                      >
+                      <i
+                        data-lucide="bitcoin"
+                        class="w-4 h-4 text-amber-500"
+                      ></i>
                     </div>
+
                     <div>
                       <div class="text-xs text-slate-400">Bitcoin</div>
                       <div class="text-sm font-bold text-white">$1,500.00</div>
                     </div>
                   </div>
+
                   <button
-                    class="material-symbols-outlined text-slate-400 text-xl hover:text-primary transition-colors"
+                    class="text-slate-400 hover:text-primary transition-colors"
                     onclick="
                       event.stopPropagation();
                       showTransactionDetails(1);
                     "
                   >
-                    info
+                    <i data-lucide="info" class="w-5 h-5"></i>
                   </button>
                 </div>
               </div>
 
-              <!-- Transaction Card 2 -->
               <div
                 class="bg-surface-dark border border-border-dark rounded-xl p-4 cursor-pointer"
                 onclick="showTransactionDetails(2)"
@@ -794,39 +855,42 @@
                       #TRX-992138
                     </div>
                   </div>
+
                   <span
                     class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-amber-400/10 text-amber-400 border border-amber-400/20"
                     >Pending</span
                   >
                 </div>
+
                 <div class="flex justify-between items-center">
                   <div class="flex items-center gap-2">
                     <div
                       class="h-8 w-8 rounded bg-emerald-accent/10 flex items-center justify-center"
                     >
-                      <span
-                        class="material-symbols-outlined text-emerald-accent text-base"
-                        >monetization_on</span
-                      >
+                      <i
+                        data-lucide="coins"
+                        class="w-4 h-4 text-emerald-accent"
+                      ></i>
                     </div>
+
                     <div>
                       <div class="text-xs text-slate-400">USDT (TRC20)</div>
                       <div class="text-sm font-bold text-white">$250.00</div>
                     </div>
                   </div>
+
                   <button
-                    class="material-symbols-outlined text-slate-400 text-xl hover:text-primary transition-colors"
+                    class="text-slate-400 hover:text-primary transition-colors"
                     onclick="
                       event.stopPropagation();
                       showTransactionDetails(2);
                     "
                   >
-                    info
+                    <i data-lucide="info" class="w-5 h-5"></i>
                   </button>
                 </div>
               </div>
 
-              <!-- Transaction Card 3 -->
               <div
                 class="bg-surface-dark border border-border-dark rounded-xl p-4 cursor-pointer"
                 onclick="showTransactionDetails(3)"
@@ -840,39 +904,42 @@
                       #TRX-992122
                     </div>
                   </div>
+
                   <span
                     class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-rose-500/10 text-rose-500 border border-rose-500/20"
                     >Rejected</span
                   >
                 </div>
+
                 <div class="flex justify-between items-center">
                   <div class="flex items-center gap-2">
                     <div
                       class="h-8 w-8 rounded bg-primary/10 flex items-center justify-center"
                     >
-                      <span
-                        class="material-symbols-outlined text-primary text-base"
-                        >account_balance</span
-                      >
+                      <i
+                        data-lucide="landmark"
+                        class="w-4 h-4 text-primary"
+                      ></i>
                     </div>
+
                     <div>
                       <div class="text-xs text-slate-400">Bank Wire</div>
                       <div class="text-sm font-bold text-white">$5,000.00</div>
                     </div>
                   </div>
+
                   <button
-                    class="material-symbols-outlined text-slate-400 text-xl hover:text-primary transition-colors"
+                    class="text-slate-400 hover:text-primary transition-colors"
                     onclick="
                       event.stopPropagation();
                       showTransactionDetails(3);
                     "
                   >
-                    info
+                    <i data-lucide="info" class="w-5 h-5"></i>
                   </button>
                 </div>
               </div>
 
-              <!-- Transaction Card 4 -->
               <div
                 class="bg-surface-dark border border-border-dark rounded-xl p-4 cursor-pointer"
                 onclick="showTransactionDetails(4)"
@@ -886,34 +953,38 @@
                       #TRX-992085
                     </div>
                   </div>
+
                   <span
                     class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-emerald-accent/10 text-emerald-accent border border-emerald-accent/20"
                     >Approved</span
                   >
                 </div>
+
                 <div class="flex justify-between items-center">
                   <div class="flex items-center gap-2">
                     <div
                       class="h-8 w-8 rounded bg-emerald-accent/10 flex items-center justify-center"
                     >
-                      <span
-                        class="material-symbols-outlined text-emerald-accent text-base"
-                        >monetization_on</span
-                      >
+                      <i
+                        data-lucide="coins"
+                        class="w-4 h-4 text-emerald-accent"
+                      ></i>
                     </div>
+
                     <div>
                       <div class="text-xs text-slate-400">USDT (ERC20)</div>
                       <div class="text-sm font-bold text-white">$10,000.00</div>
                     </div>
                   </div>
+
                   <button
-                    class="material-symbols-outlined text-slate-400 text-xl hover:text-primary transition-colors"
+                    class="text-slate-400 hover:text-primary transition-colors"
                     onclick="
                       event.stopPropagation();
                       showTransactionDetails(4);
                     "
                   >
-                    info
+                    <i data-lucide="info" class="w-5 h-5"></i>
                   </button>
                 </div>
               </div>
@@ -924,21 +995,19 @@
               <span class="text-xs text-slate-500 font-medium"
                 >Showing 1-4 of 45</span
               >
+
               <div class="flex items-center gap-2">
                 <button
                   class="flex items-center justify-center h-8 w-8 rounded-lg bg-surface-dark border border-border-dark text-slate-400 disabled:opacity-50"
                   disabled
                 >
-                  <span class="material-symbols-outlined text-lg"
-                    >chevron_left</span
-                  >
+                  <i data-lucide="chevron-left" class="w-5 h-5"></i>
                 </button>
+
                 <button
                   class="flex items-center justify-center h-8 w-8 rounded-lg bg-surface-dark border border-border-dark text-slate-400"
                 >
-                  <span class="material-symbols-outlined text-lg"
-                    >chevron_right</span
-                  >
+                  <i data-lucide="chevron-right" class="w-5 h-5"></i>
                 </button>
               </div>
             </div>
@@ -958,25 +1027,24 @@
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-white text-lg font-bold">Transaction Details</h3>
         <button id="closePanel" class="text-slate-400 hover:text-white">
-          <span class="material-symbols-outlined">close</span>
+          <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
       <div id="panelContent"></div>
     </div>
 
-    <!-- Mobile menu JavaScript -->
     <script>
-      // Bottom panel functionality
       const panelOverlay = document.getElementById("panelOverlay");
       const detailPanel = document.getElementById("detailPanel");
       const closePanel = document.getElementById("closePanel");
       const panelContent = document.getElementById("panelContent");
+      const body = document.body;
 
       function closePanelFunc() {
         detailPanel.classList.remove("open");
         panelOverlay.classList.remove("open");
-        body.classList.remove("mobile-menu-open"); // Just in case
+        body.classList.remove("mobile-menu-open");
       }
 
       if (panelOverlay && detailPanel && closePanel) {
@@ -990,10 +1058,7 @@
         });
       }
 
-      // Make showTransactionDetails available globally
       window.showTransactionDetails = function (id) {
-        // In a real app, you'd fetch data based on ID
-        // For demo, we'll show different content based on ID
         let content = "";
 
         switch (id) {
@@ -1016,7 +1081,7 @@
                 <span class="text-slate-400 text-sm">Payment Method</span>
                 <div class="flex items-center gap-2">
                   <div class="h-6 w-6 rounded bg-amber-500/10 flex items-center justify-center">
-                    <span class="material-symbols-outlined text-amber-500 text-sm">currency_bitcoin</span>
+                    <i data-lucide="bitcoin" class="w-4 h-4 text-amber-500"></i>
                   </div>
                   <span class="text-white text-sm">Bitcoin</span>
                 </div>
@@ -1039,6 +1104,7 @@
             </div>
           `;
             break;
+
           case 2:
             content = `
             <div class="space-y-4">
@@ -1058,7 +1124,7 @@
                 <span class="text-slate-400 text-sm">Payment Method</span>
                 <div class="flex items-center gap-2">
                   <div class="h-6 w-6 rounded bg-emerald-accent/10 flex items-center justify-center">
-                    <span class="material-symbols-outlined text-emerald-accent text-sm">monetization_on</span>
+                    <i data-lucide="coins" class="w-4 h-4 text-emerald-accent"></i>
                   </div>
                   <span class="text-white text-sm">USDT</span>
                 </div>
@@ -1081,6 +1147,7 @@
             </div>
           `;
             break;
+
           case 3:
             content = `
             <div class="space-y-4">
@@ -1100,7 +1167,7 @@
                 <span class="text-slate-400 text-sm">Payment Method</span>
                 <div class="flex items-center gap-2">
                   <div class="h-6 w-6 rounded bg-primary/10 flex items-center justify-center">
-                    <span class="material-symbols-outlined text-primary text-sm">account_balance</span>
+                    <i data-lucide="landmark" class="w-4 h-4 text-primary"></i>
                   </div>
                   <span class="text-white text-sm">Bank Wire</span>
                 </div>
@@ -1119,6 +1186,7 @@
             </div>
           `;
             break;
+
           case 4:
             content = `
             <div class="space-y-4">
@@ -1138,7 +1206,7 @@
                 <span class="text-slate-400 text-sm">Payment Method</span>
                 <div class="flex items-center gap-2">
                   <div class="h-6 w-6 rounded bg-emerald-accent/10 flex items-center justify-center">
-                    <span class="material-symbols-outlined text-emerald-accent text-sm">monetization_on</span>
+                    <i data-lucide="coins" class="w-4 h-4 text-emerald-accent"></i>
                   </div>
                   <span class="text-white text-sm">USDT</span>
                 </div>
@@ -1161,17 +1229,23 @@
             </div>
           `;
             break;
+
           default:
             content =
               '<p class="text-slate-400">Transaction details not found</p>';
         }
 
         panelContent.innerHTML = content;
+        lucide.createIcons();
+
         detailPanel.classList.add("open");
         panelOverlay.classList.add("open");
         body.classList.add("mobile-menu-open");
       };
+
+      lucide.createIcons();
     </script>
+
     <script src="js/dashmenu.js"></script>
   </body>
 </html>

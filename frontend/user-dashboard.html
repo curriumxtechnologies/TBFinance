@@ -9,11 +9,7 @@
     <title>Dashboard | TheBrave Finance</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link
@@ -34,6 +30,8 @@
       href="images/favicon-16x16.png"
     />
     <link rel="manifest" href="images/site.webmanifest" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -61,47 +59,63 @@
         },
       };
     </script>
+
     <style>
       body {
         font-family: "Manrope", sans-serif;
       }
+
       .glass-panel {
         background: rgba(21, 28, 44, 0.7);
         backdrop-filter: blur(12px);
         border: 1px solid rgba(36, 48, 73, 0.5);
       }
+
       .custom-scrollbar::-webkit-scrollbar {
         width: 4px;
       }
+
       .custom-scrollbar::-webkit-scrollbar-track {
         background: transparent;
       }
+
       .custom-scrollbar::-webkit-scrollbar-thumb {
         background: #243049;
         border-radius: 10px;
       }
-      /* mobile menu styles - left sliding drawer */
+
       .mobile-menu-open {
         overflow: hidden;
       }
+
       #mobileSidebar {
         transition: transform 0.3s ease-in-out;
         transform: translateX(-100%);
       }
+
       #mobileSidebar.open {
         transform: translateX(0);
       }
+
       #sidebarOverlay {
         transition: opacity 0.3s ease-in-out;
         opacity: 0;
         pointer-events: none;
       }
+
       #sidebarOverlay.open {
         opacity: 1;
         pointer-events: auto;
       }
+
+      .lucide {
+        width: 20px;
+        height: 20px;
+        stroke-width: 2;
+      }
     </style>
   </head>
+
   <body
     class="bg-background-dark text-slate-100 font-display transition-colors duration-300 antialiased overflow-hidden"
   >
@@ -111,7 +125,7 @@
       class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"
     ></div>
 
-    <!-- Mobile Sidebar (slides from left) -->
+    <!-- Mobile Sidebar -->
     <aside
       id="mobileSidebar"
       class="fixed top-0 left-0 h-full w-64 bg-surface-dark border-r border-border-dark flex flex-col z-50 lg:hidden transform -translate-x-full transition-transform duration-300 ease-in-out"
@@ -129,68 +143,74 @@
             TBF
           </h2>
         </div>
+
         <button id="closeSidebar" class="text-slate-400 hover:text-white p-1">
-          <span class="material-symbols-outlined">close</span>
+          <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
+
       <nav class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto">
         <a
           class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20 transition-all"
-          href="#"
+          href="user-dashboard.html"
         >
-          <span class="material-symbols-outlined">dashboard</span>
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
           Dashboard
         </a>
+
         <a
           class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
           href="deposit.html"
         >
-          <span class="material-symbols-outlined text-[20px]"
-            >account_balance_wallet</span
-          >
+          <i data-lucide="wallet" class="w-5 h-5"></i>
           Deposit
         </a>
+
         <a
           class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
           href="deposit-history.html"
         >
-          <span class="material-symbols-outlined text-[20px]">history</span>
+          <i data-lucide="history" class="w-5 h-5"></i>
           Deposit History
         </a>
+
         <a
           class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
           href="vip-sub.html"
         >
-          <span class="material-symbols-outlined text-[20px]">verified</span>
+          <i data-lucide="badge-check" class="w-5 h-5"></i>
           VIP Subscription
         </a>
+
         <a
           class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
           href="recovery-request.html"
         >
-          <span class="material-symbols-outlined text-[20px]">security</span>
+          <i data-lucide="shield-check" class="w-5 h-5"></i>
           Recovery Requests
         </a>
+
         <a
           class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
           href="profile.html"
         >
-          <span class="material-symbols-outlined text-[20px]">person</span>
+          <i data-lucide="user" class="w-5 h-5"></i>
           Profile
         </a>
       </nav>
+
       <div class="p-4 border-t border-border-dark">
         <button
           class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
         >
-          <span class="material-symbols-outlined text-[20px]">logout</span>
+          <i data-lucide="log-out" class="w-5 h-5"></i>
           Logout
         </button>
       </div>
     </aside>
 
     <div class="flex h-screen overflow-hidden">
-      <!-- Desktop Sidebar (hidden on mobile) -->
+      <!-- Desktop Sidebar -->
       <aside
         class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex-col hidden lg:flex"
       >
@@ -206,6 +226,7 @@
             TBF
           </h2>
         </div>
+
         <nav
           class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto"
         >
@@ -213,52 +234,56 @@
             class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20 transition-all"
             href="user-dashboard.html"
           >
-            <span class="material-symbols-outlined">dashboard</span>
+            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
             Dashboard
           </a>
+
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
             href="deposit.html"
           >
-            <span class="material-symbols-outlined text-[20px]"
-              >account_balance_wallet</span
-            >
+            <i data-lucide="wallet" class="w-5 h-5"></i>
             Deposit
           </a>
+
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
             href="deposit-history.html"
           >
-            <span class="material-symbols-outlined text-[20px]">history</span>
+            <i data-lucide="history" class="w-5 h-5"></i>
             Deposit History
           </a>
+
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
             href="vip-sub.html"
           >
-            <span class="material-symbols-outlined text-[20px]">verified</span>
+            <i data-lucide="badge-check" class="w-5 h-5"></i>
             VIP Subscription
           </a>
+
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
             href="recovery-request.html"
           >
-            <span class="material-symbols-outlined text-[20px]">security</span>
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
             Recovery Requests
           </a>
+
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
             href="profile.html"
           >
-            <span class="material-symbols-outlined text-[20px]">person</span>
+            <i data-lucide="user" class="w-5 h-5"></i>
             Profile
           </a>
         </nav>
+
         <div class="p-4 border-t border-border-dark">
           <button
             class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
           >
-            <span class="material-symbols-outlined text-[20px]">logout</span>
+            <i data-lucide="log-out" class="w-5 h-5"></i>
             Logout
           </button>
         </div>
@@ -269,19 +294,21 @@
           class="h-16 flex-shrink-0 border-b border-border-dark bg-surface-dark/50 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between"
         >
           <div class="flex items-center gap-3">
-            <!-- Mobile menu button -->
             <button
               id="menuToggle"
               class="block lg:hidden p-2 text-slate-400 hover:text-white transition-colors"
             >
-              <span class="material-symbols-outlined text-2xl">menu</span>
+              <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
+
             <div class="flex items-center text-xs sm:text-sm font-medium">
               <span class="text-slate-500">Home</span>
             </div>
           </div>
+
           <div class="flex items-center gap-4 sm:gap-6">
             <div class="h-8 w-px bg-border-dark hidden sm:block"></div>
+
             <a href="profile.html">
               <button class="flex items-center gap-2 sm:gap-3 group">
                 <div class="text-right hidden sm:block">
@@ -296,13 +323,14 @@
                     Pro Trader
                   </p>
                 </div>
+
                 <div
                   class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/20 border border-primary/30 overflow-hidden flex items-center justify-center"
                 >
-                  <span
-                    class="material-symbols-outlined text-primary text-lg sm:text-xl"
-                    >person</span
-                  >
+                  <i
+                    data-lucide="user"
+                    class="w-4 h-4 sm:w-5 sm:h-5 text-primary"
+                  ></i>
                 </div>
               </button>
             </a>
@@ -338,6 +366,7 @@
                   $12,450.00
                 </h3>
               </div>
+
               <a
                 href="deposit.html"
                 class="mt-4 w-full py-2 bg-emerald-accent/10 hover:bg-emerald-accent text-emerald-accent hover:text-white text-xs font-bold rounded-lg border border-emerald-accent/20 transition-all text-center block"
@@ -354,6 +383,7 @@
               >
                 Assigned MT5 Details
               </p>
+
               <div class="space-y-2">
                 <div class="flex justify-between text-xs sm:text-sm">
                   <span class="text-slate-400">Login ID:</span>
@@ -381,22 +411,23 @@
                 </p>
                 <span
                   class="px-2 py-0.5 bg-emerald-accent/10 text-emerald-accent text-[10px] font-black rounded border border-emerald-accent/20 uppercase tracking-tighter"
-                  >Active</span
                 >
+                  Active
+                </span>
               </div>
+
               <div class="flex-1">
                 <p class="text-slate-300 text-xs sm:text-sm">
                   Expires in: <span class="text-white font-bold">24 days</span>
                 </p>
               </div>
+
               <a
                 class="mt-4 text-primary text-xs font-bold flex items-center gap-1 hover:underline"
                 href="vip-sub.html"
               >
                 Manage Subscription
-                <span class="material-symbols-outlined text-[14px]"
-                  >arrow_forward</span
-                >
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
               </a>
             </div>
 
@@ -414,6 +445,7 @@
               <p class="text-[10px] sm:text-[11px] text-slate-500">
                 Last 30 days performance
               </p>
+
               <div class="mt-3 flex items-end gap-1 h-8 sm:h-10">
                 <div class="flex-1 bg-border-dark rounded-t h-[40%]"></div>
                 <div class="flex-1 bg-border-dark rounded-t h-[60%]"></div>
@@ -436,16 +468,16 @@
               >
                 Quick Actions
               </h4>
+
               <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                 <a
                   href="deposit.html"
                   class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-primary transition-all text-center group block"
                 >
-                  <span
-                    class="material-symbols-outlined text-primary mb-2 block text-2xl sm:text-3xl group-hover:scale-110 transition-transform"
-                  >
-                    add_card
-                  </span>
+                  <i
+                    data-lucide="credit-card"
+                    class="w-7 h-7 sm:w-8 sm:h-8 text-primary mb-2 mx-auto group-hover:scale-110 transition-transform"
+                  ></i>
                   <span class="text-[10px] sm:text-xs font-bold text-slate-300">
                     Fund Account
                   </span>
@@ -455,11 +487,10 @@
                   href="vip-sub.html"
                   class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-emerald-accent transition-all text-center group block"
                 >
-                  <span
-                    class="material-symbols-outlined text-emerald-accent mb-2 block text-2xl sm:text-3xl group-hover:scale-110 transition-transform"
-                  >
-                    auto_graph
-                  </span>
+                  <i
+                    data-lucide="chart-no-axes-column-increasing"
+                    class="w-7 h-7 sm:w-8 sm:h-8 text-emerald-accent mb-2 mx-auto group-hover:scale-110 transition-transform"
+                  ></i>
                   <span class="text-[10px] sm:text-xs font-bold text-slate-300">
                     Join VIP Room
                   </span>
@@ -469,11 +500,10 @@
                   href="recovery-request.html"
                   class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-primary transition-all text-center group block"
                 >
-                  <span
-                    class="material-symbols-outlined text-primary mb-2 block text-2xl sm:text-3xl group-hover:scale-110 transition-transform"
-                  >
-                    health_and_safety
-                  </span>
+                  <i
+                    data-lucide="shield-plus"
+                    class="w-7 h-7 sm:w-8 sm:h-8 text-primary mb-2 mx-auto group-hover:scale-110 transition-transform"
+                  ></i>
                   <span class="text-[10px] sm:text-xs font-bold text-slate-300">
                     Request Recovery
                   </span>
@@ -483,11 +513,10 @@
                   href="contact-support.html"
                   class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-slate-300 transition-all text-center group block"
                 >
-                  <span
-                    class="material-symbols-outlined text-slate-400 mb-2 block text-2xl sm:text-3xl group-hover:scale-110 transition-transform"
-                  >
-                    headset_mic
-                  </span>
+                  <i
+                    data-lucide="headset"
+                    class="w-7 h-7 sm:w-8 sm:h-8 text-slate-400 mb-2 mx-auto group-hover:scale-110 transition-transform"
+                  ></i>
                   <span class="text-[10px] sm:text-xs font-bold text-slate-300">
                     Contact Support
                   </span>
@@ -520,12 +549,12 @@
                     <div
                       class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
                     >
-                      <span
-                        class="material-symbols-outlined text-sm sm:text-lg"
-                      >
-                        check_circle
-                      </span>
+                      <i
+                        data-lucide="check-circle-2"
+                        class="w-4 h-4 sm:w-5 sm:h-5"
+                      ></i>
                     </div>
+
                     <div class="flex-1 min-w-0">
                       <p
                         class="text-xs sm:text-sm font-bold text-white truncate"
@@ -536,6 +565,7 @@
                         Transaction ID: #TRX882941
                       </p>
                     </div>
+
                     <span
                       class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap"
                     >
@@ -549,12 +579,9 @@
                     <div
                       class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary"
                     >
-                      <span
-                        class="material-symbols-outlined text-sm sm:text-lg"
-                      >
-                        bolt
-                      </span>
+                      <i data-lucide="zap" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                     </div>
+
                     <div class="flex-1 min-w-0">
                       <p
                         class="text-xs sm:text-sm font-bold text-white truncate"
@@ -565,6 +592,7 @@
                         Awaiting confirmation
                       </p>
                     </div>
+
                     <span
                       class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap"
                     >
@@ -578,12 +606,12 @@
                     <div
                       class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-slate-500/10 flex items-center justify-center text-slate-400"
                     >
-                      <span
-                        class="material-symbols-outlined text-sm sm:text-lg"
-                      >
-                        schedule
-                      </span>
+                      <i
+                        data-lucide="clock-3"
+                        class="w-4 h-4 sm:w-5 sm:h-5"
+                      ></i>
                     </div>
+
                     <div class="flex-1 min-w-0">
                       <p
                         class="text-xs sm:text-sm font-bold text-white truncate"
@@ -594,6 +622,7 @@
                         Waiting for payment verification
                       </p>
                     </div>
+
                     <span
                       class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap"
                     >
@@ -607,12 +636,12 @@
                     <div
                       class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
                     >
-                      <span
-                        class="material-symbols-outlined text-sm sm:text-lg"
-                      >
-                        verified
-                      </span>
+                      <i
+                        data-lucide="badge-check"
+                        class="w-4 h-4 sm:w-5 sm:h-5"
+                      ></i>
                     </div>
+
                     <div class="flex-1 min-w-0">
                       <p
                         class="text-xs sm:text-sm font-bold text-white truncate"
@@ -623,6 +652,7 @@
                         Funds added to account
                       </p>
                     </div>
+
                     <span
                       class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap"
                     >
@@ -678,7 +708,9 @@
       </div>
     </div>
 
-    <!-- Mobile menu JavaScript -->
     <script src="js/dashmenu.js"></script>
+    <script>
+      lucide.createIcons();
+    </script>
   </body>
 </html>
