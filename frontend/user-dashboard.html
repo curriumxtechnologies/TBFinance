@@ -338,11 +338,12 @@
                   $12,450.00
                 </h3>
               </div>
-              <button
-                class="mt-4 w-full py-2 bg-emerald-accent/10 hover:bg-emerald-accent text-emerald-accent hover:text-white text-xs font-bold rounded-lg border border-emerald-accent/20 transition-all"
+              <a
+                href="deposit.html"
+                class="mt-4 w-full py-2 bg-emerald-accent/10 hover:bg-emerald-accent text-emerald-accent hover:text-white text-xs font-bold rounded-lg border border-emerald-accent/20 transition-all text-center block"
               >
                 Deposit Now
-              </button>
+              </a>
             </div>
 
             <div
@@ -390,7 +391,7 @@
               </div>
               <a
                 class="mt-4 text-primary text-xs font-bold flex items-center gap-1 hover:underline"
-                href="#"
+                href="vip-sub.html"
               >
                 Manage Subscription
                 <span class="material-symbols-outlined text-[14px]"
@@ -436,53 +437,64 @@
                 Quick Actions
               </h4>
               <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-                <button
-                  class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-primary transition-all text-center group"
+                <a
+                  href="deposit.html"
+                  class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-primary transition-all text-center group block"
                 >
                   <span
                     class="material-symbols-outlined text-primary mb-2 block text-2xl sm:text-3xl group-hover:scale-110 transition-transform"
-                    >add_card</span
                   >
-                  <span class="text-[10px] sm:text-xs font-bold text-slate-300"
-                    >Fund Account</span
-                  >
-                </button>
-                <button
-                  class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-emerald-accent transition-all text-center group"
+                    add_card
+                  </span>
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-300">
+                    Fund Account
+                  </span>
+                </a>
+
+                <a
+                  href="vip-sub.html"
+                  class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-emerald-accent transition-all text-center group block"
                 >
                   <span
                     class="material-symbols-outlined text-emerald-accent mb-2 block text-2xl sm:text-3xl group-hover:scale-110 transition-transform"
-                    >auto_graph</span
                   >
-                  <span class="text-[10px] sm:text-xs font-bold text-slate-300"
-                    >Join VIP Room</span
-                  >
-                </button>
-                <button
-                  class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-primary transition-all text-center group"
+                    auto_graph
+                  </span>
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-300">
+                    Join VIP Room
+                  </span>
+                </a>
+
+                <a
+                  href="recovery-request.html"
+                  class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-primary transition-all text-center group block"
                 >
                   <span
                     class="material-symbols-outlined text-primary mb-2 block text-2xl sm:text-3xl group-hover:scale-110 transition-transform"
-                    >health_and_safety</span
                   >
-                  <span class="text-[10px] sm:text-xs font-bold text-slate-300"
-                    >Request Recovery</span
-                  >
-                </button>
-                <button
-                  class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-slate-300 transition-all text-center group"
+                    health_and_safety
+                  </span>
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-300">
+                    Request Recovery
+                  </span>
+                </a>
+
+                <a
+                  href="contact-support.html"
+                  class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-slate-300 transition-all text-center group block"
                 >
                   <span
                     class="material-symbols-outlined text-slate-400 mb-2 block text-2xl sm:text-3xl group-hover:scale-110 transition-transform"
-                    >headset_mic</span
                   >
-                  <span class="text-[10px] sm:text-xs font-bold text-slate-300"
-                    >Contact Support</span
-                  >
-                </button>
+                    headset_mic
+                  </span>
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-300">
+                    Contact Support
+                  </span>
+                </a>
               </div>
 
-              <!-- Recent Activity -->
+              <!-- Deposit History -->
               <div
                 class="bg-surface-dark border border-border-dark rounded-2xl overflow-hidden"
               >
@@ -490,14 +502,17 @@
                   class="px-4 sm:px-6 py-4 border-b border-border-dark flex justify-between items-center"
                 >
                   <h4 class="text-white font-bold text-sm sm:text-base">
-                    Recent Activity
+                    Deposit History
                   </h4>
-                  <button
+
+                  <a
+                    href="deposit-history.html"
                     class="text-primary text-xs font-bold hover:underline"
                   >
                     View All
-                  </button>
+                  </a>
                 </div>
+
                 <div class="divide-y divide-border-dark">
                   <div
                     class="px-4 sm:px-6 py-4 flex items-center gap-3 sm:gap-4"
@@ -505,9 +520,11 @@
                     <div
                       class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
                     >
-                      <span class="material-symbols-outlined text-sm sm:text-lg"
-                        >check_circle</span
+                      <span
+                        class="material-symbols-outlined text-sm sm:text-lg"
                       >
+                        check_circle
+                      </span>
                     </div>
                     <div class="flex-1 min-w-0">
                       <p
@@ -521,83 +538,96 @@
                     </div>
                     <span
                       class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap"
-                      >2 hours ago</span
                     >
+                      2 hours ago
+                    </span>
                   </div>
+
                   <div
                     class="px-4 sm:px-6 py-4 flex items-center gap-3 sm:gap-4"
                   >
                     <div
                       class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary"
                     >
-                      <span class="material-symbols-outlined text-sm sm:text-lg"
-                        >bolt</span
+                      <span
+                        class="material-symbols-outlined text-sm sm:text-lg"
                       >
+                        bolt
+                      </span>
                     </div>
                     <div class="flex-1 min-w-0">
                       <p
                         class="text-xs sm:text-sm font-bold text-white truncate"
                       >
-                        New VIP signal available
+                        Deposit processing
                       </p>
                       <p class="text-[10px] sm:text-xs text-slate-500">
-                        Gold (XAUUSD) - Buy Entry
+                        Awaiting confirmation
                       </p>
                     </div>
                     <span
                       class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap"
-                      >4 hours ago</span
                     >
+                      4 hours ago
+                    </span>
                   </div>
+
                   <div
                     class="px-4 sm:px-6 py-4 flex items-center gap-3 sm:gap-4"
                   >
                     <div
                       class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-slate-500/10 flex items-center justify-center text-slate-400"
                     >
-                      <span class="material-symbols-outlined text-sm sm:text-lg"
-                        >settings_account_box</span
+                      <span
+                        class="material-symbols-outlined text-sm sm:text-lg"
                       >
+                        schedule
+                      </span>
                     </div>
                     <div class="flex-1 min-w-0">
                       <p
                         class="text-xs sm:text-sm font-bold text-white truncate"
                       >
-                        Profile updated
+                        Deposit pending
                       </p>
                       <p class="text-[10px] sm:text-xs text-slate-500">
-                        Security preferences modified
+                        Waiting for payment verification
                       </p>
                     </div>
                     <span
                       class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap"
-                      >Yesterday</span
                     >
+                      Yesterday
+                    </span>
                   </div>
+
                   <div
                     class="px-4 sm:px-6 py-4 flex items-center gap-3 sm:gap-4"
                   >
                     <div
                       class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
                     >
-                      <span class="material-symbols-outlined text-sm sm:text-lg"
-                        >verified_user</span
+                      <span
+                        class="material-symbols-outlined text-sm sm:text-lg"
                       >
+                        verified
+                      </span>
                     </div>
                     <div class="flex-1 min-w-0">
                       <p
                         class="text-xs sm:text-sm font-bold text-white truncate"
                       >
-                        KYC Verification Successful
+                        Deposit successful
                       </p>
                       <p class="text-[10px] sm:text-xs text-slate-500">
-                        Tier 2 access granted
+                        Funds added to account
                       </p>
                     </div>
                     <span
                       class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap"
-                      >2 days ago</span
                     >
+                      2 days ago
+                    </span>
                   </div>
                 </div>
               </div>
