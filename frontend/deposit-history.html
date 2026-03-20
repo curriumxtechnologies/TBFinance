@@ -154,9 +154,9 @@
       <nav class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto">
         <a
           class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-          href="dashboard.html"
+          href="user-dashboard.html"
         >
-          <span class="material-symbols-outlined text-[20px]">dashboard</span>
+          <span class="material-symbols-outlined">dashboard</span>
           Dashboard
         </a>
         <a
@@ -207,31 +207,6 @@
       </div>
     </aside>
 
-    <!-- Bottom Slide Panel for Transaction Details -->
-    <div
-      id="panelOverlay"
-      class="fixed inset-0 bg-black/50 z-40 transition-opacity"
-    ></div>
-    <div
-      id="detailPanel"
-      class="fixed bottom-0 left-0 right-0 bg-surface-dark border-t border-border-dark rounded-t-2xl z-50 transform translate-y-full transition-transform duration-300 ease-in-out"
-    >
-      <div
-        class="p-4 border-b border-border-dark flex justify-between items-center"
-      >
-        <h3 class="text-white font-bold text-lg">Transaction Details</h3>
-        <button id="closePanel" class="text-slate-400 hover:text-white p-1">
-          <span class="material-symbols-outlined">close</span>
-        </button>
-      </div>
-      <div
-        class="p-6 space-y-4 max-h-[70vh] overflow-y-auto custom-scrollbar"
-        id="panelContent"
-      >
-        <!-- Content will be populated dynamically -->
-      </div>
-    </div>
-
     <div class="flex h-screen overflow-hidden">
       <!-- Desktop Sidebar (hidden on mobile) -->
       <aside
@@ -252,9 +227,9 @@
         >
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-            href="dashboard.html"
+            href="user-dashboard.html"
           >
-            <span class="material-symbols-outlined text-[20px]">dashboard</span>
+            <span class="material-symbols-outlined">dashboard</span>
             Dashboard
           </a>
           <a
