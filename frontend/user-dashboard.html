@@ -351,8 +351,9 @@
 
           <!-- Stats Grid -->
           <div
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
+            class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 sm:gap-6"
           >
+            <!-- Account Balance -->
             <div
               class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark flex flex-col justify-between"
             >
@@ -375,35 +376,75 @@
               </a>
             </div>
 
+            <!-- Live Account -->
+            <div
+              class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark flex flex-col justify-between"
+            >
+              <div>
+                <div class="flex items-center justify-between mb-3 gap-2">
+                  <p
+                    class="text-slate-500 text-xs font-bold uppercase tracking-wider"
+                  >
+                    Live Account
+                  </p>
+                  <span
+                    class="px-2 py-0.5 bg-rose-500/10 text-rose-400 text-[10px] font-black rounded border border-rose-400/20 uppercase tracking-tighter"
+                  >
+                    Inactive
+                  </span>
+                </div>
+
+                <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                  Deposit to get your live MT5 account activated.
+                </p>
+              </div>
+
+              <a
+                href="deposit.html"
+                class="mt-4 w-full py-2 bg-primary/10 hover:bg-primary text-primary hover:text-white text-xs font-bold rounded-lg border border-primary/20 transition-all text-center block"
+              >
+                Deposit to Activate
+              </a>
+            </div>
+
+            <!-- Demo Account -->
             <div
               class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark"
             >
-              <p
-                class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-4"
-              >
-                Assigned MT5 Details
-              </p>
+              <div class="flex items-center justify-between mb-4 gap-2">
+                <p
+                  class="text-slate-500 text-xs font-bold uppercase tracking-wider"
+                >
+                  Demo Account
+                </p>
+                <span
+                  class="px-2 py-0.5 bg-emerald-accent/10 text-emerald-accent text-[10px] font-black rounded border border-emerald-accent/20 uppercase tracking-tighter"
+                >
+                  Active
+                </span>
+              </div>
 
               <div class="space-y-2">
-                <div class="flex justify-between text-xs sm:text-sm">
+                <div class="flex justify-between text-xs sm:text-sm gap-3">
                   <span class="text-slate-400">Login ID:</span>
-                  <span class="text-white font-mono">882941</span>
+                  <span class="text-white font-mono">992184</span>
                 </div>
-                <div class="flex justify-between text-xs sm:text-sm">
+                <div class="flex justify-between text-xs sm:text-sm gap-3">
                   <span class="text-slate-400">Server:</span>
-                  <span class="text-white">TheBrave-Live</span>
+                  <span class="text-white">TheBrave-Demo</span>
                 </div>
-                <div class="flex justify-between text-xs sm:text-sm">
-                  <span class="text-slate-400">Account Type:</span>
-                  <span class="text-primary font-bold">ECN Elite</span>
+                <div class="flex justify-between text-xs sm:text-sm gap-3">
+                  <span class="text-slate-400">Balance:</span>
+                  <span class="text-primary font-bold">$10,000</span>
                 </div>
               </div>
             </div>
 
+            <!-- VIP Status -->
             <div
               class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark flex flex-col"
             >
-              <div class="flex justify-between items-start mb-4">
+              <div class="flex justify-between items-start mb-4 gap-2">
                 <p
                   class="text-slate-500 text-xs font-bold uppercase tracking-wider"
                 >
@@ -431,6 +472,7 @@
               </a>
             </div>
 
+            <!-- Recent Deposits -->
             <div
               class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark"
             >

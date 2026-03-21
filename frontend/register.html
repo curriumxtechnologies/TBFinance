@@ -11,7 +11,6 @@
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png" />
     <link rel="manifest" href="images/site.webmanifest" />
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google GIS -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script id="tailwind-config">
       tailwind.config = {
@@ -39,18 +38,6 @@
         border: 1px solid rgba(50, 68, 103, 0.5);
       }
       .lucide { width: 1em; height: 1em; stroke-width: 1.5; display: inline-block; vertical-align: middle; fill: none; }
-
-      /* Modal overlay */
-      #phone-modal {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.7);
-        z-index: 100;
-        align-items: center;
-        justify-content: center;
-      }
-      #phone-modal.open { display: flex; }
 
       @keyframes fadeIn {
         from { opacity: 0; transform: translateY(10px); }
@@ -97,6 +84,7 @@
 
         <!-- Card -->
         <div class="glass-panel rounded-2xl p-8 space-y-6 animate-fade-in">
+
           <!-- Badge -->
           <div class="flex justify-center">
             <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-accent/10 text-emerald-accent text-xs font-medium">
@@ -107,6 +95,17 @@
 
           <!-- Error message -->
           <div id="error-msg" class="hidden text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3 text-center"></div>
+
+          <!-- Phone Number Input -->
+          <div>
+            <label class="text-xs text-slate-400 mb-2 block">Phone Number</label>
+            <input
+              type="tel"
+              id="phone"
+              placeholder="Enter your phone number"
+              class="w-full px-4 py-3 rounded-xl bg-background-dark border border-border-dark text-white text-sm placeholder-slate-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"
+            />
+          </div>
 
           <!-- Google Sign Up Button -->
           <button
@@ -163,51 +162,18 @@
       </div>
     </footer>
 
-    <!-- Phone Number Modal -->
-    <div id="phone-modal">
-      <div class="glass-panel rounded-2xl p-8 w-full max-w-sm mx-4 space-y-6 animate-fade-in">
-        <div class="text-center">
-          <h3 class="text-xl font-bold text-white">One last step</h3>
-          <p class="text-sm text-slate-400 mt-1">Enter your phone number to complete signup</p>
-        </div>
-
-        <div id="modal-error-msg" class="hidden text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3 text-center"></div>
-
-        <div class="space-y-2">
-          <label class="text-sm text-slate-300 font-medium">Phone Number</label>
-          <input
-            id="phone-input"
-            type="tel"
-            placeholder="+234 800 000 0000"
-            class="w-full px-4 py-3 rounded-xl bg-background-dark border border-border-dark text-white placeholder-slate-500 focus:outline-none focus:border-primary transition-colors"
-          />
-        </div>
-
-        <button
-          id="submit-phone-btn"
-          onclick="submitPhoneNumber()"
-          class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl transition-colors"
-        >
-          Complete Sign Up
-        </button>
-
-        <button
-          onclick="closePhoneModal()"
-          class="w-full text-sm text-slate-500 hover:text-slate-300 transition-colors"
-        >
-          Cancel
-        </button>
-      </div>
-    </div>
-
     <script src="./js/api.js"></script>
     <script>
       lucide.createIcons();
 
       const GOOGLE_CLIENT_ID = "135801485768-d8ft27r5tlbllv3mms4ub4s1udvsu1f8.apps.googleusercontent.com";
-      let pendingGoogleToken = null;
 
-      // ─── Helpers ────────────────────────────────────────────
+      const GOOGLE_BTN_DEFAULT = `
+        <img src="https://www.google.com/favicon.ico" alt="Google" class="w-5 h-5" />
+        <span class="text-sm font-medium text-white">Sign up with Google</span>
+      `;
+
+      // ─── Helpers ─────────────────────────────────────────────
       function showError(msg) {
         const el = document.getElementById("error-msg");
         el.textContent = msg;
@@ -215,45 +181,30 @@
       }
 
       function hideError() {
-        document.getElementById("error-msg").classList.add("hidden");
+        const el = document.getElementById("error-msg");
+        el.classList.add("hidden");
       }
 
-      function showModalError(msg) {
-        const el = document.getElementById("modal-error-msg");
-        el.textContent = msg;
-        el.classList.remove("hidden");
-      }
-
-      function hideModalError() {
-        document.getElementById("modal-error-msg").classList.add("hidden");
-      }
-
-      function setButtonLoading(btnId, loading, originalText) {
-        const btn = document.getElementById(btnId);
+      function setButtonLoading(loading) {
+        const btn = document.getElementById("google-btn");
         if (loading) {
           btn.disabled = true;
           btn.innerHTML = `<span class="spinner"></span>`;
         } else {
           btn.disabled = false;
-          btn.innerHTML = originalText;
+          btn.innerHTML = GOOGLE_BTN_DEFAULT;
         }
       }
 
-      function openPhoneModal() {
-        document.getElementById("phone-modal").classList.add("open");
-        document.getElementById("phone-input").focus();
-      }
-
-      function closePhoneModal() {
-        document.getElementById("phone-modal").classList.remove("open");
-        document.getElementById("phone-input").value = "";
-        pendingGoogleToken = null;
-        hideModalError();
-      }
-
-      // ─── Step 1: Trigger Google OAuth Popup ─────────────────
+      // ─── Google Sign Up ───────────────────────────────────────
       function handleGoogleSignUp() {
         hideError();
+
+        const phone = document.getElementById("phone").value.trim();
+        if (!phone) {
+          showError("Please enter your phone number first.");
+          return;
+        }
 
         const client = google.accounts.oauth2.initTokenClient({
           client_id: GOOGLE_CLIENT_ID,
@@ -263,74 +214,39 @@
               showError("Google sign-in was cancelled or failed. Please try again.");
               return;
             }
-            // Store token and open phone modal
-            pendingGoogleToken = response.access_token;
-            openPhoneModal();
+
+            setButtonLoading(true);
+
+            try {
+              const data = await API.post("/users/google", {
+                token: response.access_token,
+                phone,
+                mode: "signup",
+              });
+
+              localStorage.setItem("user", JSON.stringify({
+                _id: data._id,
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                profile: data.profile,
+              }));
+
+              window.location.href = "user-dashboard.html";
+
+            } catch (error) {
+              showError(error.message || "Signup failed. Please try again.");
+              setButtonLoading(false);
+            }
           },
         });
 
         client.requestAccessToken();
       }
 
-      // ─── Step 2: Submit phone + token to backend ─────────────
-      async function submitPhoneNumber() {
-        hideModalError();
-
-        const phone = document.getElementById("phone-input").value.trim();
-
-        if (!phone) {
-          showModalError("Please enter your phone number.");
-          return;
-        }
-
-        if (!pendingGoogleToken) {
-          showModalError("Something went wrong. Please try again.");
-          closePhoneModal();
-          return;
-        }
-
-        setButtonLoading(
-          "submit-phone-btn",
-          true,
-          "Complete Sign Up"
-        );
-
-        try {
-          const data = await API.post("/users/google", {
-            token: pendingGoogleToken,
-            phone,
-            mode: "signup",
-          });
-
-          // Store user info in localStorage for UI use (token is in cookie)
-          localStorage.setItem("user", JSON.stringify({
-            _id: data._id,
-            name: data.name,
-            email: data.email,
-            phone: data.phone,
-            profile: data.profile,
-          }));
-
-          window.location.href = "user-dashboard.html";
-
-        } catch (error) {
-          showModalError(error.message || "Signup failed. Please try again.");
-          setButtonLoading(
-            "submit-phone-btn",
-            false,
-            "Complete Sign Up"
-          );
-        }
-      }
-
-      // Close modal on backdrop click
-      document.getElementById("phone-modal").addEventListener("click", function (e) {
-        if (e.target === this) closePhoneModal();
-      });
-
-      // Allow Enter key on phone input
-      document.getElementById("phone-input").addEventListener("keydown", function (e) {
-        if (e.key === "Enter") submitPhoneNumber();
+      // Allow Enter key on phone input to trigger signup
+      document.getElementById("phone").addEventListener("keydown", function (e) {
+        if (e.key === "Enter") handleGoogleSignUp();
       });
     </script>
   </body>
