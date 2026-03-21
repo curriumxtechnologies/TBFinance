@@ -13,7 +13,7 @@
       rel="stylesheet"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
       rel="stylesheet"
     />
     <link
@@ -117,6 +117,14 @@
       }
       .sheet.open {
         transform: translateY(0);
+      }
+      .lucide {
+        width: 1em;
+        height: 1em;
+        stroke-width: 1.5;
+        display: inline-block;
+        vertical-align: middle;
+        fill: none;
       }
       .sheet::-webkit-scrollbar {
         width: 4px;
@@ -900,6 +908,14 @@
 
       // Initialize Lucide icons
       if (typeof lucide !== "undefined") lucide.createIcons();
+    </script>
+    <script>
+      // Ensure icons are initialized when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        if (typeof lucide !== "undefined") {
+          lucide.createIcons();
+        }
+      });
     </script>
   </body>
 </html>
