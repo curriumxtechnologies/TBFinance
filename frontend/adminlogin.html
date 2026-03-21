@@ -1,0 +1,652 @@
+<!doctype html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Admin Login | TheBrave Finance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      * {
+        font-family: "Manrope", sans-serif;
+      }
+      body {
+        background: linear-gradient(135deg, #0a0f18 0%, #0c1220 100%);
+        min-height: 100vh;
+      }
+      .glass-card {
+        background: rgba(15, 18, 25, 0.85);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(36, 48, 73, 0.5);
+      }
+      .input-glow:focus {
+        box-shadow: 0 0 0 3px rgba(17, 82, 212, 0.2);
+        border-color: #1152d4;
+      }
+      .shake-animation {
+        animation: shake 0.4s ease-in-out;
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-8px);
+        }
+        75% {
+          transform: translateX(8px);
+        }
+      }
+      .particle {
+        position: absolute;
+        background: rgba(17, 82, 212, 0.3);
+        border-radius: 50%;
+        pointer-events: none;
+        animation: float 20s infinite linear;
+      }
+      @keyframes float {
+        0% {
+          transform: translateY(100vh) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.5;
+        }
+        90% {
+          opacity: 0.5;
+        }
+        100% {
+          transform: translateY(-20vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+      .lucide {
+        width: 20px;
+        height: 20px;
+        stroke-width: 1.8;
+      }
+      .spinner {
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        display: inline-block;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body class="flex items-center justify-center p-4 relative overflow-hidden">
+    <!-- Animated Background Particles -->
+    <div
+      id="particles-container"
+      class="fixed inset-0 overflow-hidden pointer-events-none"
+    ></div>
+
+    <!-- Main Container -->
+    <div class="relative z-10 w-full max-w-md">
+      <!-- Logo & Brand -->
+      <div class="text-center mb-8">
+        <div
+          class="inline-flex items-center justify-center p-3 bg-gradient-to-br from-primary/20 to-blue-600/20 rounded-2xl mb-4"
+        >
+          <div
+            class="h-16 w-16 rounded-xl bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center shadow-2xl"
+          >
+            <i data-lucide="shield" class="w-8 h-8 text-white"></i>
+          </div>
+        </div>
+        <h1 class="text-3xl font-black text-white tracking-tight">
+          Admin Portal
+        </h1>
+        <p class="text-slate-400 text-sm mt-2">
+          Secure access for authorized administrators only
+        </p>
+      </div>
+
+      <!-- Login Card -->
+      <div class="glass-card rounded-2xl p-8 shadow-2xl">
+        <!-- Alert Messages -->
+        <div
+          id="errorAlert"
+          class="hidden mb-5 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-sm flex items-center gap-2"
+        >
+          <i data-lucide="alert-circle" class="w-4 h-4 flex-shrink-0"></i>
+          <span id="errorMessage">Invalid credentials</span>
+        </div>
+
+        <div
+          id="successAlert"
+          class="hidden mb-5 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm flex items-center gap-2"
+        >
+          <i data-lucide="check-circle" class="w-4 h-4 flex-shrink-0"></i>
+          <span id="successMessage">Login successful! Redirecting...</span>
+        </div>
+
+        <!-- Login Form -->
+        <form id="adminLoginForm" class="space-y-5">
+          <!-- Email Field -->
+          <div>
+            <label
+              class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2"
+            >
+              Admin Email
+            </label>
+            <div class="relative">
+              <div
+                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+              >
+                <i data-lucide="mail" class="w-5 h-5 text-slate-500"></i>
+              </div>
+              <input
+                type="email"
+                id="adminEmail"
+                name="email"
+                class="w-full pl-10 pr-4 py-3 bg-black/40 border border-[#1e293b] rounded-xl text-white placeholder:text-slate-600 focus:border-primary focus:outline-none input-glow transition-all"
+                placeholder="admin@thebrave.com"
+                autocomplete="username"
+                value=""
+              />
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div>
+            <label
+              class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2"
+            >
+              Password
+            </label>
+            <div class="relative">
+              <div
+                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+              >
+                <i data-lucide="lock" class="w-5 h-5 text-slate-500"></i>
+              </div>
+              <input
+                type="password"
+                id="adminPassword"
+                name="password"
+                class="w-full pl-10 pr-12 py-3 bg-black/40 border border-[#1e293b] rounded-xl text-white placeholder:text-slate-600 focus:border-primary focus:outline-none input-glow transition-all"
+                placeholder="••••••••"
+                autocomplete="current-password"
+              />
+              <button
+                type="button"
+                id="togglePassword"
+                class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-300 transition-colors"
+              >
+                <i data-lucide="eye" id="eyeIcon" class="w-5 h-5"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Login Button -->
+          <button
+            type="submit"
+            id="loginBtn"
+            class="w-full py-3.5 bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-bold rounded-xl transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 shadow-lg shadow-primary/20"
+          >
+            <i data-lucide="log-in" class="w-5 h-5"></i>
+            <span>Sign In to Admin Panel</span>
+          </button>
+
+          <!-- Security Note -->
+          <div class="text-center">
+            <div
+              class="flex items-center justify-center gap-2 text-[10px] text-slate-600"
+            >
+              <i data-lucide="shield-check" class="w-3 h-3"></i>
+              <span>Secure admin area • Protected access only</span>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Footer Note -->
+      <div class="text-center mt-6">
+        <p class="text-[10px] text-slate-600">
+          TheBrave Finance Admin Portal • Unauthorized access is prohibited
+        </p>
+      </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div
+      id="forgotModal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 hidden transition-all"
+    >
+      <div
+        class="glass-card rounded-2xl w-full max-w-md p-6 m-4 transform transition-all"
+      >
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-white">Reset Password</h3>
+          <button id="closeForgotModal" class="text-slate-400 hover:text-white">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+        <p class="text-slate-400 text-sm mb-4">
+          Enter your admin email to receive password reset instructions.
+        </p>
+        <input
+          type="email"
+          id="resetEmail"
+          class="w-full px-4 py-3 bg-black/40 border border-[#1e293b] rounded-xl text-white placeholder:text-slate-600 focus:border-primary outline-none mb-4"
+          placeholder="admin@thebrave.com"
+        />
+        <div class="flex gap-3">
+          <button
+            id="sendResetBtn"
+            class="flex-1 py-3 bg-primary hover:bg-primary/80 text-white font-bold rounded-xl transition-all"
+          >
+            Send Reset Link
+          </button>
+          <button
+            id="cancelForgotBtn"
+            class="px-5 py-3 bg-[#1e293b] hover:bg-[#2d3a4e] text-slate-300 rounded-xl"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Two-Factor Authentication Modal -->
+    <div
+      id="twoFactorModal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 hidden transition-all"
+    >
+      <div class="glass-card rounded-2xl w-full max-w-md p-6 m-4">
+        <div class="text-center mb-4">
+          <div
+            class="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-3"
+          >
+            <i data-lucide="shield" class="w-6 h-6 text-primary"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white">
+            Two-Factor Authentication
+          </h3>
+          <p class="text-slate-400 text-sm mt-1">
+            Enter the 6-digit code from your authenticator app
+          </p>
+        </div>
+        <div class="flex justify-center gap-2 mb-6">
+          <input
+            type="text"
+            maxlength="1"
+            class="code-input w-12 h-12 text-center text-xl font-bold bg-black/40 border border-[#1e293b] rounded-xl text-white focus:border-primary outline-none"
+            autofocus
+          />
+          <input
+            type="text"
+            maxlength="1"
+            class="code-input w-12 h-12 text-center text-xl font-bold bg-black/40 border border-[#1e293b] rounded-xl text-white focus:border-primary outline-none"
+          />
+          <input
+            type="text"
+            maxlength="1"
+            class="code-input w-12 h-12 text-center text-xl font-bold bg-black/40 border border-[#1e293b] rounded-xl text-white focus:border-primary outline-none"
+          />
+          <input
+            type="text"
+            maxlength="1"
+            class="code-input w-12 h-12 text-center text-xl font-bold bg-black/40 border border-[#1e293b] rounded-xl text-white focus:border-primary outline-none"
+          />
+          <input
+            type="text"
+            maxlength="1"
+            class="code-input w-12 h-12 text-center text-xl font-bold bg-black/40 border border-[#1e293b] rounded-xl text-white focus:border-primary outline-none"
+          />
+          <input
+            type="text"
+            maxlength="1"
+            class="code-input w-12 h-12 text-center text-xl font-bold bg-black/40 border border-[#1e293b] rounded-xl text-white focus:border-primary outline-none"
+          />
+        </div>
+        <div
+          id="twoFactorError"
+          class="hidden text-center text-rose-400 text-xs mb-3"
+        >
+          Invalid verification code
+        </div>
+        <div class="flex gap-3">
+          <button
+            id="verify2faBtn"
+            class="flex-1 py-3 bg-primary hover:bg-primary/80 text-white font-bold rounded-xl transition-all"
+          >
+            Verify
+          </button>
+          <button
+            id="cancel2faBtn"
+            class="px-5 py-3 bg-[#1e293b] hover:bg-[#2d3a4e] text-slate-300 rounded-xl"
+          >
+            Back
+          </button>
+        </div>
+        <p class="text-center text-[10px] text-slate-500 mt-4">
+          Demo: Use code <span class="text-primary font-mono">123456</span>
+        </p>
+      </div>
+    </div>
+
+    <script>
+      lucide.createIcons();
+
+      // Particles Animation
+      function createParticles() {
+        const container = document.getElementById("particles-container");
+        const particleCount = 40;
+        for (let i = 0; i < particleCount; i++) {
+          const particle = document.createElement("div");
+          particle.className = "particle";
+          const size = Math.random() * 4 + 2;
+          particle.style.width = `${size}px`;
+          particle.style.height = `${size}px`;
+          particle.style.left = `${Math.random() * 100}%`;
+          particle.style.animationDuration = `${Math.random() * 15 + 10}s`;
+          particle.style.animationDelay = `${Math.random() * 15}s`;
+          particle.style.background = `rgba(17, 82, 212, ${Math.random() * 0.4 + 0.1})`;
+          container.appendChild(particle);
+        }
+      }
+      createParticles();
+
+      // DOM Elements
+      const form = document.getElementById("adminLoginForm");
+      const emailInput = document.getElementById("adminEmail");
+      const passwordInput = document.getElementById("adminPassword");
+      const loginBtn = document.getElementById("loginBtn");
+      const errorAlert = document.getElementById("errorAlert");
+      const errorMessage = document.getElementById("errorMessage");
+      const successAlert = document.getElementById("successAlert");
+      const successMessage = document.getElementById("successMessage");
+      const togglePasswordBtn = document.getElementById("togglePassword");
+      const eyeIcon = document.getElementById("eyeIcon");
+      const rememberCheckbox = document.getElementById("rememberMe");
+      const forgotBtn = document.getElementById("forgotPasswordBtn");
+      const forgotModal = document.getElementById("forgotModal");
+      const closeForgotModal = document.getElementById("closeForgotModal");
+      const cancelForgotBtn = document.getElementById("cancelForgotBtn");
+      const sendResetBtn = document.getElementById("sendResetBtn");
+      const twoFactorModal = document.getElementById("twoFactorModal");
+      const verify2faBtn = document.getElementById("verify2faBtn");
+      const cancel2faBtn = document.getElementById("cancel2faBtn");
+      const twoFactorError = document.getElementById("twoFactorError");
+      const codeInputs = document.querySelectorAll(".code-input");
+
+      let pendingAdminData = null;
+
+      // Toggle Password Visibility
+      togglePasswordBtn.addEventListener("click", () => {
+        const type = passwordInput.type === "password" ? "text" : "password";
+        passwordInput.type = type;
+        eyeIcon.setAttribute(
+          "data-lucide",
+          type === "password" ? "eye" : "eye-off",
+        );
+        lucide.createIcons();
+      });
+
+      // Load saved credentials
+      function loadSavedCredentials() {
+        const savedEmail = localStorage.getItem("admin_remember_email");
+        const savedPassword = localStorage.getItem("admin_remember_password");
+        if (savedEmail && savedPassword) {
+          emailInput.value = savedEmail;
+          passwordInput.value = savedPassword;
+          rememberCheckbox.checked = true;
+        }
+      }
+      loadSavedCredentials();
+
+      // Save credentials
+      function saveCredentials(email, password, remember) {
+        if (remember) {
+          localStorage.setItem("admin_remember_email", email);
+          localStorage.setItem("admin_remember_password", password);
+        } else {
+          localStorage.removeItem("admin_remember_email");
+          localStorage.removeItem("admin_remember_password");
+        }
+      }
+
+      // Show error message
+      function showError(message) {
+        errorMessage.textContent = message;
+        errorAlert.classList.remove("hidden");
+        successAlert.classList.add("hidden");
+        form.classList.add("shake-animation");
+        setTimeout(() => form.classList.remove("shake-animation"), 400);
+        setTimeout(() => {
+          errorAlert.classList.add("hidden");
+        }, 4000);
+      }
+
+      function showSuccess(message) {
+        successMessage.textContent = message;
+        successAlert.classList.remove("hidden");
+        errorAlert.classList.add("hidden");
+      }
+
+      function hideAlerts() {
+        errorAlert.classList.add("hidden");
+        successAlert.classList.add("hidden");
+      }
+
+      // 2FA Code Input Handling
+      codeInputs.forEach((input, index) => {
+        input.addEventListener("input", (e) => {
+          if (e.target.value.length === 1 && index < codeInputs.length - 1) {
+            codeInputs[index + 1].focus();
+          }
+        });
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Backspace" && !e.target.value && index > 0) {
+            codeInputs[index - 1].focus();
+          }
+        });
+        input.addEventListener("keypress", (e) => {
+          if (e.key === "Enter") {
+            if (index === codeInputs.length - 1) {
+              verify2FA();
+            } else {
+              codeInputs[index + 1].focus();
+            }
+          }
+        });
+      });
+
+      function get2FACode() {
+        let code = "";
+        codeInputs.forEach((input) => (code += input.value));
+        return code;
+      }
+
+      function reset2FAInputs() {
+        codeInputs.forEach((input) => (input.value = ""));
+        codeInputs[0].focus();
+        twoFactorError.classList.add("hidden");
+      }
+
+      // Verify 2FA
+      function verify2FA() {
+        const code = get2FACode();
+        if (code === "123456") {
+          twoFactorModal.classList.add("hidden");
+          showSuccess(
+            "Authentication successful! Redirecting to admin dashboard...",
+          );
+
+          // Store admin session
+          const adminSession = {
+            id: "admin_001",
+            email: pendingAdminData?.email || emailInput.value,
+            name: "Administrator",
+            role: "super_admin",
+            loginTime: new Date().toISOString(),
+          };
+          localStorage.setItem("admin_session", JSON.stringify(adminSession));
+          localStorage.setItem(
+            "user",
+            JSON.stringify({ ...adminSession, role: "admin" }),
+          );
+
+          setTimeout(() => {
+            window.location.href = "admin-dashboard.html";
+          }, 1500);
+        } else {
+          twoFactorError.classList.remove("hidden");
+          setTimeout(() => {
+            twoFactorError.classList.add("hidden");
+          }, 3000);
+          reset2FAInputs();
+        }
+      }
+
+      // Login Handler
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        hideAlerts();
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        const remember = rememberCheckbox.checked;
+
+        if (!email || !password) {
+          showError("Please enter both email and password");
+          return;
+        }
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          showError("Please enter a valid email address");
+          return;
+        }
+
+        // Show loading state
+        const originalBtnHTML = loginBtn.innerHTML;
+        loginBtn.innerHTML =
+          '<span class="spinner"></span><span class="ml-2">Verifying...</span>';
+        loginBtn.disabled = true;
+
+        // Simulate API call with timeout
+        setTimeout(() => {
+          // Demo admin credentials
+          const validAdmins = [
+            { email: "admin@thebrave.com", password: "Admin@123" },
+            { email: "superadmin@thebrave.com", password: "Super@2024" },
+            { email: "admin@thebravefinance.com", password: "TheBrave2024" },
+          ];
+
+          const isValid = validAdmins.some(
+            (admin) =>
+              admin.email.toLowerCase() === email.toLowerCase() &&
+              admin.password === password,
+          );
+
+          if (isValid) {
+            // Save credentials if remember me checked
+            saveCredentials(email, password, remember);
+
+            pendingAdminData = { email };
+            showSuccess("Credentials verified. Please enter 2FA code...");
+
+            // Show 2FA modal after short delay
+            setTimeout(() => {
+              twoFactorModal.classList.remove("hidden");
+              reset2FAInputs();
+            }, 800);
+          } else {
+            showError("Invalid admin credentials. Access denied.");
+          }
+
+          // Reset button
+          loginBtn.innerHTML = originalBtnHTML;
+          loginBtn.disabled = false;
+        }, 800);
+      });
+
+      // 2FA Verification
+      verify2faBtn.addEventListener("click", verify2FA);
+      cancel2faBtn.addEventListener("click", () => {
+        twoFactorModal.classList.add("hidden");
+        reset2FAInputs();
+      });
+
+      // Forgot Password Modal
+      forgotBtn.addEventListener("click", () => {
+        forgotModal.classList.remove("hidden");
+      });
+
+      function closeForgotModals() {
+        forgotModal.classList.add("hidden");
+        document.getElementById("resetEmail").value = "";
+      }
+
+      closeForgotModal.addEventListener("click", closeForgotModals);
+      cancelForgotBtn.addEventListener("click", closeForgotModals);
+
+      sendResetBtn.addEventListener("click", () => {
+        const resetEmail = document.getElementById("resetEmail").value;
+        if (!resetEmail) {
+          alert("Please enter your admin email address");
+          return;
+        }
+        if (!/^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(resetEmail)) {
+          alert("Please enter a valid email address");
+          return;
+        }
+        alert(
+          `Password reset link sent to ${resetEmail}\n(Demo mode - check console)`,
+        );
+        console.log("Reset password requested for:", resetEmail);
+        closeForgotModals();
+      });
+
+      // Click outside modals to close
+      forgotModal.addEventListener("click", (e) => {
+        if (e.target === forgotModal) closeForgotModals();
+      });
+      twoFactorModal.addEventListener("click", (e) => {
+        if (e.target === twoFactorModal) {
+          twoFactorModal.classList.add("hidden");
+          reset2FAInputs();
+        }
+      });
+
+      // Auto-fill demo credentials on page load (optional helper)
+      const demoHint = document.createElement("div");
+      demoHint.className =
+        "fixed bottom-4 right-4 text-[10px] text-slate-500 bg-black/30 px-3 py-1.5 rounded-full cursor-pointer hover:bg-black/50 transition-all z-20";
+      demoHint.innerHTML = "🔐 Demo: admin@thebrave.com / Admin@123";
+      demoHint.title = "Click to auto-fill demo credentials";
+      document.body.appendChild(demoHint);
+
+      demoHint.addEventListener("click", () => {
+        emailInput.value = "admin@thebrave.com";
+        passwordInput.value = "Admin@123";
+        rememberCheckbox.checked = true;
+        showSuccess("Demo credentials filled. Click Sign In to continue.");
+        setTimeout(() => successAlert.classList.add("hidden"), 3000);
+      });
+
+      // Re-initialize icons after dynamic changes
+      const observer = new MutationObserver(() => lucide.createIcons());
+      observer.observe(document.body, { childList: true, subtree: true });
+    </script>
+  </body>
+</html>
