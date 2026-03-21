@@ -41,17 +41,19 @@
             colors: {
               primary: "#1152d4",
               "emerald-accent": "#10b981",
-              "background-dark": "#0a0f18",
-              "surface-dark": "#151c2c",
-              "border-dark": "#243049",
+              "background-light": "#f6f6f8",
+              "background-dark": "#101622", // Changed from #0a0f18
+              "surface-dark": "#192233", // Changed from #151c2c
+              "border-dark": "#324467", // Changed from #243049
             },
             fontFamily: {
               display: ["Manrope", "sans-serif"],
             },
-            boxShadow: {
-              soft: "0 10px 40px rgba(0,0,0,0.25)",
-              glow: "0 0 0 1px rgba(17,82,212,0.12), 0 20px 60px rgba(17,82,212,0.15)",
-              emerald: "0 20px 60px rgba(16,185,129,0.18)",
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
             },
           },
         },
@@ -64,9 +66,9 @@
       }
 
       .glass-panel {
-        background: rgba(21, 28, 44, 0.72);
-        backdrop-filter: blur(14px);
-        border: 1px solid rgba(36, 48, 73, 0.7);
+        background: rgba(25, 34, 51, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(50, 68, 103, 0.5);
       }
 
       .text-gradient {
@@ -138,7 +140,9 @@
     </style>
   </head>
 
-  <body class="bg-background-dark text-slate-100 font-display antialiased">
+  <body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display transition-colors duration-300"
+  >
     <!-- Header -->
     <header
       class="sticky top-0 z-50 border-b border-border-dark bg-background-dark/85 backdrop-blur-xl"
