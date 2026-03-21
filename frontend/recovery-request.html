@@ -135,6 +135,18 @@
         width: 26px;
         height: 26px;
       }
+
+      .hero-watermark {
+        width: 180px;
+        height: 180px;
+      }
+
+      @media (min-width: 640px) {
+        .hero-watermark {
+          width: 240px;
+          height: 240px;
+        }
+      }
     </style>
   </head>
 
@@ -365,467 +377,551 @@
         <main
           class="flex-1 overflow-y-auto custom-scrollbar bg-background-dark p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 pb-24 sm:pb-8"
         >
-          <!-- Header and Stats -->
-          <div
-            class="flex flex-col sm:flex-row sm:items-end justify-between gap-4"
-          >
-            <div>
-              <h1
-                class="text-xl sm:text-2xl font-bold text-white tracking-tight"
-              >
-                My Recovery Requests
-              </h1>
-              <p class="text-slate-400 text-xs sm:text-sm mt-1">
-                Manage and track your fund recovery cases with our legal team.
-              </p>
-            </div>
-
-            <div class="flex gap-2 w-full sm:w-auto">
-              <div
-                class="px-3 sm:px-4 py-2 bg-surface-dark border border-border-dark rounded-xl flex items-center gap-2 sm:gap-3 flex-1 sm:flex-none"
-              >
-                <i
-                  data-lucide="badge-check"
-                  class="icon text-emerald-accent"
-                ></i>
-                <div>
-                  <p
-                    class="text-[8px] sm:text-[10px] text-slate-500 uppercase font-bold leading-none"
-                  >
-                    Successful Recoveries
-                  </p>
-                  <p class="text-xs sm:text-sm font-bold text-white">
-                    $45,200.00
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- New Recovery Case Form -->
+          <!-- Recovery Hero -->
           <section
-            class="bg-surface-dark border border-border-dark rounded-2xl overflow-hidden"
+            class="p-5 sm:p-8 rounded-2xl bg-gradient-to-br from-surface-dark to-background-dark border border-border-dark flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative overflow-hidden"
           >
             <div
-              class="p-4 sm:p-6 border-b border-border-dark flex items-center gap-3"
+              class="absolute -right-12 -top-12 opacity-[0.03] pointer-events-none"
             >
-              <div
-                class="h-8 w-8 sm:h-10 sm:w-10 rounded-lg bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
-              >
-                <i data-lucide="shield-plus" class="icon-lg"></i>
-              </div>
-              <h3 class="text-base sm:text-lg font-bold text-white">
-                Start a New Recovery Case
-              </h3>
+              <i
+                data-lucide="shield-check"
+                class="hero-watermark text-white"
+              ></i>
             </div>
 
-            <div class="p-4 sm:p-6">
-              <form class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-                <div class="space-y-3 sm:space-y-4">
-                  <div>
-                    <label
-                      class="block text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 sm:mb-2"
-                    >
-                      Broker Name
-                    </label>
-                    <input
-                      class="w-full bg-background-dark border-border-dark rounded-xl text-white text-xs sm:text-sm focus:ring-emerald-accent focus:border-emerald-accent py-2 sm:py-3 px-3 sm:px-4"
-                      placeholder="e.g. Global Trade Markets"
-                      type="text"
-                    />
-                  </div>
+            <div class="relative z-10 max-w-3xl">
+              <div class="flex items-center gap-2 sm:gap-3 mb-3">
+                <span
+                  class="px-2 sm:px-3 py-0.5 sm:py-1 bg-emerald-accent text-white text-[8px] sm:text-[10px] font-black rounded-full uppercase tracking-widest"
+                >
+                  Recovery Support
+                </span>
+                <span
+                  class="text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-widest"
+                >
+                  Lost Investment Funds
+                </span>
+              </div>
 
-                  <div>
-                    <label
-                      class="block text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 sm:mb-2"
-                    >
-                      Amount Lost ($)
-                    </label>
-                    <input
-                      class="w-full bg-background-dark border-border-dark rounded-xl text-white text-xs sm:text-sm focus:ring-emerald-accent focus:border-emerald-accent py-2 sm:py-3 px-3 sm:px-4"
-                      placeholder="0.00"
-                      type="number"
-                    />
-                  </div>
+              <h1
+                class="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight"
+              >
+                Professional support for
+                <span class="text-emerald-accent">fund recovery</span>
+              </h1>
 
-                  <div>
-                    <label
-                      class="block text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 sm:mb-2"
-                    >
-                      Issue Description
-                    </label>
-                    <textarea
-                      class="w-full bg-background-dark border-border-dark rounded-xl text-white text-xs sm:text-sm focus:ring-emerald-accent focus:border-emerald-accent py-2 sm:py-3 px-3 sm:px-4"
-                      placeholder="Describe the situation, reasons for loss, and broker response..."
-                      rows="4"
-                    ></textarea>
-                  </div>
+              <p
+                class="mt-4 text-slate-400 text-sm sm:text-base leading-relaxed max-w-2xl"
+              >
+                If you have lost money to a suspicious broker, blocked
+                investment platform, frozen withdrawal, or deceptive trading
+                service, our recovery team can guide you through a more
+                structured review process. We support clients with case
+                assessment, recovery strategy, and coordination with appropriate
+                authorities where applicable.
+              </p>
+
+              <div class="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                <div
+                  class="px-4 py-3 rounded-xl bg-background-dark/60 border border-border-dark"
+                >
+                  <p
+                    class="text-[10px] sm:text-xs text-slate-500 uppercase font-bold tracking-wider"
+                  >
+                    Focus
+                  </p>
+                  <p class="text-sm sm:text-base font-bold text-white mt-1">
+                    Investment fund recovery
+                  </p>
                 </div>
 
-                <div class="space-y-3 sm:space-y-4 flex flex-col">
-                  <label
-                    class="block text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 sm:mb-2"
+                <div
+                  class="px-4 py-3 rounded-xl bg-background-dark/60 border border-border-dark"
+                >
+                  <p
+                    class="text-[10px] sm:text-xs text-slate-500 uppercase font-bold tracking-wider"
                   >
-                    Evidence & Documents
-                  </label>
-
-                  <div
-                    class="flex-1 border-2 border-dashed border-border-dark rounded-xl sm:rounded-2xl flex flex-col items-center justify-center p-4 sm:p-8 bg-background-dark/50 hover:bg-background-dark/80 transition-all cursor-pointer group"
-                  >
-                    <i
-                      data-lucide="cloud-upload"
-                      class="w-8 h-8 sm:w-10 sm:h-10 text-slate-500 group-hover:text-emerald-accent mb-2 sm:mb-4 transition-colors"
-                    ></i>
-
-                    <p
-                      class="text-xs sm:text-sm font-bold text-white mb-1 text-center"
-                    >
-                      Drag and drop files here
-                    </p>
-
-                    <p
-                      class="text-[10px] sm:text-xs text-slate-500 text-center"
-                    >
-                      Upload transaction screenshots, emails, or contracts (PDF,
-                      JPG, PNG)
-                    </p>
-
-                    <button
-                      class="mt-3 sm:mt-4 px-3 sm:px-4 py-1.5 sm:py-2 bg-border-dark text-slate-300 text-[10px] sm:text-xs font-bold rounded-lg hover:bg-slate-700 transition-all"
-                      type="button"
-                    >
-                      Browse Files
-                    </button>
-                  </div>
-
-                  <div class="flex justify-end pt-2 sm:pt-4">
-                    <button
-                      class="w-full sm:w-auto px-5 sm:px-8 py-2.5 sm:py-3 bg-emerald-accent hover:bg-emerald-600 text-white font-bold rounded-xl shadow-lg shadow-emerald-900/20 transition-all flex items-center justify-center gap-2 text-xs sm:text-sm"
-                      type="submit"
-                    >
-                      <i data-lucide="send" class="icon"></i>
-                      Submit Request
-                    </button>
-                  </div>
+                    Method
+                  </p>
+                  <p class="text-sm sm:text-base font-bold text-white mt-1">
+                    Case-based review
+                  </p>
                 </div>
-              </form>
+
+                <div
+                  class="px-4 py-3 rounded-xl bg-background-dark/60 border border-border-dark"
+                >
+                  <p
+                    class="text-[10px] sm:text-xs text-slate-500 uppercase font-bold tracking-wider"
+                  >
+                    Access
+                  </p>
+                  <p class="text-sm sm:text-base font-bold text-white mt-1">
+                    Direct agent support
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="relative z-10 flex flex-col sm:flex-row lg:flex-col gap-3 w-full lg:w-auto"
+            >
+              <a
+                href="https://wa.me/1234567890"
+                class="px-5 sm:px-8 py-3 sm:py-4 bg-emerald-accent text-white text-xs sm:text-sm font-extrabold rounded-xl shadow-lg shadow-emerald-accent/20 hover:bg-emerald-accent/90 transition-all flex items-center justify-center gap-2"
+              >
+                <i data-lucide="message-circle" class="icon"></i>
+                Chat With an Agent
+              </a>
+
+              <a
+                href="#recovery-framework"
+                class="px-5 sm:px-8 py-3 sm:py-4 bg-emerald-accent/10 border border-emerald-accent/30 text-emerald-accent text-xs sm:text-sm font-extrabold rounded-xl hover:bg-emerald-accent/20 transition-all flex items-center justify-center gap-2"
+              >
+                <i data-lucide="info" class="icon"></i>
+                How It Works
+              </a>
             </div>
           </section>
 
-          <!-- Active Cases -->
-          <div class="space-y-3 sm:space-y-4">
-            <h4
-              class="text-white font-bold text-xs sm:text-sm uppercase tracking-widest"
+          <!-- Recovery Framework -->
+          <section id="recovery-framework" class="space-y-4 sm:space-y-6">
+            <h3
+              class="text-white font-bold text-xs sm:text-sm uppercase tracking-widest flex items-center gap-2"
             >
-              Active Cases
-            </h4>
+              <span class="h-px w-6 sm:w-8 bg-emerald-accent"></span>
+              Recovery Framework
+            </h3>
 
-            <!-- Desktop/Tablet View -->
-            <div class="hidden sm:block space-y-4">
-              <!-- Case 1 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
               <div
-                class="p-4 sm:p-5 rounded-2xl bg-surface-dark border border-primary/30 ring-1 ring-primary/20 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 hover:bg-surface-dark/80 cursor-pointer transition-all"
+                class="p-5 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors"
               >
                 <div
-                  class="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0"
+                  class="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-4"
                 >
-                  <i data-lucide="landmark" class="icon-xl"></i>
+                  <i data-lucide="messages-square" class="icon-lg"></i>
+                </div>
+                <h4 class="text-white font-bold text-sm sm:text-base mb-2">
+                  1. Agent Consultation
+                </h4>
+                <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                  Start with a direct conversation about the investment loss,
+                  broker conduct, and available transaction history.
+                </p>
+              </div>
+
+              <div
+                class="p-5 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors"
+              >
+                <div
+                  class="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-4"
+                >
+                  <i data-lucide="file-search" class="icon-lg"></i>
+                </div>
+                <h4 class="text-white font-bold text-sm sm:text-base mb-2">
+                  2. Case Review
+                </h4>
+                <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                  Our team evaluates the case details, account behavior,
+                  communications, and supporting evidence.
+                </p>
+              </div>
+
+              <div
+                class="p-5 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors"
+              >
+                <div
+                  class="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-4"
+                >
+                  <i data-lucide="scale" class="icon-lg"></i>
+                </div>
+                <h4 class="text-white font-bold text-sm sm:text-base mb-2">
+                  3. Strategic Escalation
+                </h4>
+                <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                  Where appropriate, the matter may be guided toward compliance,
+                  investigative, legal, or enforcement channels.
+                </p>
+              </div>
+
+              <div
+                class="p-5 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors"
+              >
+                <div
+                  class="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-4"
+                >
+                  <i data-lucide="shield-check" class="icon-lg"></i>
+                </div>
+                <h4 class="text-white font-bold text-sm sm:text-base mb-2">
+                  4. Guided Support
+                </h4>
+                <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                  You receive direct updates and next-step guidance through the
+                  recovery process.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Consultation Blocks -->
+          <section class="grid lg:grid-cols-12 gap-6">
+            <div class="lg:col-span-8 space-y-6">
+              <div
+                class="bg-surface-dark border border-border-dark rounded-2xl overflow-hidden"
+              >
+                <div
+                  class="px-4 sm:px-6 py-4 border-b border-border-dark flex items-center gap-3"
+                >
+                  <div
+                    class="h-8 w-8 sm:h-10 sm:w-10 rounded-lg bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
+                  >
+                    <i data-lucide="briefcase" class="icon-lg"></i>
+                  </div>
+                  <h3 class="text-base sm:text-lg font-bold text-white">
+                    Direct Recovery Consultation
+                  </h3>
                 </div>
 
-                <div class="flex-1 text-center sm:text-left">
-                  <h5 class="text-sm sm:text-base font-bold text-white">
-                    Capital Forex Pro
-                  </h5>
-                  <p class="text-[10px] sm:text-xs text-slate-500 mt-0.5">
-                    Ref: #REC-88219
-                  </p>
-                </div>
-
-                <div class="text-center sm:text-right">
-                  <p class="text-base sm:text-lg font-bold text-white">
-                    $12,500.00
-                  </p>
+                <div class="p-4 sm:p-6 space-y-5">
                   <p
-                    class="text-[8px] sm:text-[10px] text-slate-500 uppercase font-bold"
+                    class="text-slate-400 text-sm sm:text-base leading-relaxed"
                   >
-                    Estimated Recovery
+                    This recovery service is designed for individuals who have
+                    lost funds through failed investment platforms, deceptive
+                    brokers, blocked withdrawals, cloned trading brands, or
+                    suspicious digital asset activity. Instead of filling a long
+                    request form, you can begin with a direct conversation and
+                    allow an agent to guide the next steps.
                   </p>
-                </div>
 
-                <div class="flex flex-col items-center sm:items-end gap-2">
-                  <span
-                    class="px-2 sm:px-3 py-0.5 sm:py-1 bg-status-progress/10 text-status-progress text-[9px] sm:text-[11px] font-black rounded-full border border-status-progress/20 uppercase tracking-tighter"
+                  <div class="grid sm:grid-cols-2 gap-4">
+                    <div
+                      class="rounded-2xl border border-border-dark bg-background-dark/40 p-4 sm:p-5"
+                    >
+                      <div class="flex items-center gap-3 mb-3">
+                        <i
+                          data-lucide="shield-alert"
+                          class="w-5 h-5 text-emerald-accent"
+                        ></i>
+                        <h4 class="text-white font-bold text-sm sm:text-base">
+                          Fraud-aware review
+                        </h4>
+                      </div>
+                      <p
+                        class="text-slate-400 text-xs sm:text-sm leading-relaxed"
+                      >
+                        Focused support for suspicious investment losses and
+                        inaccessible account balances.
+                      </p>
+                    </div>
+
+                    <div
+                      class="rounded-2xl border border-border-dark bg-background-dark/40 p-4 sm:p-5"
+                    >
+                      <div class="flex items-center gap-3 mb-3">
+                        <i
+                          data-lucide="landmark"
+                          class="w-5 h-5 text-emerald-accent"
+                        ></i>
+                        <h4 class="text-white font-bold text-sm sm:text-base">
+                          Authority coordination
+                        </h4>
+                      </div>
+                      <p
+                        class="text-slate-400 text-xs sm:text-sm leading-relaxed"
+                      >
+                        Cases may be guided through compliance, legal, or
+                        relevant authorities where appropriate.
+                      </p>
+                    </div>
+
+                    <div
+                      class="rounded-2xl border border-border-dark bg-background-dark/40 p-4 sm:p-5"
+                    >
+                      <div class="flex items-center gap-3 mb-3">
+                        <i
+                          data-lucide="search-check"
+                          class="w-5 h-5 text-emerald-accent"
+                        ></i>
+                        <h4 class="text-white font-bold text-sm sm:text-base">
+                          Structured case analysis
+                        </h4>
+                      </div>
+                      <p
+                        class="text-slate-400 text-xs sm:text-sm leading-relaxed"
+                      >
+                        Better than a generic ticket system — your case is
+                        reviewed with more context and direction.
+                      </p>
+                    </div>
+
+                    <div
+                      class="rounded-2xl border border-border-dark bg-background-dark/40 p-4 sm:p-5"
+                    >
+                      <div class="flex items-center gap-3 mb-3">
+                        <i
+                          data-lucide="lock"
+                          class="w-5 h-5 text-emerald-accent"
+                        ></i>
+                        <h4 class="text-white font-bold text-sm sm:text-base">
+                          Confidential support
+                        </h4>
+                      </div>
+                      <p
+                        class="text-slate-400 text-xs sm:text-sm leading-relaxed"
+                      >
+                        Speak privately with an agent and begin your recovery
+                        process directly.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div
+                    class="rounded-2xl border border-emerald-accent/20 bg-emerald-accent/10 p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
                   >
-                    In Progress
-                  </span>
-                  <span class="text-[8px] sm:text-[10px] text-slate-500">
-                    Last updated: 2 hours ago
-                  </span>
+                    <div>
+                      <p class="text-white font-bold text-base sm:text-lg">
+                        Need immediate recovery guidance?
+                      </p>
+                      <p class="text-emerald-100 text-xs sm:text-sm mt-1">
+                        Start with a direct agent conversation instead of
+                        submitting a form.
+                      </p>
+                    </div>
+
+                    <a
+                      href="https://wa.me/1234567890"
+                      class="inline-flex items-center justify-center gap-2 px-6 py-3 sm:py-4 bg-emerald-accent hover:bg-emerald-600 text-white font-black rounded-xl transition-all whitespace-nowrap text-sm"
+                    >
+                      <i data-lucide="message-circle" class="w-5 h-5"></i>
+                      Chat With an Agent
+                    </a>
+                  </div>
                 </div>
               </div>
 
-              <!-- Case 2 -->
+              <!-- Case Status -->
               <div
-                class="p-4 sm:p-5 rounded-2xl bg-surface-dark border border-border-dark flex flex-col sm:flex-row items-center gap-4 sm:gap-6 hover:border-slate-500 transition-all cursor-pointer"
+                class="bg-surface-dark border border-border-dark rounded-2xl overflow-hidden"
               >
                 <div
-                  class="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-slate-500/10 flex items-center justify-center text-slate-400 flex-shrink-0"
+                  class="px-4 sm:px-6 py-4 border-b border-border-dark flex justify-between items-center"
                 >
-                  <i data-lucide="building-2" class="icon-xl"></i>
-                </div>
-
-                <div class="flex-1 text-center sm:text-left">
-                  <h5 class="text-sm sm:text-base font-bold text-white">
-                    Prime Trading Solutions
-                  </h5>
-                  <p class="text-[10px] sm:text-xs text-slate-500 mt-0.5">
-                    Ref: #REC-88104
-                  </p>
-                </div>
-
-                <div class="text-center sm:text-right">
-                  <p class="text-base sm:text-lg font-bold text-white">
-                    $4,800.00
-                  </p>
-                  <p
-                    class="text-[8px] sm:text-[10px] text-slate-500 uppercase font-bold"
-                  >
-                    Estimated Recovery
-                  </p>
-                </div>
-
-                <div class="flex flex-col items-center sm:items-end gap-2">
+                  <h4 class="text-white font-bold text-sm sm:text-base">
+                    Recovery Status
+                  </h4>
                   <span
-                    class="px-2 sm:px-3 py-0.5 sm:py-1 bg-status-review/10 text-status-review text-[9px] sm:text-[11px] font-black rounded-full border border-status-review/20 uppercase tracking-tighter"
+                    class="text-[10px] sm:text-xs text-slate-500 uppercase font-bold tracking-widest"
                   >
-                    Under Review
-                  </span>
-                  <span class="text-[8px] sm:text-[10px] text-slate-500">
-                    Last updated: Yesterday
+                    Internal Overview
                   </span>
                 </div>
-              </div>
 
-              <!-- Case 3 -->
-              <div
-                class="p-4 sm:p-5 rounded-2xl bg-surface-dark border border-border-dark flex flex-col sm:flex-row items-center gap-4 sm:gap-6 opacity-70 hover:opacity-100 transition-all cursor-pointer"
-              >
-                <div
-                  class="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent flex-shrink-0"
-                >
-                  <i data-lucide="circle-check-big" class="icon-xl"></i>
-                </div>
-
-                <div class="flex-1 text-center sm:text-left">
-                  <h5 class="text-sm sm:text-base font-bold text-white">
-                    OptionFlow Ltd
-                  </h5>
-                  <p class="text-[10px] sm:text-xs text-slate-500 mt-0.5">
-                    Ref: #REC-87952
-                  </p>
-                </div>
-
-                <div class="text-center sm:text-right">
-                  <p class="text-base sm:text-lg font-bold text-emerald-accent">
-                    $8,200.00
-                  </p>
-                  <p
-                    class="text-[8px] sm:text-[10px] text-slate-500 uppercase font-bold"
+                <div class="divide-y divide-border-dark">
+                  <div
+                    class="px-4 sm:px-6 py-4 flex items-center gap-3 sm:gap-4"
                   >
-                    Amount Recovered
-                  </p>
-                </div>
+                    <div
+                      class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-status-review/10 flex items-center justify-center text-status-review"
+                    >
+                      <i
+                        data-lucide="file-search"
+                        class="w-4 h-4 sm:w-5 sm:h-5"
+                      ></i>
+                    </div>
 
-                <div class="flex flex-col items-center sm:items-end gap-2">
-                  <span
-                    class="px-2 sm:px-3 py-0.5 sm:py-1 bg-status-resolved/10 text-status-resolved text-[9px] sm:text-[11px] font-black rounded-full border border-status-resolved/20 uppercase tracking-tighter"
+                    <div class="flex-1 min-w-0">
+                      <p
+                        class="text-xs sm:text-sm font-bold text-white truncate"
+                      >
+                        Case review and evidence assessment
+                      </p>
+                      <p class="text-[10px] sm:text-xs text-slate-500">
+                        Transaction trail and platform behavior are being
+                        reviewed
+                      </p>
+                    </div>
+
+                    <span
+                      class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap"
+                    >
+                      Active
+                    </span>
+                  </div>
+
+                  <div
+                    class="px-4 sm:px-6 py-4 flex items-center gap-3 sm:gap-4"
                   >
-                    Resolved
-                  </span>
-                  <span class="text-[8px] sm:text-[10px] text-slate-500">
-                    Completed: Oct 12, 2023
-                  </span>
-                </div>
-              </div>
+                    <div
+                      class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-status-progress/10 flex items-center justify-center text-status-progress"
+                    >
+                      <i data-lucide="scale" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    </div>
 
-              <!-- Case 4 -->
-              <div
-                class="p-4 sm:p-5 rounded-2xl bg-surface-dark border border-border-dark flex flex-col sm:flex-row items-center gap-4 sm:gap-6 hover:border-slate-500 transition-all cursor-pointer"
-              >
-                <div
-                  class="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-status-pending/10 flex items-center justify-center text-status-pending flex-shrink-0"
-                >
-                  <i data-lucide="clock-3" class="icon-xl"></i>
-                </div>
+                    <div class="flex-1 min-w-0">
+                      <p
+                        class="text-xs sm:text-sm font-bold text-white truncate"
+                      >
+                        Escalation and recovery strategy
+                      </p>
+                      <p class="text-[10px] sm:text-xs text-slate-500">
+                        Appropriate channels are being considered based on the
+                        case
+                      </p>
+                    </div>
 
-                <div class="flex-1 text-center sm:text-left">
-                  <h5 class="text-sm sm:text-base font-bold text-white">
-                    X-Crypto Exchange
-                  </h5>
-                  <p class="text-[10px] sm:text-xs text-slate-500 mt-0.5">
-                    Ref: #REC-88432
-                  </p>
-                </div>
+                    <span
+                      class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap"
+                    >
+                      Ongoing
+                    </span>
+                  </div>
 
-                <div class="text-center sm:text-right">
-                  <p class="text-base sm:text-lg font-bold text-white">
-                    $15,000.00
-                  </p>
-                  <p
-                    class="text-[8px] sm:text-[10px] text-slate-500 uppercase font-bold"
+                  <div
+                    class="px-4 sm:px-6 py-4 flex items-center gap-3 sm:gap-4"
                   >
-                    Estimated Recovery
-                  </p>
-                </div>
+                    <div
+                      class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-status-pending/10 flex items-center justify-center text-status-pending"
+                    >
+                      <i
+                        data-lucide="clock-3"
+                        class="w-4 h-4 sm:w-5 sm:h-5"
+                      ></i>
+                    </div>
 
-                <div class="flex flex-col items-center sm:items-end gap-2">
-                  <span
-                    class="px-2 sm:px-3 py-0.5 sm:py-1 bg-status-pending/10 text-status-pending text-[9px] sm:text-[11px] font-black rounded-full border border-status-pending/20 uppercase tracking-tighter"
-                  >
-                    Pending
-                  </span>
-                  <span class="text-[8px] sm:text-[10px] text-slate-500">
-                    Submitted: 3 hours ago
-                  </span>
+                    <div class="flex-1 min-w-0">
+                      <p
+                        class="text-xs sm:text-sm font-bold text-white truncate"
+                      >
+                        Client follow-up and case updates
+                      </p>
+                      <p class="text-[10px] sm:text-xs text-slate-500">
+                        Your agent continues to provide next-step guidance
+                      </p>
+                    </div>
+
+                    <span
+                      class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap"
+                    >
+                      Monitored
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- Mobile Card View -->
-            <div class="block sm:hidden space-y-3">
+            <div class="lg:col-span-4 space-y-6">
               <div
-                class="bg-surface-dark border border-primary/30 ring-1 ring-primary/20 rounded-xl p-4 cursor-pointer hover:bg-surface-dark/80 transition-all"
+                class="p-5 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark"
               >
-                <div class="flex items-center gap-3 mb-3">
-                  <div
-                    class="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary"
-                  >
-                    <i data-lucide="landmark" class="icon"></i>
-                  </div>
-                  <div>
-                    <h5 class="text-sm font-bold text-white">
-                      Capital Forex Pro
-                    </h5>
-                    <p class="text-[9px] text-slate-500">Ref: #REC-88219</p>
-                  </div>
-                </div>
+                <h4 class="text-white font-bold text-sm sm:text-base mb-4">
+                  Why clients contact us
+                </h4>
 
-                <div class="flex justify-between items-center mb-2">
-                  <span class="text-xs text-slate-400">Estimated Recovery</span>
-                  <span class="text-sm font-bold text-white">$12,500.00</span>
-                </div>
+                <div class="space-y-4">
+                  <div class="flex items-start gap-3">
+                    <i
+                      data-lucide="check-circle-2"
+                      class="w-5 h-5 text-emerald-accent mt-0.5"
+                    ></i>
+                    <div>
+                      <p class="text-white font-bold text-sm">
+                        Blocked withdrawals
+                      </p>
+                      <p class="text-slate-400 text-xs mt-1">
+                        Funds locked inside investment dashboards or inactive
+                        accounts.
+                      </p>
+                    </div>
+                  </div>
 
-                <div class="flex justify-between items-center">
-                  <span
-                    class="px-2 py-0.5 bg-status-progress/10 text-status-progress text-[8px] font-black rounded-full border border-status-progress/20 uppercase tracking-tighter"
-                  >
-                    In Progress
-                  </span>
-                  <span class="text-[8px] text-slate-500">Updated: 2h ago</span>
+                  <div class="flex items-start gap-3">
+                    <i
+                      data-lucide="check-circle-2"
+                      class="w-5 h-5 text-emerald-accent mt-0.5"
+                    ></i>
+                    <div>
+                      <p class="text-white font-bold text-sm">
+                        Deceptive brokers
+                      </p>
+                      <p class="text-slate-400 text-xs mt-1">
+                        Suspicious platforms, cloned brands, and misleading
+                        investment offers.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start gap-3">
+                    <i
+                      data-lucide="check-circle-2"
+                      class="w-5 h-5 text-emerald-accent mt-0.5"
+                    ></i>
+                    <div>
+                      <p class="text-white font-bold text-sm">
+                        Recovery escalation
+                      </p>
+                      <p class="text-slate-400 text-xs mt-1">
+                        Case support that may involve documented escalation
+                        where relevant.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <div
-                class="bg-surface-dark border border-border-dark rounded-xl p-4 cursor-pointer"
+                class="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-emerald-accent to-emerald-700 text-white relative overflow-hidden"
               >
-                <div class="flex items-center gap-3 mb-3">
-                  <div
-                    class="h-8 w-8 rounded-lg bg-slate-500/10 flex items-center justify-center text-slate-400"
-                  >
-                    <i data-lucide="building-2" class="icon"></i>
-                  </div>
-                  <div>
-                    <h5 class="text-sm font-bold text-white">
-                      Prime Trading Solutions
-                    </h5>
-                    <p class="text-[9px] text-slate-500">Ref: #REC-88104</p>
-                  </div>
+                <div class="absolute -right-4 -top-4 opacity-10">
+                  <i data-lucide="headset" class="w-24 h-24"></i>
                 </div>
 
-                <div class="flex justify-between items-center mb-2">
-                  <span class="text-xs text-slate-400">Estimated Recovery</span>
-                  <span class="text-sm font-bold text-white">$4,800.00</span>
-                </div>
+                <h4 class="text-lg sm:text-xl font-bold mb-2">
+                  Speak to recovery support
+                </h4>
+                <p class="text-emerald-100 text-sm mb-5">
+                  No long request form. No delay. Just direct contact with an
+                  agent.
+                </p>
 
-                <div class="flex justify-between items-center">
-                  <span
-                    class="px-2 py-0.5 bg-status-review/10 text-status-review text-[8px] font-black rounded-full border border-status-review/20 uppercase tracking-tighter"
-                  >
-                    Under Review
-                  </span>
-                  <span class="text-[8px] text-slate-500">
-                    Updated: Yesterday
-                  </span>
-                </div>
+                <a
+                  class="flex items-center gap-3 p-4 bg-white/10 hover:bg-white/20 rounded-xl transition-colors border border-white/10"
+                  href="https://wa.me/1234567890"
+                >
+                  <i data-lucide="message-square" class="w-5 h-5"></i>
+                  <div class="text-sm">
+                    <p class="font-bold">Chat With an Agent</p>
+                    <p
+                      class="opacity-70 text-[10px] uppercase font-bold tracking-widest"
+                    >
+                      Fast response
+                    </p>
+                  </div>
+                </a>
               </div>
 
               <div
-                class="bg-surface-dark border border-border-dark rounded-xl p-4 cursor-pointer opacity-70"
+                class="p-5 sm:p-6 rounded-2xl border border-border-dark bg-surface-dark/50"
               >
-                <div class="flex items-center gap-3 mb-3">
-                  <div
-                    class="h-8 w-8 rounded-lg bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
-                  >
-                    <i data-lucide="circle-check-big" class="icon"></i>
-                  </div>
-                  <div>
-                    <h5 class="text-sm font-bold text-white">OptionFlow Ltd</h5>
-                    <p class="text-[9px] text-slate-500">Ref: #REC-87952</p>
-                  </div>
-                </div>
-
-                <div class="flex justify-between items-center mb-2">
-                  <span class="text-xs text-slate-400">Recovered</span>
-                  <span class="text-sm font-bold text-emerald-accent">
-                    $8,200.00
-                  </span>
-                </div>
-
-                <div class="flex justify-between items-center">
-                  <span
-                    class="px-2 py-0.5 bg-status-resolved/10 text-status-resolved text-[8px] font-black rounded-full border border-status-resolved/20 uppercase tracking-tighter"
-                  >
-                    Resolved
-                  </span>
-                  <span class="text-[8px] text-slate-500">Oct 12, 2023</span>
-                </div>
-              </div>
-
-              <div
-                class="bg-surface-dark border border-border-dark rounded-xl p-4 cursor-pointer"
-              >
-                <div class="flex items-center gap-3 mb-3">
-                  <div
-                    class="h-8 w-8 rounded-lg bg-status-pending/10 flex items-center justify-center text-status-pending"
-                  >
-                    <i data-lucide="clock-3" class="icon"></i>
-                  </div>
-                  <div>
-                    <h5 class="text-sm font-bold text-white">
-                      X-Crypto Exchange
-                    </h5>
-                    <p class="text-[9px] text-slate-500">Ref: #REC-88432</p>
-                  </div>
-                </div>
-
-                <div class="flex justify-between items-center mb-2">
-                  <span class="text-xs text-slate-400">Estimated Recovery</span>
-                  <span class="text-sm font-bold text-white">$15,000.00</span>
-                </div>
-
-                <div class="flex justify-between items-center">
-                  <span
-                    class="px-2 py-0.5 bg-status-pending/10 text-status-pending text-[8px] font-black rounded-full border border-status-pending/20 uppercase tracking-tighter"
-                  >
-                    Pending
-                  </span>
-                  <span class="text-[8px] text-slate-500">
-                    Submitted: 3h ago
-                  </span>
-                </div>
+                <p
+                  class="text-emerald-accent text-[10px] sm:text-xs font-black uppercase tracking-widest mb-2"
+                >
+                  Recovery Focus
+                </p>
+                <p
+                  class="text-white font-bold leading-tight text-sm sm:text-base"
+                >
+                  Lost investment funds
+                </p>
+                <p class="text-slate-400 text-xs mt-2">
+                  Structured support for suspicious investment platforms, frozen
+                  accounts, and inaccessible balances.
+                </p>
               </div>
             </div>
-          </div>
+          </section>
         </main>
       </div>
     </div>
