@@ -1,0 +1,489 @@
+<!doctype html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+    <title>VIP Signals | TheBrave Finance</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png" />
+    <link rel="manifest" href="images/site.webmanifest" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1152d4",
+              "emerald-accent": "#10b981",
+              "background-dark": "#0a0f18",
+              "surface-dark": "#151c2c",
+              "border-dark": "#243049",
+            },
+            fontFamily: { display: ["Manrope", "sans-serif"] },
+          },
+        },
+      };
+    </script>
+    <style>
+      body { font-family: "Manrope", sans-serif; }
+      .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+      .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background: #243049; border-radius: 10px; }
+      #mobileSidebar { transition: transform 0.3s ease-in-out; transform: translateX(-100%); }
+      #mobileSidebar.open { transform: translateX(0); }
+      #sidebarOverlay { transition: opacity 0.3s ease-in-out; opacity: 0; pointer-events: none; }
+      #sidebarOverlay.open { opacity: 1; pointer-events: auto; }
+      .icon { width: 20px; height: 20px; stroke-width: 2.2; flex-shrink: 0; }
+      .icon-sm { width: 16px; height: 16px; stroke-width: 2; }
+      .avatar-img { width: 100%; height: 100%; object-fit: cover; }
+
+      /* Access gate overlay */
+      #accessGate {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(10, 15, 24, 0.97);
+        z-index: 200;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+      }
+      #accessGate.show { display: flex; }
+
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .signal-card { animation: fadeInUp 0.3s ease-out both; }
+
+      /* Signal type badge */
+      .badge-buy  { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
+      .badge-sell { background: rgba(239,68,68,0.12);  color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
+
+      .tp-dot   { width: 8px; height: 8px; border-radius: 50%; background: #10b981; flex-shrink: 0; }
+      .sl-dot   { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; flex-shrink: 0; }
+
+      /* Status pills */
+      .pill-active    { background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.2); }
+      .pill-closed    { background: rgba(100,116,139,0.1); color: #94a3b8; border: 1px solid rgba(100,116,139,0.2); }
+      .pill-cancelled { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
+    </style>
+  </head>
+
+  <body class="bg-background-dark text-slate-100 font-display antialiased overflow-hidden">
+
+    <!-- ── Access Gate ─────────────────────────────────────── -->
+    <div id="accessGate" class="show">
+      <div id="gateContent" class="text-center max-w-sm w-full space-y-6">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"></div>
+
+    <!-- Mobile Sidebar -->
+    <aside id="mobileSidebar" class="fixed top-0 left-0 h-full w-64 bg-surface-dark border-r border-border-dark flex flex-col z-50 lg:hidden">
+      <div class="p-6 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <img src="images/TBF-LOGO.png" alt="TheBrave Logo" class="h-8 w-auto sm:h-10 object-contain" />
+          <h2 class="text-white text-lg font-extrabold tracking-tight uppercase">TBF</h2>
+        </div>
+        <button id="closeSidebar" class="text-slate-400 hover:text-white p-1"><i data-lucide="x" class="icon"></i></button>
+      </div>
+      <nav class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto">
+        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="user-dashboard.html"><i data-lucide="layout-dashboard" class="icon"></i> Dashboard</a>
+        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="deposit.html"><i data-lucide="wallet" class="icon"></i> Deposit</a>
+        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="deposit-history.html"><i data-lucide="history" class="icon"></i> Deposit History</a>
+        <a class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20" href="vip-sub.html"><i data-lucide="badge-check" class="icon"></i> VIP Subscription</a>
+        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="recovery-request.html"><i data-lucide="shield-check" class="icon"></i> Recovery Requests</a>
+        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="profile.html"><i data-lucide="user" class="icon"></i> Profile</a>
+      </nav>
+      <div class="p-4 border-t border-border-dark">
+        <button id="mobileLogoutBtn" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all">
+          <i data-lucide="log-out" class="icon"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <div class="flex h-screen overflow-hidden">
+      <!-- Desktop Sidebar -->
+      <aside class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex-col hidden lg:flex">
+        <div class="p-6 flex items-center gap-3">
+          <img src="images/TBF-LOGO.png" alt="TheBrave Logo" class="h-8 w-auto sm:h-10 object-contain" />
+          <h2 class="text-white text-lg font-extrabold tracking-tight uppercase">TBF</h2>
+        </div>
+        <nav class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto">
+          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="user-dashboard.html"><i data-lucide="layout-dashboard" class="icon"></i> Dashboard</a>
+          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="deposit.html"><i data-lucide="wallet" class="icon"></i> Deposit</a>
+          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="deposit-history.html"><i data-lucide="history" class="icon"></i> Deposit History</a>
+          <a class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20" href="vip-sub.html"><i data-lucide="badge-check" class="icon"></i> VIP Subscription</a>
+          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="recovery-request.html"><i data-lucide="shield-check" class="icon"></i> Recovery Requests</a>
+          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="profile.html"><i data-lucide="user" class="icon"></i> Profile</a>
+        </nav>
+        <div class="p-4 border-t border-border-dark">
+          <button id="logoutBtn" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all">
+            <i data-lucide="log-out" class="icon"></i> Logout
+          </button>
+        </div>
+      </aside>
+
+      <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <!-- Header -->
+        <header class="h-16 flex-shrink-0 border-b border-border-dark bg-surface-dark/50 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <button id="menuToggle" class="block lg:hidden p-2 text-slate-400 hover:text-white transition-colors">
+              <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+            <div class="flex items-center text-xs sm:text-sm font-medium">
+              <span class="text-slate-500">Home</span>
+              <span class="mx-2 text-slate-600">/</span>
+              <span class="text-slate-500"><a href="vip-sub.html" class="hover:text-white transition-colors">VIP</a></span>
+              <span class="mx-2 text-slate-600">/</span>
+              <span class="text-white">Signals</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 sm:gap-6">
+            <!-- VIP expiry badge -->
+            <div id="vipExpiryBadge" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-accent/10 border border-emerald-accent/20">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-accent animate-pulse"></span>
+              <span id="vipExpiryText" class="text-emerald-accent text-[10px] font-black uppercase tracking-widest"></span>
+            </div>
+            <div class="h-8 w-px bg-border-dark hidden sm:block"></div>
+            <a href="profile.html" class="flex items-center gap-2 sm:gap-3 group">
+              <div class="text-right hidden sm:block">
+                <p id="headerName" class="text-xs sm:text-sm font-bold text-white group-hover:text-emerald-accent transition-colors">Loading...</p>
+                <p class="text-[10px] sm:text-[11px] text-slate-500 uppercase tracking-widest font-bold">VIP Member</p>
+              </div>
+              <div id="headerAvatarWrap" class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-emerald-accent/20 border border-emerald-accent/30 overflow-hidden flex items-center justify-center">
+                <i data-lucide="user" class="w-[18px] h-[18px] sm:w-5 sm:h-5 text-emerald-accent"></i>
+              </div>
+            </a>
+          </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto custom-scrollbar bg-background-dark p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 pb-24 sm:pb-8">
+
+          <!-- Page Header -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="w-2 h-2 rounded-full bg-emerald-accent animate-pulse"></span>
+                <span class="text-emerald-accent text-[10px] font-black uppercase tracking-widest">Live Signals</span>
+              </div>
+              <h1 class="text-xl sm:text-2xl font-black text-white">VIP Signal Room</h1>
+              <p class="text-slate-400 text-xs sm:text-sm mt-1">Premium trade signals updated in real time by our analysts.</p>
+            </div>
+
+            <!-- Filter -->
+            <div class="flex items-center gap-2">
+              <select id="statusFilter" onchange="filterSignals()" class="px-3 py-2 bg-surface-dark border border-border-dark rounded-xl text-slate-300 text-xs outline-none focus:border-emerald-accent">
+                <option value="">All Signals</option>
+                <option value="active">Active</option>
+                <option value="closed">Closed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+              <select id="typeFilter" onchange="filterSignals()" class="px-3 py-2 bg-surface-dark border border-border-dark rounded-xl text-slate-300 text-xs outline-none focus:border-emerald-accent">
+                <option value="">Buy & Sell</option>
+                <option value="buy">Buy Only</option>
+                <option value="sell">Sell Only</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Signals Grid -->
+          <div id="signalsGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+            <!-- Populated by JS -->
+            <div class="sm:col-span-2 xl:col-span-3 text-center py-16 text-slate-500 text-sm">
+              Loading signals...
+            </div>
+          </div>
+
+        </main>
+      </div>
+    </div>
+
+    <script src="./js/api.js"></script>
+    <script src="js/dashmenu.js"></script>
+    <script>
+      lucide.createIcons();
+
+      // ─── Auth Guard ───────────────────────────────────────────
+      const user = JSON.parse(localStorage.getItem("user") || "null");
+      if (!user) window.location.href = "login.html";
+
+      if (user) {
+        document.getElementById("headerName").textContent = user.name || "Trader";
+        if (user.profile) {
+          document.getElementById("headerAvatarWrap").innerHTML =
+            `<img src="${user.profile}" alt="avatar" class="avatar-img" />`;
+        }
+      }
+
+      // ─── Gate Content Builders ────────────────────────────────
+      function showGate(type) {
+        const gate = document.getElementById("accessGate");
+        const content = document.getElementById("gateContent");
+        gate.classList.add("show");
+
+        if (type === "expired") {
+          content.innerHTML = `
+            <div class="flex items-center justify-center mb-4">
+              <div class="h-20 w-20 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">
+                <i data-lucide="clock" class="text-rose-400" style="width:36px;height:36px;"></i>
+              </div>
+            </div>
+            <h2 class="text-2xl font-black text-white">Access Expired</h2>
+            <p class="text-slate-400 text-sm leading-relaxed">Your VIP subscription has expired. Renew to regain access to premium signals.</p>
+            <div class="space-y-3 pt-2">
+              <a href="vip-sub.html" class="w-full py-3 bg-emerald-accent hover:bg-emerald-500 text-white font-black rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
+                <i data-lucide="refresh-cw" style="width:16px;height:16px;"></i>
+                Renew Subscription — $56.78
+              </a>
+              <a href="user-dashboard.html" class="w-full py-3 bg-surface-dark border border-border-dark text-slate-400 hover:text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
+                Back to Dashboard
+              </a>
+            </div>
+          `;
+        } else if (type === "pending") {
+          content.innerHTML = `
+            <div class="flex items-center justify-center mb-4">
+              <div class="h-20 w-20 rounded-full bg-amber-400/10 border border-amber-400/20 flex items-center justify-center">
+                <i data-lucide="clock" class="text-amber-400" style="width:36px;height:36px;"></i>
+              </div>
+            </div>
+            <h2 class="text-2xl font-black text-white">Payment Pending</h2>
+            <p class="text-slate-400 text-sm leading-relaxed">Your payment is awaiting admin approval. You'll get access as soon as it's confirmed.</p>
+            <div class="space-y-3 pt-2">
+              <a href="vip-sub.html" class="w-full py-3 bg-surface-dark border border-border-dark text-slate-400 hover:text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
+                View Subscription Status
+              </a>
+            </div>
+          `;
+        } else {
+          // no subscription at all
+          content.innerHTML = `
+            <div class="flex items-center justify-center mb-4">
+              <div class="h-20 w-20 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
+                <i data-lucide="lock" class="text-primary" style="width:36px;height:36px;"></i>
+              </div>
+            </div>
+            <h2 class="text-2xl font-black text-white">VIP Access Required</h2>
+            <p class="text-slate-400 text-sm leading-relaxed">This page is exclusive to VIP members. Subscribe to unlock premium trade signals.</p>
+            <div class="p-4 rounded-xl bg-surface-dark border border-border-dark space-y-2 text-left">
+              <div class="flex items-center gap-2 text-xs text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-accent"></span> Real-time trade signals</div>
+              <div class="flex items-center gap-2 text-xs text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-accent"></span> Entry, TP & SL levels</div>
+              <div class="flex items-center gap-2 text-xs text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-accent"></span> 5 days access per subscription</div>
+            </div>
+            <div class="space-y-3 pt-2">
+              <a href="vip-sub.html" class="w-full py-3 bg-emerald-accent hover:bg-emerald-500 text-white font-black rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
+                <i data-lucide="badge-check" style="width:16px;height:16px;"></i>
+                Subscribe — $56.78
+              </a>
+              <a href="user-dashboard.html" class="w-full py-3 bg-surface-dark border border-border-dark text-slate-400 hover:text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
+                Back to Dashboard
+              </a>
+            </div>
+          `;
+        }
+
+        lucide.createIcons();
+      }
+
+      function hideGate() {
+        document.getElementById("accessGate").classList.remove("show");
+      }
+
+      // ─── VIP Access Check ─────────────────────────────────────
+      let allSignals = [];
+
+      async function checkAccessAndLoad() {
+        try {
+          const { isVip, daysLeft, expiry } = await API.get("/vip/my-status");
+
+          if (isVip) {
+            // ── Granted ──────────────────────────────────────────
+            hideGate();
+
+            // Show expiry badge in header
+            const badge = document.getElementById("vipExpiryBadge");
+            badge.classList.remove("hidden");
+            badge.classList.add("flex");
+            document.getElementById("vipExpiryText").textContent =
+              `${daysLeft} day${daysLeft !== 1 ? "s" : ""} left`;
+
+            loadSignals();
+
+          } else {
+            // Not active — check if pending
+            const payments = await API.get("/vip/my-payments");
+            const hasPending = payments.some(p => p.status === "pending");
+            showGate(hasPending ? "pending" : "none");
+          }
+
+        } catch {
+          // If /my-status throws (e.g. expired cookie), treat as no access
+          showGate("none");
+        }
+      }
+
+      // ─── Load Signals ─────────────────────────────────────────
+      async function loadSignals() {
+        const grid = document.getElementById("signalsGrid");
+
+        try {
+          allSignals = await API.get("/vip/signals");
+          renderSignals(allSignals);
+        } catch (err) {
+          // 403 means VIP expired mid-session
+          if (err.message?.includes("VIP access required") || err.message?.includes("403")) {
+            showGate("expired");
+          } else {
+            grid.innerHTML = `<div class="sm:col-span-2 xl:col-span-3 text-center py-16 text-slate-500 text-sm">Failed to load signals.</div>`;
+          }
+        }
+      }
+
+      // ─── Render Signals ───────────────────────────────────────
+      function renderSignals(signals) {
+        const grid = document.getElementById("signalsGrid");
+
+        if (!signals.length) {
+          grid.innerHTML = `
+            <div class="sm:col-span-2 xl:col-span-3 flex flex-col items-center justify-center py-20 text-center space-y-3">
+              <div class="h-16 w-16 rounded-full bg-surface-dark border border-border-dark flex items-center justify-center">
+                <i data-lucide="radio" class="text-slate-600" style="width:28px;height:28px;"></i>
+              </div>
+              <p class="text-white font-bold">No signals yet</p>
+              <p class="text-slate-500 text-xs">New signals will appear here when posted by our analysts.</p>
+            </div>
+          `;
+          lucide.createIcons();
+          return;
+        }
+
+        grid.innerHTML = signals.map((s, i) => {
+          const isBuy     = s.type === "buy";
+          const typeClass = isBuy ? "badge-buy" : "badge-sell";
+          const typeLabel = isBuy ? "BUY" : "SELL";
+          const typeColor = isBuy ? "text-emerald-accent" : "text-rose-400";
+
+          const pillClass = {
+            active:    "pill-active",
+            closed:    "pill-closed",
+            cancelled: "pill-cancelled",
+          }[s.status] || "pill-active";
+
+          const date = new Date(s.createdAt).toLocaleDateString("en-US", {
+            month: "short", day: "numeric", year: "numeric",
+          });
+          const time = new Date(s.createdAt).toLocaleTimeString("en-US", {
+            hour: "2-digit", minute: "2-digit",
+          });
+
+          const tpRows = (s.takeProfits || []).map((tp, idx) => `
+            <div class="flex items-center justify-between py-1.5">
+              <div class="flex items-center gap-2">
+                <span class="tp-dot"></span>
+                <span class="text-slate-400 text-xs">TP${idx + 1}</span>
+              </div>
+              <span class="text-emerald-accent font-bold text-xs font-mono">${tp}</span>
+            </div>
+          `).join("");
+
+          const slRows = (s.stopLosses || []).map((sl, idx) => `
+            <div class="flex items-center justify-between py-1.5">
+              <div class="flex items-center gap-2">
+                <span class="sl-dot"></span>
+                <span class="text-slate-400 text-xs">SL${(s.stopLosses || []).length > 1 ? idx + 1 : ""}</span>
+              </div>
+              <span class="text-rose-400 font-bold text-xs font-mono">${sl}</span>
+            </div>
+          `).join("");
+
+          return `
+            <div class="signal-card bg-surface-dark border border-border-dark rounded-2xl overflow-hidden hover:border-emerald-accent/30 transition-all" style="animation-delay:${i * 0.05}s">
+
+              <!-- Card Header -->
+              <div class="px-5 pt-5 pb-4 border-b border-border-dark">
+                <div class="flex items-start justify-between gap-3 mb-3">
+                  <div>
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider ${typeClass}">${typeLabel}</span>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider ${pillClass}">${s.status}</span>
+                    </div>
+                    <h3 class="text-white font-black text-xl sm:text-2xl tracking-tight ${typeColor}">${s.pair}</h3>
+                  </div>
+                  ${s.image ? `<img src="${s.image}" alt="signal" class="w-14 h-14 rounded-xl object-cover border border-border-dark flex-shrink-0" />` : ""}
+                </div>
+
+                <!-- Entry -->
+                <div class="flex items-center justify-between py-2 border-t border-border-dark/50">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="crosshair" class="icon-sm text-primary"></i>
+                    <span class="text-slate-400 text-xs">Entry</span>
+                  </div>
+                  <span class="text-white font-black text-sm font-mono">${s.entry}</span>
+                </div>
+              </div>
+
+              <!-- TP & SL Levels -->
+              <div class="px-5 py-3 space-y-0 divide-y divide-border-dark/40">
+                ${tpRows || `<p class="text-slate-600 text-xs py-2">No take profit set</p>`}
+                ${slRows || `<p class="text-slate-600 text-xs py-2">No stop loss set</p>`}
+              </div>
+
+              <!-- Description -->
+              ${s.description ? `
+              <div class="px-5 pb-4 pt-1">
+                <p class="text-slate-400 text-xs leading-relaxed border-t border-border-dark pt-3">${s.description}</p>
+              </div>` : ""}
+
+              <!-- Footer -->
+              <div class="px-5 py-3 border-t border-border-dark bg-background-dark/30 flex items-center justify-between">
+                <div class="flex items-center gap-1.5 text-slate-500">
+                  <i data-lucide="clock" class="icon-sm"></i>
+                  <span class="text-[10px] font-medium">${date} · ${time}</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <i data-lucide="shield-check" class="icon-sm text-emerald-accent"></i>
+                  <span class="text-[10px] text-emerald-accent font-bold uppercase tracking-widest">Verified</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join("");
+
+        lucide.createIcons();
+      }
+
+      // ─── Filters ──────────────────────────────────────────────
+      function filterSignals() {
+        const status = document.getElementById("statusFilter").value;
+        const type   = document.getElementById("typeFilter").value;
+
+        let result = [...allSignals];
+        if (status) result = result.filter(s => s.status === status);
+        if (type)   result = result.filter(s => s.type   === type);
+
+        renderSignals(result);
+      }
+
+      // ─── Logout ───────────────────────────────────────────────
+      async function handleLogout() {
+        try { await API.post("/users/logout"); } catch {}
+        localStorage.removeItem("user");
+        window.location.href = "login.html";
+      }
+
+      document.getElementById("logoutBtn").addEventListener("click", handleLogout);
+      document.getElementById("mobileLogoutBtn").addEventListener("click", handleLogout);
+
+      // ─── Init ─────────────────────────────────────────────────
+      checkAccessAndLoad();
+    </script>
+  </body>
+</html>

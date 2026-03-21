@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import userRoutes from './routes/userRoutes.js'
 import transactionRoutes from './routes/transactionRoutes.js';
 import tradingRoutes from './routes/tradingRoutes.js';
+import vipRoutes from './routes/vipRoutes.js'
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
@@ -53,6 +54,7 @@ app.get("/api/health", (req, res) => {
 app.use('/api/users', userRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/trading', tradingRoutes);
+app.use('/api/vip', vipRoutes);
 
 // ✅ Error handlers
 app.use(notFound);
