@@ -3,7 +3,7 @@ const API = (() => {
     window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1"
       ? "http://localhost:8000/api"
-      : "https://your-production-backend.com/api";
+      : "https://tbfinance.onrender.com/api";
 
   async function request(endpoint, options = {}) {
     const url = `${BASE_URL}${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`;
