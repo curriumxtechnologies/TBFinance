@@ -2,36 +2,15 @@
 <html class="dark" lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-      name="viewport"
-    />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
     <title>Deposit History | TheBrave Finance</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="images/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="images/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="images/favicon-16x16.png"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png" />
     <link rel="manifest" href="images/site.webmanifest" />
     <script src="https://unpkg.com/lucide@latest"></script>
-
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -45,1208 +24,520 @@
               "surface-dark": "#151c2c",
               "border-dark": "#243049",
             },
-            fontFamily: {
-              display: ["Manrope", "sans-serif"],
-            },
-            borderRadius: {
-              DEFAULT: "0.375rem",
-              lg: "0.5rem",
-              xl: "0.75rem",
-              "2xl": "1rem",
-              full: "9999px",
-            },
+            fontFamily: { display: ["Manrope", "sans-serif"] },
+            borderRadius: { DEFAULT: "0.375rem", lg: "0.5rem", xl: "0.75rem", "2xl": "1rem", full: "9999px" },
           },
         },
       };
     </script>
-
     <style>
-      body {
-        font-family: "Manrope", sans-serif;
-      }
-
-      .glass-panel {
-        background: rgba(21, 28, 44, 0.7);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(36, 48, 73, 0.5);
-      }
-
-      .custom-scrollbar::-webkit-scrollbar {
-        width: 4px;
-      }
-
-      .custom-scrollbar::-webkit-scrollbar-track {
-        background: transparent;
-      }
-
-      .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #243049;
-        border-radius: 10px;
-      }
-
-      input[type="date"]::-webkit-calendar-picker-indicator {
-        filter: invert(1);
-      }
-
-      .mobile-menu-open {
-        overflow: hidden;
-      }
-
-      #mobileSidebar {
-        transition: transform 0.3s ease-in-out;
-        transform: translateX(-100%);
-      }
-
-      #mobileSidebar.open {
-        transform: translateX(0);
-      }
-
-      #sidebarOverlay {
-        transition: opacity 0.3s ease-in-out;
-        opacity: 0;
-        pointer-events: none;
-      }
-
-      #sidebarOverlay.open {
-        opacity: 1;
-        pointer-events: auto;
-      }
-
-      #detailPanel {
-        transition: transform 0.3s ease-in-out;
-        transform: translateY(100%);
-      }
-
-      #detailPanel.open {
-        transform: translateY(0);
-      }
-
-      #panelOverlay {
-        transition: opacity 0.3s ease-in-out;
-        opacity: 0;
-        pointer-events: none;
-      }
-
-      #panelOverlay.open {
-        opacity: 1;
-        pointer-events: auto;
-      }
-
-      .lucide {
-        width: 20px;
-        height: 20px;
-        stroke-width: 2;
-      }
+      body { font-family: "Manrope", sans-serif; }
+      .glass-panel { background: rgba(21, 28, 44, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(36, 48, 73, 0.5); }
+      .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+      .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background: #243049; border-radius: 10px; }
+      input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+      #mobileSidebar { transition: transform 0.3s ease-in-out; transform: translateX(-100%); }
+      #mobileSidebar.open { transform: translateX(0); }
+      #sidebarOverlay { transition: opacity 0.3s ease-in-out; opacity: 0; pointer-events: none; }
+      #sidebarOverlay.open { opacity: 1; pointer-events: auto; }
+      #detailPanel { transition: transform 0.3s ease-in-out; transform: translateY(100%); }
+      #detailPanel.open { transform: translateY(0); }
+      #panelOverlay { transition: opacity 0.3s ease-in-out; opacity: 0; pointer-events: none; }
+      #panelOverlay.open { opacity: 1; pointer-events: auto; }
+      .lucide { width: 20px; height: 20px; stroke-width: 2; }
+      .avatar-img { width: 100%; height: 100%; object-fit: cover; }
     </style>
   </head>
 
-  <body
-    class="bg-background-dark text-slate-100 font-display transition-colors duration-300 antialiased overflow-hidden"
-  >
-    <!-- Mobile Sidebar Overlay -->
-    <div
-      id="sidebarOverlay"
-      class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"
-    ></div>
+  <body class="bg-background-dark text-slate-100 font-display transition-colors duration-300 antialiased overflow-hidden">
+
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"></div>
 
     <!-- Mobile Sidebar -->
-    <aside
-      id="mobileSidebar"
-      class="fixed top-0 left-0 h-full w-64 bg-surface-dark border-r border-border-dark flex flex-col z-50 lg:hidden transform -translate-x-full transition-transform duration-300 ease-in-out"
-    >
+    <aside id="mobileSidebar" class="fixed top-0 left-0 h-full w-64 bg-surface-dark border-r border-border-dark flex flex-col z-50 lg:hidden">
       <div class="p-6 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <img
-            src="images/TBF-LOGO.png"
-            alt="TheBrave Logo"
-            class="h-8 w-auto sm:h-10 object-contain"
-          />
-          <h2
-            class="text-white text-lg font-extrabold tracking-tight uppercase"
-          >
-            TBF
-          </h2>
+          <img src="images/TBF-LOGO.png" alt="TheBrave Logo" class="h-8 w-auto sm:h-10 object-contain" />
+          <h2 class="text-white text-lg font-extrabold tracking-tight uppercase">TBF</h2>
         </div>
-
-        <button id="closeSidebar" class="text-slate-400 hover:text-white p-1">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+        <button id="closeSidebar" class="text-slate-400 hover:text-white p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
-
       <nav class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto">
-        <a
-          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-          href="user-dashboard.html"
-        >
-          <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-          Dashboard
-        </a>
-
-        <a
-          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-          href="deposit.html"
-        >
-          <i data-lucide="wallet" class="w-5 h-5"></i>
-          Deposit
-        </a>
-
-        <a
-          class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20 transition-all"
-          href="deposit-history.html"
-        >
-          <i data-lucide="history" class="w-5 h-5"></i>
-          Deposit History
-        </a>
-
-        <a
-          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-          href="vip-sub.html"
-        >
-          <i data-lucide="badge-check" class="w-5 h-5"></i>
-          VIP Subscription
-        </a>
-
-        <a
-          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-          href="recovery-request.html"
-        >
-          <i data-lucide="shield-check" class="w-5 h-5"></i>
-          Recovery Requests
-        </a>
-
-        <a
-          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-          href="profile.html"
-        >
-          <i data-lucide="user" class="w-5 h-5"></i>
-          Profile
-        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="user-dashboard.html"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</a>
+        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="deposit.html"><i data-lucide="wallet" class="w-5 h-5"></i> Deposit</a>
+        <a class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20" href="deposit-history.html"><i data-lucide="history" class="w-5 h-5"></i> Deposit History</a>
+        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="vip-sub.html"><i data-lucide="badge-check" class="w-5 h-5"></i> VIP Subscription</a>
+        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="recovery-request.html"><i data-lucide="shield-check" class="w-5 h-5"></i> Recovery Requests</a>
+        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="profile.html"><i data-lucide="user" class="w-5 h-5"></i> Profile</a>
       </nav>
-
       <div class="p-4 border-t border-border-dark">
-        <button
-          class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
-        >
-          <i data-lucide="log-out" class="w-5 h-5"></i>
-          Logout
+        <button id="mobileLogoutBtn" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all">
+          <i data-lucide="log-out" class="w-5 h-5"></i> Logout
         </button>
       </div>
     </aside>
 
     <div class="flex h-screen overflow-hidden">
       <!-- Desktop Sidebar -->
-      <aside
-        class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex-col hidden lg:flex"
-      >
+      <aside class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex-col hidden lg:flex">
         <div class="p-6 flex items-center gap-3">
-          <img
-            src="images/TBF-LOGO.png"
-            alt="TheBrave Logo"
-            class="h-8 w-auto sm:h-10 object-contain"
-          />
-          <h2
-            class="text-white text-lg font-extrabold tracking-tight uppercase"
-          >
-            TBF
-          </h2>
+          <img src="images/TBF-LOGO.png" alt="TheBrave Logo" class="h-8 w-auto sm:h-10 object-contain" />
+          <h2 class="text-white text-lg font-extrabold tracking-tight uppercase">TBF</h2>
         </div>
-
-        <nav
-          class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto"
-        >
-          <a
-            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-            href="user-dashboard.html"
-          >
-            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-            Dashboard
-          </a>
-
-          <a
-            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-            href="deposit.html"
-          >
-            <i data-lucide="wallet" class="w-5 h-5"></i>
-            Deposit
-          </a>
-
-          <a
-            class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20 transition-all"
-            href="deposit-history.html"
-          >
-            <i data-lucide="history" class="w-5 h-5"></i>
-            Deposit History
-          </a>
-
-          <a
-            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-            href="vip-sub.html"
-          >
-            <i data-lucide="badge-check" class="w-5 h-5"></i>
-            VIP Subscription
-          </a>
-
-          <a
-            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-            href="recovery-request.html"
-          >
-            <i data-lucide="shield-check" class="w-5 h-5"></i>
-            Recovery Requests
-          </a>
-
-          <a
-            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-            href="profile.html"
-          >
-            <i data-lucide="user" class="w-5 h-5"></i>
-            Profile
-          </a>
+        <nav class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto">
+          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="user-dashboard.html"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</a>
+          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="deposit.html"><i data-lucide="wallet" class="w-5 h-5"></i> Deposit</a>
+          <a class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20" href="deposit-history.html"><i data-lucide="history" class="w-5 h-5"></i> Deposit History</a>
+          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="vip-sub.html"><i data-lucide="badge-check" class="w-5 h-5"></i> VIP Subscription</a>
+          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="recovery-request.html"><i data-lucide="shield-check" class="w-5 h-5"></i> Recovery Requests</a>
+          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="profile.html"><i data-lucide="user" class="w-5 h-5"></i> Profile</a>
         </nav>
-
         <div class="p-4 border-t border-border-dark">
-          <button
-            class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
-          >
-            <i data-lucide="log-out" class="w-5 h-5"></i>
-            Logout
+          <button id="logoutBtn" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all">
+            <i data-lucide="log-out" class="w-5 h-5"></i> Logout
           </button>
         </div>
       </aside>
 
       <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <header
-          class="h-16 flex-shrink-0 border-b border-border-dark bg-surface-dark/50 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between"
-        >
+        <!-- Header -->
+        <header class="h-16 flex-shrink-0 border-b border-border-dark bg-surface-dark/50 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between">
           <div class="flex items-center gap-3">
-            <button
-              id="menuToggle"
-              class="block lg:hidden p-2 text-slate-400 hover:text-white transition-colors"
-            >
+            <button id="menuToggle" class="block lg:hidden p-2 text-slate-400 hover:text-white transition-colors">
               <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
-
             <div class="flex items-center text-xs sm:text-sm font-medium">
               <span class="text-slate-500">Home</span>
               <span class="mx-2 text-slate-600">/</span>
               <span class="text-white">Deposit History</span>
             </div>
           </div>
-
           <div class="flex items-center gap-4 sm:gap-6">
             <div class="h-8 w-px bg-border-dark hidden sm:block"></div>
-
             <a href="profile.html">
               <button class="flex items-center gap-2 sm:gap-3 group">
                 <div class="text-right hidden sm:block">
-                  <p
-                    class="text-xs sm:text-sm font-bold text-white group-hover:text-primary transition-colors"
-                  >
-                    Alexander Brave
-                  </p>
-                  <p
-                    class="text-[10px] sm:text-[11px] text-slate-500 uppercase tracking-widest font-bold"
-                  >
-                    Pro Trader
-                  </p>
+                  <p id="headerName" class="text-xs sm:text-sm font-bold text-white group-hover:text-primary transition-colors">Loading...</p>
+                  <p class="text-[10px] sm:text-[11px] text-slate-500 uppercase tracking-widest font-bold">Trader</p>
                 </div>
-
-                <div
-                  class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/20 border border-primary/30 overflow-hidden flex items-center justify-center"
-                >
-                  <i
-                    data-lucide="user"
-                    class="w-4 h-4 sm:w-5 sm:h-5 text-primary"
-                  ></i>
+                <div id="headerAvatarWrap" class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/20 border border-primary/30 overflow-hidden flex items-center justify-center">
+                  <i data-lucide="user" class="w-4 h-4 sm:w-5 sm:h-5 text-primary"></i>
                 </div>
               </button>
             </a>
           </div>
         </header>
 
-        <main
-          class="flex-1 overflow-y-auto custom-scrollbar bg-background-dark p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 pb-24 sm:pb-8"
-        >
+        <main class="flex-1 overflow-y-auto custom-scrollbar bg-background-dark p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 pb-24 sm:pb-8">
           <div class="max-w-7xl mx-auto space-y-6 sm:space-y-8">
+
             <!-- Header and Stats -->
-            <div
-              class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6"
-            >
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6">
               <div>
-                <h1 class="text-xl sm:text-2xl font-bold text-white">
-                  Deposit History
-                </h1>
-                <p class="text-slate-400 text-xs sm:text-sm mt-1">
-                  Manage and track your funding transactions.
-                </p>
+                <h1 class="text-xl sm:text-2xl font-bold text-white">Deposit History</h1>
+                <p class="text-slate-400 text-xs sm:text-sm mt-1">Manage and track your funding transactions.</p>
               </div>
-
-              <div
-                class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto"
-              >
-                <div
-                  class="p-3 sm:p-4 rounded-2xl bg-surface-dark border border-border-dark flex-1 sm:flex-none sm:min-w-[160px]"
-                >
-                  <p
-                    class="text-slate-500 text-[8px] sm:text-[10px] font-bold uppercase tracking-wider mb-1"
-                  >
-                    Total Deposited
-                  </p>
-                  <h3
-                    class="text-base sm:text-xl font-bold text-emerald-accent"
-                  >
-                    $42,850.00
-                  </h3>
+              <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+                <div class="p-3 sm:p-4 rounded-2xl bg-surface-dark border border-border-dark flex-1 sm:flex-none sm:min-w-[160px]">
+                  <p class="text-slate-500 text-[8px] sm:text-[10px] font-bold uppercase tracking-wider mb-1">Total Deposited</p>
+                  <h3 id="statTotal" class="text-base sm:text-xl font-bold text-emerald-accent">$0.00</h3>
                 </div>
-
-                <div
-                  class="p-3 sm:p-4 rounded-2xl bg-surface-dark border border-border-dark flex-1 sm:flex-none sm:min-w-[160px]"
-                >
-                  <p
-                    class="text-slate-500 text-[8px] sm:text-[10px] font-bold uppercase tracking-wider mb-1"
-                  >
-                    Pending Transactions
-                  </p>
-                  <h3 class="text-base sm:text-xl font-bold text-amber-400">
-                    03
-                  </h3>
+                <div class="p-3 sm:p-4 rounded-2xl bg-surface-dark border border-border-dark flex-1 sm:flex-none sm:min-w-[160px]">
+                  <p class="text-slate-500 text-[8px] sm:text-[10px] font-bold uppercase tracking-wider mb-1">Pending Transactions</p>
+                  <h3 id="statPending" class="text-base sm:text-xl font-bold text-amber-400">0</h3>
                 </div>
               </div>
             </div>
 
-            <div
-              class="bg-surface-dark/50 border border-border-dark p-3 sm:p-4 rounded-xl sm:rounded-2xl"
-            >
-              <div
-                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4"
-              >
+            <!-- Filters -->
+            <div class="bg-surface-dark/50 border border-border-dark p-3 sm:p-4 rounded-xl sm:rounded-2xl">
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
                 <div class="relative min-w-0">
-                  <i
-                    data-lucide="search"
-                    class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 w-4 h-4"
-                  ></i>
-                  <input
-                    class="w-full bg-background-dark border-border-dark text-xs sm:text-sm rounded-xl pl-10 pr-3 py-2 sm:py-2.5 focus:border-primary focus:ring-0 text-slate-300"
-                    placeholder="Search ID..."
-                    type="text"
-                  />
+                  <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 w-4 h-4"></i>
+                  <input id="searchInput" class="w-full bg-background-dark border-border-dark text-xs sm:text-sm rounded-xl pl-10 pr-3 py-2 sm:py-2.5 focus:border-primary focus:ring-0 text-slate-300 outline-none border" placeholder="Search ID..." type="text" />
                 </div>
-
                 <div class="flex items-center gap-2 min-w-0">
-                  <input
-                    class="bg-background-dark border-border-dark text-xs sm:text-sm rounded-xl px-3 py-2 sm:py-2.5 focus:border-primary focus:ring-0 text-slate-300 w-full min-w-0"
-                    type="date"
-                  />
-                  <span
-                    class="text-slate-600 text-xs sm:text-sm whitespace-nowrap"
-                    >to</span
-                  >
-                  <input
-                    class="bg-background-dark border-border-dark text-xs sm:text-sm rounded-xl px-3 py-2 sm:py-2.5 focus:border-primary focus:ring-0 text-slate-300 w-full min-w-0"
-                    type="date"
-                  />
+                  <input id="dateFrom" class="bg-background-dark border border-border-dark text-xs sm:text-sm rounded-xl px-3 py-2 sm:py-2.5 focus:border-primary focus:ring-0 text-slate-300 w-full min-w-0 outline-none" type="date" />
+                  <span class="text-slate-600 text-xs sm:text-sm whitespace-nowrap">to</span>
+                  <input id="dateTo" class="bg-background-dark border border-border-dark text-xs sm:text-sm rounded-xl px-3 py-2 sm:py-2.5 focus:border-primary focus:ring-0 text-slate-300 w-full min-w-0 outline-none" type="date" />
                 </div>
-
                 <div class="min-w-0">
-                  <select
-                    class="w-full min-w-0 bg-background-dark border-border-dark text-xs sm:text-sm rounded-xl px-3 py-2 sm:py-2.5 focus:border-primary focus:ring-0 text-slate-300"
-                  >
+                  <select id="statusFilter" class="w-full min-w-0 bg-background-dark border border-border-dark text-xs sm:text-sm rounded-xl px-3 py-2 sm:py-2.5 focus:border-primary focus:ring-0 text-slate-300 outline-none">
                     <option value="">All Statuses</option>
                     <option value="pending">Pending</option>
                     <option value="approved">Approved</option>
                     <option value="rejected">Rejected</option>
                   </select>
                 </div>
-
-                <button
-                  class="bg-primary/10 text-primary hover:bg-primary hover:text-white border border-primary/20 px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all w-full sm:w-auto"
-                >
+                <button onclick="applyFilters()" class="bg-primary/10 text-primary hover:bg-primary hover:text-white border border-primary/20 px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all w-full sm:w-auto">
                   Apply Filters
                 </button>
               </div>
             </div>
 
-            <!-- Desktop Table View -->
-            <div
-              class="hidden sm:block bg-surface-dark border border-border-dark rounded-2xl overflow-hidden"
-            >
+            <!-- Desktop Table -->
+            <div class="hidden sm:block bg-surface-dark border border-border-dark rounded-2xl overflow-hidden">
               <div class="overflow-x-auto">
                 <table class="w-full text-left">
                   <thead>
-                    <tr
-                      class="bg-background-dark/30 border-b border-border-dark"
-                    >
-                      <th
-                        class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-slate-500"
-                      >
-                        Date
-                      </th>
-                      <th
-                        class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-slate-500"
-                      >
-                        Transaction ID
-                      </th>
-                      <th
-                        class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-slate-500"
-                      >
-                        Amount
-                      </th>
-                      <th
-                        class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-slate-500"
-                      >
-                        Payment Method
-                      </th>
-                      <th
-                        class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-slate-500"
-                      >
-                        Status
-                      </th>
+                    <tr class="bg-background-dark/30 border-b border-border-dark">
+                      <th class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-slate-500">Date</th>
+                      <th class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-slate-500">Transaction ID</th>
+                      <th class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-slate-500">Amount</th>
+                      <th class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-slate-500">Asset / Network</th>
+                      <th class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-slate-500">Status</th>
                     </tr>
                   </thead>
-
-                  <tbody class="divide-y divide-border-dark">
-                    <tr
-                      class="hover:bg-white/[0.02] transition-colors cursor-pointer"
-                      onclick="showTransactionDetails(1)"
-                    >
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <div class="text-xs sm:text-sm text-white">
-                          Jan 12, 2024
-                        </div>
-                        <div class="text-[8px] sm:text-[10px] text-slate-500">
-                          10:30 AM
-                        </div>
-                      </td>
-
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <div class="flex items-center gap-2 group">
-                          <span
-                            class="text-xs sm:text-sm font-mono text-slate-300"
-                            >#TRX-992144</span
-                          >
-                          <button
-                            class="text-slate-600 hover:text-primary opacity-0 group-hover:opacity-100 transition-all"
-                          >
-                            <i data-lucide="copy" class="w-4 h-4"></i>
-                          </button>
-                        </div>
-                      </td>
-
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <span class="text-xs sm:text-sm font-bold text-white"
-                          >$1,500.00</span
-                        >
-                      </td>
-
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <div class="flex items-center gap-2">
-                          <div
-                            class="h-6 w-6 sm:h-7 sm:w-7 rounded bg-amber-500/10 flex items-center justify-center"
-                          >
-                            <i
-                              data-lucide="bitcoin"
-                              class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500"
-                            ></i>
-                          </div>
-                          <span class="text-[10px] sm:text-xs text-slate-300"
-                            >Bitcoin</span
-                          >
-                        </div>
-                      </td>
-
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <span
-                          class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-bold uppercase tracking-wider bg-emerald-accent/10 text-emerald-accent border border-emerald-accent/20"
-                          >Approved</span
-                        >
-                      </td>
-                    </tr>
-
-                    <tr
-                      class="hover:bg-white/[0.02] transition-colors cursor-pointer"
-                      onclick="showTransactionDetails(2)"
-                    >
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <div class="text-xs sm:text-sm text-white">
-                          Jan 11, 2024
-                        </div>
-                        <div class="text-[8px] sm:text-[10px] text-slate-500">
-                          03:45 PM
-                        </div>
-                      </td>
-
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <div class="flex items-center gap-2 group">
-                          <span
-                            class="text-xs sm:text-sm font-mono text-slate-300"
-                            >#TRX-992138</span
-                          >
-                          <button
-                            class="text-slate-600 hover:text-primary opacity-0 group-hover:opacity-100 transition-all"
-                          >
-                            <i data-lucide="copy" class="w-4 h-4"></i>
-                          </button>
-                        </div>
-                      </td>
-
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <span class="text-xs sm:text-sm font-bold text-white"
-                          >$250.00</span
-                        >
-                      </td>
-
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <div class="flex items-center gap-2">
-                          <div
-                            class="h-6 w-6 sm:h-7 sm:w-7 rounded bg-emerald-accent/10 flex items-center justify-center"
-                          >
-                            <i
-                              data-lucide="coins"
-                              class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-accent"
-                            ></i>
-                          </div>
-                          <span class="text-[10px] sm:text-xs text-slate-300"
-                            >USDT (TRC20)</span
-                          >
-                        </div>
-                      </td>
-
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <span
-                          class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-bold uppercase tracking-wider bg-amber-400/10 text-amber-400 border border-amber-400/20"
-                          >Pending</span
-                        >
-                      </td>
-                    </tr>
-
-                    <tr
-                      class="hover:bg-white/[0.02] transition-colors cursor-pointer"
-                      onclick="showTransactionDetails(3)"
-                    >
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <div class="text-xs sm:text-sm text-white">
-                          Jan 09, 2024
-                        </div>
-                        <div class="text-[8px] sm:text-[10px] text-slate-500">
-                          09:15 AM
-                        </div>
-                      </td>
-
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <div class="flex items-center gap-2 group">
-                          <span
-                            class="text-xs sm:text-sm font-mono text-slate-300"
-                            >#TRX-992122</span
-                          >
-                          <button
-                            class="text-slate-600 hover:text-primary opacity-0 group-hover:opacity-100 transition-all"
-                          >
-                            <i data-lucide="copy" class="w-4 h-4"></i>
-                          </button>
-                        </div>
-                      </td>
-
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <span class="text-xs sm:text-sm font-bold text-white"
-                          >$5,000.00</span
-                        >
-                      </td>
-
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <div class="flex items-center gap-2">
-                          <div
-                            class="h-6 w-6 sm:h-7 sm:w-7 rounded bg-primary/10 flex items-center justify-center"
-                          >
-                            <i
-                              data-lucide="landmark"
-                              class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary"
-                            ></i>
-                          </div>
-                          <span class="text-[10px] sm:text-xs text-slate-300"
-                            >Bank Wire</span
-                          >
-                        </div>
-                      </td>
-
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <span
-                          class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-bold uppercase tracking-wider bg-rose-500/10 text-rose-500 border border-rose-500/20"
-                          >Rejected</span
-                        >
-                      </td>
-                    </tr>
-
-                    <tr
-                      class="hover:bg-white/[0.02] transition-colors cursor-pointer"
-                      onclick="showTransactionDetails(4)"
-                    >
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <div class="text-xs sm:text-sm text-white">
-                          Jan 05, 2024
-                        </div>
-                        <div class="text-[8px] sm:text-[10px] text-slate-500">
-                          11:00 AM
-                        </div>
-                      </td>
-
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <div class="flex items-center gap-2 group">
-                          <span
-                            class="text-xs sm:text-sm font-mono text-slate-300"
-                            >#TRX-992085</span
-                          >
-                          <button
-                            class="text-slate-600 hover:text-primary opacity-0 group-hover:opacity-100 transition-all"
-                          >
-                            <i data-lucide="copy" class="w-4 h-4"></i>
-                          </button>
-                        </div>
-                      </td>
-
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <span class="text-xs sm:text-sm font-bold text-white"
-                          >$10,000.00</span
-                        >
-                      </td>
-
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <div class="flex items-center gap-2">
-                          <div
-                            class="h-6 w-6 sm:h-7 sm:w-7 rounded bg-emerald-accent/10 flex items-center justify-center"
-                          >
-                            <i
-                              data-lucide="coins"
-                              class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-accent"
-                            ></i>
-                          </div>
-                          <span class="text-[10px] sm:text-xs text-slate-300"
-                            >USDT (ERC20)</span
-                          >
-                        </div>
-                      </td>
-
-                      <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                        <span
-                          class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-bold uppercase tracking-wider bg-emerald-accent/10 text-emerald-accent border border-emerald-accent/20"
-                          >Approved</span
-                        >
-                      </td>
-                    </tr>
+                  <tbody id="desktopTableBody" class="divide-y divide-border-dark">
+                    <tr><td colspan="5" class="px-6 py-10 text-center text-slate-500 text-xs">Loading transactions...</td></tr>
                   </tbody>
                 </table>
               </div>
-
               <!-- Pagination -->
-              <div
-                class="px-4 sm:px-6 py-3 sm:py-4 bg-background-dark/30 border-t border-border-dark flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4"
-              >
-                <span class="text-[10px] sm:text-xs text-slate-500 font-medium"
-                  >Showing <span class="text-white">1-4</span> of
-                  <span class="text-white">45</span> transactions</span
-                >
-
-                <div class="flex items-center gap-2">
-                  <button
-                    class="flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-lg bg-surface-dark border border-border-dark text-slate-400 hover:text-white hover:border-primary transition-all disabled:opacity-50"
-                    disabled
-                  >
-                    <i
-                      data-lucide="chevron-left"
-                      class="w-4 h-4 sm:w-5 sm:h-5"
-                    ></i>
-                  </button>
-
-                  <div class="flex items-center gap-1">
-                    <button
-                      class="h-7 w-7 sm:h-8 sm:w-8 rounded-lg bg-primary text-white text-xs font-bold"
-                    >
-                      1
-                    </button>
-                    <button
-                      class="h-7 w-7 sm:h-8 sm:w-8 rounded-lg bg-surface-dark border border-border-dark text-slate-400 hover:text-white text-xs font-bold transition-all"
-                    >
-                      2
-                    </button>
-                    <button
-                      class="h-7 w-7 sm:h-8 sm:w-8 rounded-lg bg-surface-dark border border-border-dark text-slate-400 hover:text-white text-xs font-bold transition-all"
-                    >
-                      3
-                    </button>
-                    <span class="px-1 text-slate-600 text-xs">...</span>
-                    <button
-                      class="h-7 w-7 sm:h-8 sm:w-8 rounded-lg bg-surface-dark border border-border-dark text-slate-400 hover:text-white text-xs font-bold transition-all"
-                    >
-                      5
-                    </button>
-                  </div>
-
-                  <button
-                    class="flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-lg bg-surface-dark border border-border-dark text-slate-400 hover:text-white hover:border-primary transition-all"
-                  >
-                    <i
-                      data-lucide="chevron-right"
-                      class="w-4 h-4 sm:w-5 sm:h-5"
-                    ></i>
-                  </button>
-                </div>
+              <div class="px-4 sm:px-6 py-3 sm:py-4 bg-background-dark/30 border-t border-border-dark flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
+                <span id="paginationInfo" class="text-[10px] sm:text-xs text-slate-500 font-medium">—</span>
+                <div id="paginationBtns" class="flex items-center gap-2"></div>
               </div>
             </div>
 
             <!-- Mobile Card View -->
-            <div class="block sm:hidden space-y-3">
-              <div
-                class="bg-surface-dark border border-border-dark rounded-xl p-4 cursor-pointer"
-                onclick="showTransactionDetails(1)"
-              >
-                <div class="flex justify-between items-start mb-3">
-                  <div>
-                    <div class="text-xs text-slate-400">
-                      Jan 12, 2024 · 10:30 AM
-                    </div>
-                    <div class="text-sm font-mono text-slate-300 mt-1">
-                      #TRX-992144
-                    </div>
-                  </div>
-
-                  <span
-                    class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-emerald-accent/10 text-emerald-accent border border-emerald-accent/20"
-                    >Approved</span
-                  >
-                </div>
-
-                <div class="flex justify-between items-center">
-                  <div class="flex items-center gap-2">
-                    <div
-                      class="h-8 w-8 rounded bg-amber-500/10 flex items-center justify-center"
-                    >
-                      <i
-                        data-lucide="bitcoin"
-                        class="w-4 h-4 text-amber-500"
-                      ></i>
-                    </div>
-
-                    <div>
-                      <div class="text-xs text-slate-400">Bitcoin</div>
-                      <div class="text-sm font-bold text-white">$1,500.00</div>
-                    </div>
-                  </div>
-
-                  <button
-                    class="text-slate-400 hover:text-primary transition-colors"
-                    onclick="
-                      event.stopPropagation();
-                      showTransactionDetails(1);
-                    "
-                  >
-                    <i data-lucide="info" class="w-5 h-5"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div
-                class="bg-surface-dark border border-border-dark rounded-xl p-4 cursor-pointer"
-                onclick="showTransactionDetails(2)"
-              >
-                <div class="flex justify-between items-start mb-3">
-                  <div>
-                    <div class="text-xs text-slate-400">
-                      Jan 11, 2024 · 03:45 PM
-                    </div>
-                    <div class="text-sm font-mono text-slate-300 mt-1">
-                      #TRX-992138
-                    </div>
-                  </div>
-
-                  <span
-                    class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-amber-400/10 text-amber-400 border border-amber-400/20"
-                    >Pending</span
-                  >
-                </div>
-
-                <div class="flex justify-between items-center">
-                  <div class="flex items-center gap-2">
-                    <div
-                      class="h-8 w-8 rounded bg-emerald-accent/10 flex items-center justify-center"
-                    >
-                      <i
-                        data-lucide="coins"
-                        class="w-4 h-4 text-emerald-accent"
-                      ></i>
-                    </div>
-
-                    <div>
-                      <div class="text-xs text-slate-400">USDT (TRC20)</div>
-                      <div class="text-sm font-bold text-white">$250.00</div>
-                    </div>
-                  </div>
-
-                  <button
-                    class="text-slate-400 hover:text-primary transition-colors"
-                    onclick="
-                      event.stopPropagation();
-                      showTransactionDetails(2);
-                    "
-                  >
-                    <i data-lucide="info" class="w-5 h-5"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div
-                class="bg-surface-dark border border-border-dark rounded-xl p-4 cursor-pointer"
-                onclick="showTransactionDetails(3)"
-              >
-                <div class="flex justify-between items-start mb-3">
-                  <div>
-                    <div class="text-xs text-slate-400">
-                      Jan 09, 2024 · 09:15 AM
-                    </div>
-                    <div class="text-sm font-mono text-slate-300 mt-1">
-                      #TRX-992122
-                    </div>
-                  </div>
-
-                  <span
-                    class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-rose-500/10 text-rose-500 border border-rose-500/20"
-                    >Rejected</span
-                  >
-                </div>
-
-                <div class="flex justify-between items-center">
-                  <div class="flex items-center gap-2">
-                    <div
-                      class="h-8 w-8 rounded bg-primary/10 flex items-center justify-center"
-                    >
-                      <i
-                        data-lucide="landmark"
-                        class="w-4 h-4 text-primary"
-                      ></i>
-                    </div>
-
-                    <div>
-                      <div class="text-xs text-slate-400">Bank Wire</div>
-                      <div class="text-sm font-bold text-white">$5,000.00</div>
-                    </div>
-                  </div>
-
-                  <button
-                    class="text-slate-400 hover:text-primary transition-colors"
-                    onclick="
-                      event.stopPropagation();
-                      showTransactionDetails(3);
-                    "
-                  >
-                    <i data-lucide="info" class="w-5 h-5"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div
-                class="bg-surface-dark border border-border-dark rounded-xl p-4 cursor-pointer"
-                onclick="showTransactionDetails(4)"
-              >
-                <div class="flex justify-between items-start mb-3">
-                  <div>
-                    <div class="text-xs text-slate-400">
-                      Jan 05, 2024 · 11:00 AM
-                    </div>
-                    <div class="text-sm font-mono text-slate-300 mt-1">
-                      #TRX-992085
-                    </div>
-                  </div>
-
-                  <span
-                    class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-emerald-accent/10 text-emerald-accent border border-emerald-accent/20"
-                    >Approved</span
-                  >
-                </div>
-
-                <div class="flex justify-between items-center">
-                  <div class="flex items-center gap-2">
-                    <div
-                      class="h-8 w-8 rounded bg-emerald-accent/10 flex items-center justify-center"
-                    >
-                      <i
-                        data-lucide="coins"
-                        class="w-4 h-4 text-emerald-accent"
-                      ></i>
-                    </div>
-
-                    <div>
-                      <div class="text-xs text-slate-400">USDT (ERC20)</div>
-                      <div class="text-sm font-bold text-white">$10,000.00</div>
-                    </div>
-                  </div>
-
-                  <button
-                    class="text-slate-400 hover:text-primary transition-colors"
-                    onclick="
-                      event.stopPropagation();
-                      showTransactionDetails(4);
-                    "
-                  >
-                    <i data-lucide="info" class="w-5 h-5"></i>
-                  </button>
-                </div>
-              </div>
+            <div id="mobileCardList" class="block sm:hidden space-y-3">
+              <div class="text-center text-slate-500 text-xs py-8">Loading transactions...</div>
             </div>
 
             <!-- Mobile Pagination -->
             <div class="block sm:hidden flex justify-between items-center pt-4">
-              <span class="text-xs text-slate-500 font-medium"
-                >Showing 1-4 of 45</span
-              >
-
-              <div class="flex items-center gap-2">
-                <button
-                  class="flex items-center justify-center h-8 w-8 rounded-lg bg-surface-dark border border-border-dark text-slate-400 disabled:opacity-50"
-                  disabled
-                >
-                  <i data-lucide="chevron-left" class="w-5 h-5"></i>
-                </button>
-
-                <button
-                  class="flex items-center justify-center h-8 w-8 rounded-lg bg-surface-dark border border-border-dark text-slate-400"
-                >
-                  <i data-lucide="chevron-right" class="w-5 h-5"></i>
-                </button>
-              </div>
+              <span id="mobilePaginationInfo" class="text-xs text-slate-500 font-medium">—</span>
+              <div id="mobilePaginationBtns" class="flex items-center gap-2"></div>
             </div>
+
           </div>
         </main>
       </div>
     </div>
 
-    <!-- Detail Panel Overlay -->
+    <!-- Panel Overlay -->
     <div id="panelOverlay" class="fixed inset-0 bg-black/50 z-40"></div>
 
     <!-- Bottom Detail Panel -->
-    <div
-      id="detailPanel"
-      class="fixed bottom-0 left-0 right-0 z-50 bg-surface-dark border-t border-border-dark rounded-t-2xl p-4 sm:p-6 max-h-[85vh] overflow-y-auto"
-    >
+    <div id="detailPanel" class="fixed bottom-0 left-0 right-0 z-50 bg-surface-dark border-t border-border-dark rounded-t-2xl p-4 sm:p-6 max-h-[85vh] overflow-y-auto custom-scrollbar">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-white text-lg font-bold">Transaction Details</h3>
-        <button id="closePanel" class="text-slate-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+        <button id="closePanel" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
-
       <div id="panelContent"></div>
     </div>
 
+    <script src="./js/api.js"></script>
+    <script src="js/dashmenu.js"></script>
     <script>
-      const panelOverlay = document.getElementById("panelOverlay");
-      const detailPanel = document.getElementById("detailPanel");
-      const closePanel = document.getElementById("closePanel");
-      const panelContent = document.getElementById("panelContent");
-      const body = document.body;
+      lucide.createIcons();
 
-      function closePanelFunc() {
-        detailPanel.classList.remove("open");
-        panelOverlay.classList.remove("open");
-        body.classList.remove("mobile-menu-open");
+      // ─── Auth Guard ───────────────────────────────────────────
+      const user = JSON.parse(localStorage.getItem("user") || "null");
+      if (!user) window.location.href = "login.html";
+
+      if (user) {
+        document.getElementById("headerName").textContent = user.name || "Trader";
+        if (user.profile) {
+          document.getElementById("headerAvatarWrap").innerHTML =
+            `<img src="${user.profile}" alt="avatar" class="avatar-img" />`;
+        }
       }
 
-      if (panelOverlay && detailPanel && closePanel) {
-        closePanel.addEventListener("click", closePanelFunc);
-        panelOverlay.addEventListener("click", closePanelFunc);
+      // ─── State ────────────────────────────────────────────────
+      const PER_PAGE = 10;
+      let allTransactions = [];
+      let filtered = [];
+      let currentPage = 1;
 
-        document.addEventListener("keydown", (e) => {
-          if (e.key === "Escape" && detailPanel.classList.contains("open")) {
-            closePanelFunc();
-          }
+      // ─── Status Config ────────────────────────────────────────
+      function statusBadge(status) {
+        const map = {
+          approved: "bg-emerald-accent/10 text-emerald-accent border-emerald-accent/20",
+          pending:  "bg-amber-400/10 text-amber-400 border-amber-400/20",
+          rejected: "bg-rose-500/10 text-rose-500 border-rose-500/20",
+        };
+        return `<span class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-bold uppercase tracking-wider border ${map[status] || map.pending}">${status}</span>`;
+      }
+
+      function assetIcon(asset, network) {
+        if (asset === "BTC") return `<div class="h-6 w-6 sm:h-7 sm:w-7 rounded bg-amber-500/10 flex items-center justify-center"><i data-lucide="bitcoin" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500"></i></div>`;
+        return `<div class="h-6 w-6 sm:h-7 sm:w-7 rounded bg-emerald-accent/10 flex items-center justify-center"><i data-lucide="coins" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-accent"></i></div>`;
+      }
+
+      function formatDate(dateStr) {
+        const d = new Date(dateStr);
+        return {
+          date: d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+          time: d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+        };
+      }
+
+      // ─── Fetch Transactions ───────────────────────────────────
+      async function fetchTransactions() {
+        try {
+          allTransactions = await API.get("/transactions/my");
+          filtered = [...allTransactions];
+          updateStats();
+          renderPage(1);
+        } catch (err) {
+          document.getElementById("desktopTableBody").innerHTML =
+            `<tr><td colspan="5" class="px-6 py-10 text-center text-slate-500 text-xs">Failed to load transactions.</td></tr>`;
+          document.getElementById("mobileCardList").innerHTML =
+            `<div class="text-center text-slate-500 text-xs py-8">Failed to load transactions.</div>`;
+        }
+      }
+
+      // ─── Stats ────────────────────────────────────────────────
+      function updateStats() {
+        const total = allTransactions
+          .filter(t => t.status === "approved")
+          .reduce((sum, t) => sum + t.amount, 0);
+        const pending = allTransactions.filter(t => t.status === "pending").length;
+
+        document.getElementById("statTotal").textContent =
+          `$${total.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
+        document.getElementById("statPending").textContent =
+          String(pending).padStart(2, "0");
+      }
+
+      // ─── Filters ──────────────────────────────────────────────
+      function applyFilters() {
+        const search    = document.getElementById("searchInput").value.trim().toLowerCase();
+        const dateFrom  = document.getElementById("dateFrom").value;
+        const dateTo    = document.getElementById("dateTo").value;
+        const status    = document.getElementById("statusFilter").value;
+
+        filtered = allTransactions.filter(t => {
+          const matchSearch = !search || t.transactionId.toLowerCase().includes(search);
+          const matchStatus = !status || t.status === status;
+          const tDate = new Date(t.createdAt);
+          const matchFrom = !dateFrom || tDate >= new Date(dateFrom);
+          const matchTo   = !dateTo   || tDate <= new Date(dateTo + "T23:59:59");
+          return matchSearch && matchStatus && matchFrom && matchTo;
         });
+
+        renderPage(1);
       }
 
-      window.showTransactionDetails = function (id) {
-        let content = "";
+      // ─── Render Page ──────────────────────────────────────────
+      function renderPage(page) {
+        currentPage = page;
+        const start = (page - 1) * PER_PAGE;
+        const end   = start + PER_PAGE;
+        const pageData = filtered.slice(start, end);
+        const total = filtered.length;
+        const totalPages = Math.ceil(total / PER_PAGE);
 
-        switch (id) {
-          case 1:
-            content = `
-            <div class="space-y-4">
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Transaction ID</span>
-                <span class="text-white font-mono text-sm">#TRX-992144</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Date & Time</span>
-                <span class="text-white text-sm">Jan 12, 2024 · 10:30 AM</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Amount</span>
-                <span class="text-white font-bold text-lg">$1,500.00</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Payment Method</span>
-                <div class="flex items-center gap-2">
-                  <div class="h-6 w-6 rounded bg-amber-500/10 flex items-center justify-center">
-                    <i data-lucide="bitcoin" class="w-4 h-4 text-amber-500"></i>
+        // ── Desktop Table ─────────────────────────────────────
+        const tbody = document.getElementById("desktopTableBody");
+        if (!pageData.length) {
+          tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-10 text-center text-slate-500 text-xs">No transactions found.</td></tr>`;
+        } else {
+          tbody.innerHTML = pageData.map(t => {
+            const { date, time } = formatDate(t.createdAt);
+            return `
+              <tr class="hover:bg-white/[0.02] transition-colors cursor-pointer" onclick="showTransactionDetails('${t._id}')">
+                <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                  <div class="text-xs sm:text-sm text-white">${date}</div>
+                  <div class="text-[8px] sm:text-[10px] text-slate-500">${time}</div>
+                </td>
+                <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                  <div class="flex items-center gap-2 group">
+                    <span class="text-xs sm:text-sm font-mono text-slate-300">#${t.transactionId.slice(0, 12)}</span>
+                    <button onclick="event.stopPropagation(); copyText('${t.transactionId}')" class="text-slate-600 hover:text-primary opacity-0 group-hover:opacity-100 transition-all">
+                      <i data-lucide="copy" class="w-4 h-4"></i>
+                    </button>
                   </div>
-                  <span class="text-white text-sm">Bitcoin</span>
-                </div>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Network</span>
-                <span class="text-white text-sm">Native Segwit</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Status</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-accent/10 text-emerald-accent border border-emerald-accent/20">Approved</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Confirmations</span>
-                <span class="text-white text-sm">12/12</span>
-              </div>
-              <div class="pt-2">
-                <button class="w-full py-3 bg-primary/10 text-primary border border-primary/20 rounded-xl text-sm font-bold hover:bg-primary hover:text-white transition-all">Download Receipt</button>
-              </div>
-            </div>
-          `;
-            break;
-
-          case 2:
-            content = `
-            <div class="space-y-4">
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Transaction ID</span>
-                <span class="text-white font-mono text-sm">#TRX-992138</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Date & Time</span>
-                <span class="text-white text-sm">Jan 11, 2024 · 03:45 PM</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Amount</span>
-                <span class="text-white font-bold text-lg">$250.00</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Payment Method</span>
-                <div class="flex items-center gap-2">
-                  <div class="h-6 w-6 rounded bg-emerald-accent/10 flex items-center justify-center">
-                    <i data-lucide="coins" class="w-4 h-4 text-emerald-accent"></i>
+                </td>
+                <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                  <span class="text-xs sm:text-sm font-bold text-white">$${t.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
+                </td>
+                <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                  <div class="flex items-center gap-2">
+                    ${assetIcon(t.asset, t.network)}
+                    <span class="text-[10px] sm:text-xs text-slate-300">${t.asset} (${t.network})</span>
                   </div>
-                  <span class="text-white text-sm">USDT</span>
-                </div>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Network</span>
-                <span class="text-white text-sm">TRC20</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Status</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-400/10 text-amber-400 border border-amber-400/20">Pending</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Confirmations</span>
-                <span class="text-white text-sm">2/12</span>
-              </div>
-              <div class="pt-2">
-                <button class="w-full py-3 bg-primary/10 text-primary border border-primary/20 rounded-xl text-sm font-bold hover:bg-primary hover:text-white transition-all">Download Receipt</button>
-              </div>
-            </div>
-          `;
-            break;
-
-          case 3:
-            content = `
-            <div class="space-y-4">
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Transaction ID</span>
-                <span class="text-white font-mono text-sm">#TRX-992122</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Date & Time</span>
-                <span class="text-white text-sm">Jan 09, 2024 · 09:15 AM</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Amount</span>
-                <span class="text-white font-bold text-lg">$5,000.00</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Payment Method</span>
-                <div class="flex items-center gap-2">
-                  <div class="h-6 w-6 rounded bg-primary/10 flex items-center justify-center">
-                    <i data-lucide="landmark" class="w-4 h-4 text-primary"></i>
-                  </div>
-                  <span class="text-white text-sm">Bank Wire</span>
-                </div>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Status</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-500/10 text-rose-500 border border-rose-500/20">Rejected</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Reason</span>
-                <span class="text-white text-sm text-right">Invalid reference</span>
-              </div>
-              <div class="pt-2">
-                <button class="w-full py-3 bg-primary/10 text-primary border border-primary/20 rounded-xl text-sm font-bold hover:bg-primary hover:text-white transition-all">Download Receipt</button>
-              </div>
-            </div>
-          `;
-            break;
-
-          case 4:
-            content = `
-            <div class="space-y-4">
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Transaction ID</span>
-                <span class="text-white font-mono text-sm">#TRX-992085</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Date & Time</span>
-                <span class="text-white text-sm">Jan 05, 2024 · 11:00 AM</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Amount</span>
-                <span class="text-white font-bold text-lg">$10,000.00</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Payment Method</span>
-                <div class="flex items-center gap-2">
-                  <div class="h-6 w-6 rounded bg-emerald-accent/10 flex items-center justify-center">
-                    <i data-lucide="coins" class="w-4 h-4 text-emerald-accent"></i>
-                  </div>
-                  <span class="text-white text-sm">USDT</span>
-                </div>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Network</span>
-                <span class="text-white text-sm">ERC20</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Status</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-accent/10 text-emerald-accent border border-emerald-accent/20">Approved</span>
-              </div>
-              <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-                <span class="text-slate-400 text-sm">Confirmations</span>
-                <span class="text-white text-sm">24/12</span>
-              </div>
-              <div class="pt-2">
-                <button class="w-full py-3 bg-primary/10 text-primary border border-primary/20 rounded-xl text-sm font-bold hover:bg-primary hover:text-white transition-all">Download Receipt</button>
-              </div>
-            </div>
-          `;
-            break;
-
-          default:
-            content =
-              '<p class="text-slate-400">Transaction details not found</p>';
+                </td>
+                <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">${statusBadge(t.status)}</td>
+              </tr>
+            `;
+          }).join("");
         }
 
-        panelContent.innerHTML = content;
+        // ── Mobile Cards ──────────────────────────────────────
+        const mobileList = document.getElementById("mobileCardList");
+        if (!pageData.length) {
+          mobileList.innerHTML = `<div class="text-center text-slate-500 text-xs py-8">No transactions found.</div>`;
+        } else {
+          mobileList.innerHTML = pageData.map(t => {
+            const { date, time } = formatDate(t.createdAt);
+            const statusMap = {
+              approved: "bg-emerald-accent/10 text-emerald-accent border-emerald-accent/20",
+              pending:  "bg-amber-400/10 text-amber-400 border-amber-400/20",
+              rejected: "bg-rose-500/10 text-rose-500 border-rose-500/20",
+            };
+            return `
+              <div class="bg-surface-dark border border-border-dark rounded-xl p-4 cursor-pointer" onclick="showTransactionDetails('${t._id}')">
+                <div class="flex justify-between items-start mb-3">
+                  <div>
+                    <div class="text-xs text-slate-400">${date} · ${time}</div>
+                    <div class="text-sm font-mono text-slate-300 mt-1">#${t.transactionId.slice(0, 12)}</div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider border ${statusMap[t.status] || statusMap.pending}">${t.status}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <div class="flex items-center gap-2">
+                    ${assetIcon(t.asset, t.network)}
+                    <div>
+                      <div class="text-xs text-slate-400">${t.asset} (${t.network})</div>
+                      <div class="text-sm font-bold text-white">$${t.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
+                    </div>
+                  </div>
+                  <button class="text-slate-400 hover:text-primary transition-colors" onclick="event.stopPropagation(); showTransactionDetails('${t._id}')">
+                    <i data-lucide="info" class="w-5 h-5"></i>
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join("");
+        }
+
+        // ── Pagination ────────────────────────────────────────
+        const showing = pageData.length
+          ? `Showing <span class="text-white">${start + 1}-${Math.min(end, total)}</span> of <span class="text-white">${total}</span> transactions`
+          : "No transactions";
+
+        document.getElementById("paginationInfo").innerHTML = showing;
+        document.getElementById("mobilePaginationInfo").innerHTML =
+          `Showing ${start + 1}-${Math.min(end, total)} of ${total}`;
+
+        renderPaginationBtns("paginationBtns", totalPages);
+        renderPaginationBtns("mobilePaginationBtns", totalPages, true);
+
         lucide.createIcons();
+      }
 
-        detailPanel.classList.add("open");
-        panelOverlay.classList.add("open");
-        body.classList.add("mobile-menu-open");
-      };
+      function renderPaginationBtns(containerId, totalPages, mobile = false) {
+        const container = document.getElementById(containerId);
+        if (totalPages <= 1) { container.innerHTML = ""; return; }
 
-      lucide.createIcons();
+        let html = `
+          <button onclick="renderPage(${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""} class="flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-lg bg-surface-dark border border-border-dark text-slate-400 hover:text-white hover:border-primary transition-all disabled:opacity-50">
+            <i data-lucide="chevron-left" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+          </button>
+        `;
+
+        if (!mobile) {
+          for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+              html += `<button onclick="renderPage(${i})" class="h-7 w-7 sm:h-8 sm:w-8 rounded-lg ${i === currentPage ? "bg-primary text-white" : "bg-surface-dark border border-border-dark text-slate-400 hover:text-white"} text-xs font-bold transition-all">${i}</button>`;
+            } else if (i === currentPage - 2 || i === currentPage + 2) {
+              html += `<span class="px-1 text-slate-600 text-xs">...</span>`;
+            }
+          }
+        }
+
+        html += `
+          <button onclick="renderPage(${currentPage + 1})" ${currentPage === totalPages ? "disabled" : ""} class="flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-lg bg-surface-dark border border-border-dark text-slate-400 hover:text-white hover:border-primary transition-all disabled:opacity-50">
+            <i data-lucide="chevron-right" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+          </button>
+        `;
+
+        container.innerHTML = html;
+        lucide.createIcons();
+      }
+
+      // ─── Transaction Detail Panel ─────────────────────────────
+      function showTransactionDetails(id) {
+        const t = allTransactions.find(tx => tx._id === id);
+        if (!t) return;
+
+        const { date, time } = formatDate(t.createdAt);
+        const statusMap = {
+          approved: "bg-emerald-accent/10 text-emerald-accent border-emerald-accent/20",
+          pending:  "bg-amber-400/10 text-amber-400 border-amber-400/20",
+          rejected: "bg-rose-500/10 text-rose-500 border-rose-500/20",
+        };
+
+        document.getElementById("panelContent").innerHTML = `
+          <div class="space-y-4">
+            <div class="flex justify-between items-center pb-2 border-b border-border-dark">
+              <span class="text-slate-400 text-sm">Transaction ID</span>
+              <span class="text-white font-mono text-sm">#${t.transactionId}</span>
+            </div>
+            <div class="flex justify-between items-center pb-2 border-b border-border-dark">
+              <span class="text-slate-400 text-sm">Date & Time</span>
+              <span class="text-white text-sm">${date} · ${time}</span>
+            </div>
+            <div class="flex justify-between items-center pb-2 border-b border-border-dark">
+              <span class="text-slate-400 text-sm">Amount</span>
+              <span class="text-white font-bold text-lg">$${t.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
+            </div>
+            <div class="flex justify-between items-center pb-2 border-b border-border-dark">
+              <span class="text-slate-400 text-sm">Asset</span>
+              <span class="text-white text-sm">${t.asset}</span>
+            </div>
+            <div class="flex justify-between items-center pb-2 border-b border-border-dark">
+              <span class="text-slate-400 text-sm">Network</span>
+              <span class="text-white text-sm">${t.network}</span>
+            </div>
+            <div class="flex justify-between items-center pb-2 border-b border-border-dark">
+              <span class="text-slate-400 text-sm">Payment Method</span>
+              <span class="text-white text-sm capitalize">${t.paymentMethod}</span>
+            </div>
+            <div class="flex justify-between items-center pb-2 border-b border-border-dark">
+              <span class="text-slate-400 text-sm">Status</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${statusMap[t.status] || statusMap.pending}">${t.status}</span>
+            </div>
+            ${t.proofOfPayment ? `
+            <div class="pb-2 border-b border-border-dark space-y-2">
+              <span class="text-slate-400 text-sm">Proof of Payment</span>
+              <a href="${t.proofOfPayment}" target="_blank" class="block mt-2">
+                <img src="${t.proofOfPayment}" alt="Proof" class="w-full max-h-48 object-contain rounded-xl border border-border-dark" />
+              </a>
+            </div>` : ""}
+          </div>
+        `;
+
+        lucide.createIcons();
+        document.getElementById("detailPanel").classList.add("open");
+        document.getElementById("panelOverlay").classList.add("open");
+        document.body.classList.add("overflow-hidden");
+      }
+
+      // ─── Copy Helper ──────────────────────────────────────────
+      function copyText(text) {
+        navigator.clipboard.writeText(text);
+      }
+
+      // ─── Panel Close ──────────────────────────────────────────
+      function closeDetailPanel() {
+        document.getElementById("detailPanel").classList.remove("open");
+        document.getElementById("panelOverlay").classList.remove("open");
+        document.body.classList.remove("overflow-hidden");
+      }
+
+      document.getElementById("closePanel").addEventListener("click", closeDetailPanel);
+      document.getElementById("panelOverlay").addEventListener("click", closeDetailPanel);
+      document.addEventListener("keydown", e => {
+        if (e.key === "Escape") closeDetailPanel();
+      });
+
+      // ─── Logout ───────────────────────────────────────────────
+      async function handleLogout() {
+        try { await API.post("/users/logout"); } catch {}
+        localStorage.removeItem("user");
+        window.location.href = "login.html";
+      }
+
+      document.getElementById("logoutBtn").addEventListener("click", handleLogout);
+      document.getElementById("mobileLogoutBtn").addEventListener("click", handleLogout);
+
+      // ─── Init ─────────────────────────────────────────────────
+      fetchTransactions();
     </script>
-
-    <script src="js/dashmenu.js"></script>
-    <script src="./js/api.js"></script>
   </body>
 </html>

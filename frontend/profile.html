@@ -7,10 +7,8 @@
       name="viewport"
     />
     <title>Profile | TheBrave Finance</title>
-
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-
     <link
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
@@ -33,7 +31,6 @@
       href="images/favicon-16x16.png"
     />
     <link rel="manifest" href="images/site.webmanifest" />
-
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -42,121 +39,100 @@
             colors: {
               primary: "#1152d4",
               "emerald-accent": "#10b981",
-              "background-light": "#f6f6f8",
               "background-dark": "#0a0f18",
               "surface-dark": "#151c2c",
               "border-dark": "#243049",
             },
-            fontFamily: {
-              display: ["Manrope", "sans-serif"],
-            },
-            borderRadius: {
-              DEFAULT: "0.375rem",
-              lg: "0.5rem",
-              xl: "0.75rem",
-              "2xl": "1rem",
-              full: "9999px",
-            },
+            fontFamily: { display: ["Manrope", "sans-serif"] },
           },
         },
       };
     </script>
-
     <style>
       body {
         font-family: "Manrope", sans-serif;
       }
-
-      .glass-panel {
-        background: rgba(21, 28, 44, 0.7);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(36, 48, 73, 0.5);
-      }
-
       .custom-scrollbar::-webkit-scrollbar {
         width: 4px;
       }
-
       .custom-scrollbar::-webkit-scrollbar-track {
         background: transparent;
       }
-
       .custom-scrollbar::-webkit-scrollbar-thumb {
         background: #243049;
         border-radius: 10px;
       }
-
-      .mobile-menu-open {
-        overflow: hidden;
-      }
-
       #mobileSidebar {
         transition: transform 0.3s ease-in-out;
         transform: translateX(-100%);
       }
-
       #mobileSidebar.open {
         transform: translateX(0);
       }
-
       #sidebarOverlay {
         transition: opacity 0.3s ease-in-out;
         opacity: 0;
         pointer-events: none;
       }
-
       #sidebarOverlay.open {
         opacity: 1;
         pointer-events: auto;
       }
-
       .icon {
         width: 20px;
         height: 20px;
         stroke-width: 2.2;
         flex-shrink: 0;
       }
-
       .icon-sm {
         width: 16px;
         height: 16px;
       }
-
-      .icon-lg {
-        width: 22px;
-        height: 22px;
-      }
-
-      .icon-xl {
-        width: 28px;
-        height: 28px;
-      }
-
       .icon-hero {
         width: 44px;
         height: 44px;
       }
-
       @media (min-width: 640px) {
         .icon-hero {
           width: 56px;
           height: 56px;
         }
       }
+      .avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 9999px;
+      }
+      .spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        display: inline-block;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
     </style>
   </head>
 
   <body
-    class="bg-background-dark text-slate-100 font-display transition-colors duration-300 antialiased overflow-hidden"
+    class="bg-background-dark text-slate-100 font-display antialiased overflow-hidden"
   >
     <div
       id="sidebarOverlay"
       class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"
     ></div>
 
+    <!-- Mobile Sidebar -->
     <aside
       id="mobileSidebar"
-      class="fixed top-0 left-0 h-full w-64 bg-surface-dark border-r border-border-dark flex flex-col z-50 lg:hidden -translate-x-full transition-transform duration-300 ease-in-out"
+      class="fixed top-0 left-0 h-full w-64 bg-surface-dark border-r border-border-dark flex flex-col z-50 lg:hidden"
     >
       <div class="p-6 flex items-center justify-between">
         <div class="flex items-center gap-3">
@@ -171,73 +147,54 @@
             TBF
           </h2>
         </div>
-
         <button id="closeSidebar" class="text-slate-400 hover:text-white p-1">
           <i data-lucide="x" class="icon"></i>
         </button>
       </div>
-
       <nav class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto">
         <a
           class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
           href="user-dashboard.html"
+          ><i data-lucide="layout-dashboard" class="icon"></i> Dashboard</a
         >
-          <i data-lucide="layout-dashboard" class="icon"></i>
-          Dashboard
-        </a>
-
         <a
           class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
           href="deposit.html"
+          ><i data-lucide="wallet" class="icon"></i> Deposit</a
         >
-          <i data-lucide="wallet" class="icon"></i>
-          Deposit
-        </a>
-
         <a
           class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
           href="deposit-history.html"
+          ><i data-lucide="history" class="icon"></i> Deposit History</a
         >
-          <i data-lucide="history" class="icon"></i>
-          Deposit History
-        </a>
-
         <a
           class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
           href="vip-sub.html"
+          ><i data-lucide="badge-check" class="icon"></i> VIP Subscription</a
         >
-          <i data-lucide="badge-check" class="icon"></i>
-          VIP Subscription
-        </a>
-
         <a
           class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
           href="recovery-request.html"
+          ><i data-lucide="shield-check" class="icon"></i> Recovery Requests</a
         >
-          <i data-lucide="shield-check" class="icon"></i>
-          Recovery Requests
-        </a>
-
         <a
-          class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20 transition-all"
+          class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20"
           href="profile.html"
+          ><i data-lucide="user" class="icon"></i> Profile</a
         >
-          <i data-lucide="user" class="icon"></i>
-          Profile
-        </a>
       </nav>
-
       <div class="p-4 border-t border-border-dark">
         <button
+          id="mobileLogoutBtn"
           class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
         >
-          <i data-lucide="log-out" class="icon"></i>
-          Logout
+          <i data-lucide="log-out" class="icon"></i> Logout
         </button>
       </div>
     </aside>
 
     <div class="flex h-screen overflow-hidden">
+      <!-- Desktop Sidebar -->
       <aside
         class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex-col hidden lg:flex"
       >
@@ -253,65 +210,47 @@
             TBF
           </h2>
         </div>
-
         <nav
           class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto"
         >
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
             href="user-dashboard.html"
+            ><i data-lucide="layout-dashboard" class="icon"></i> Dashboard</a
           >
-            <i data-lucide="layout-dashboard" class="icon"></i>
-            Dashboard
-          </a>
-
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
             href="deposit.html"
+            ><i data-lucide="wallet" class="icon"></i> Deposit</a
           >
-            <i data-lucide="wallet" class="icon"></i>
-            Deposit
-          </a>
-
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
             href="deposit-history.html"
+            ><i data-lucide="history" class="icon"></i> Deposit History</a
           >
-            <i data-lucide="history" class="icon"></i>
-            Deposit History
-          </a>
-
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
             href="vip-sub.html"
+            ><i data-lucide="badge-check" class="icon"></i> VIP Subscription</a
           >
-            <i data-lucide="badge-check" class="icon"></i>
-            VIP Subscription
-          </a>
-
           <a
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
             href="recovery-request.html"
+            ><i data-lucide="shield-check" class="icon"></i> Recovery
+            Requests</a
           >
-            <i data-lucide="shield-check" class="icon"></i>
-            Recovery Requests
-          </a>
-
           <a
-            class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20 transition-all"
+            class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20"
             href="profile.html"
+            ><i data-lucide="user" class="icon"></i> Profile</a
           >
-            <i data-lucide="user" class="icon"></i>
-            Profile
-          </a>
         </nav>
-
         <div class="p-4 border-t border-border-dark">
           <button
+            id="logoutBtn"
             class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
           >
-            <i data-lucide="log-out" class="icon"></i>
-            Logout
+            <i data-lucide="log-out" class="icon"></i> Logout
           </button>
         </div>
       </aside>
@@ -327,50 +266,52 @@
             >
               <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
-
             <div class="flex items-center text-xs sm:text-sm font-medium">
               <span class="text-slate-500">Home</span>
               <span class="mx-2 text-slate-600">/</span>
               <span class="text-white">Profile</span>
             </div>
           </div>
-
-          <div class="flex items-center">
-            <a
-              href="settings.html"
-              class="h-10 w-10 rounded-xl bg-background-dark border border-border-dark text-slate-400 hover:text-white hover:border-primary hover:bg-primary/10 transition-all flex items-center justify-center"
-            >
-              <i data-lucide="settings" class="icon"></i>
-            </a>
-          </div>
         </header>
 
         <main
           class="flex-1 overflow-y-auto custom-scrollbar bg-background-dark p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 pb-24 sm:pb-8"
         >
-          <div class="w-full max-w-6xl mx-auto space-y-6 sm:space-y-8">
+          <div class="w-full max-w-4xl mx-auto space-y-6 sm:space-y-8">
             <div>
               <h1 class="text-xl sm:text-2xl font-bold text-white">
                 My Profile
               </h1>
               <p class="text-slate-400 text-xs sm:text-sm mt-1">
-                Manage your personal information and account settings
+                Manage your personal information and account settings.
               </p>
             </div>
 
+            <div
+              id="pageError"
+              class="hidden text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-xl px-4 py-3 text-center"
+            ></div>
+            <div
+              id="pageSuccess"
+              class="hidden text-sm text-emerald-accent bg-emerald-accent/10 border border-emerald-accent/20 rounded-xl px-4 py-3 text-center"
+            ></div>
+
+            <!-- Avatar + Name Card -->
             <div
               class="bg-surface-dark border border-border-dark rounded-2xl p-6 lg:p-8"
             >
               <div
                 class="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-10"
               >
-                <div class="flex flex-col items-center gap-4 lg:items-start">
+                <!-- Avatar -->
+                <div class="flex flex-col items-center gap-3 lg:items-start">
                   <div class="relative">
                     <div
-                      class="h-24 w-24 sm:h-32 sm:w-32 rounded-full bg-gradient-to-br from-primary to-emerald-accent p-1"
+                      class="h-24 w-24 sm:h-32 sm:w-32 rounded-full bg-gradient-to-br from-primary to-emerald-accent p-[3px]"
                     >
                       <div
-                        class="h-full w-full rounded-full bg-surface-dark flex items-center justify-center"
+                        id="avatarWrap"
+                        class="h-full w-full rounded-full bg-surface-dark flex items-center justify-center overflow-hidden"
                       >
                         <i
                           data-lucide="user"
@@ -378,30 +319,114 @@
                         ></i>
                       </div>
                     </div>
-
                     <button
+                      onclick="
+                        document.getElementById('avatarFileInput').click()
+                      "
                       class="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-emerald-accent hover:bg-emerald-600 flex items-center justify-center text-white border-2 border-surface-dark transition-all"
                     >
                       <i data-lucide="pencil" class="icon-sm"></i>
                     </button>
                   </div>
-
                   <button
+                    onclick="document.getElementById('avatarFileInput').click()"
                     class="text-xs text-slate-400 hover:text-primary transition-colors flex items-center gap-1"
                   >
                     <i data-lucide="upload" class="icon-sm"></i>
                     Upload Photo
                   </button>
+                  <input
+                    id="avatarFileInput"
+                    type="file"
+                    accept="image/*"
+                    class="hidden"
+                    onchange="previewAvatar(event)"
+                  />
+
+                  <div
+                    id="avatarActions"
+                    class="hidden flex-col items-center gap-2 w-full"
+                  >
+                    <button
+                      onclick="saveAvatar()"
+                      id="saveAvatarBtn"
+                      class="w-full px-4 py-2 bg-emerald-accent hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1"
+                    >
+                      <i data-lucide="check" class="icon-sm"></i> Save Photo
+                    </button>
+                    <button
+                      onclick="cancelAvatar()"
+                      class="w-full px-4 py-2 bg-surface-dark border border-border-dark text-slate-400 hover:text-white text-xs font-bold rounded-xl transition-all"
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
 
-                <div class="flex-1 text-center lg:text-left">
-                  <h2 class="text-2xl lg:text-3xl font-bold text-white">
-                    Alexander Brave
-                  </h2>
+                <!-- Name + Edit -->
+                <div class="flex-1">
+                  <p
+                    class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-2"
+                  >
+                    Display Name
+                  </p>
+
+                  <div id="nameDisplay" class="flex items-center gap-3">
+                    <h2
+                      id="displayNameText"
+                      class="text-2xl lg:text-3xl font-bold text-white"
+                    >
+                      Loading...
+                    </h2>
+                    <button
+                      onclick="toggleNameEdit(true)"
+                      class="p-2 rounded-lg bg-background-dark border border-border-dark text-slate-400 hover:text-white hover:border-primary transition-all"
+                    >
+                      <i data-lucide="pencil" class="icon-sm"></i>
+                    </button>
+                  </div>
+
+                  <div id="nameEdit" class="hidden space-y-3">
+                    <input
+                      id="nameInput"
+                      type="text"
+                      placeholder="Enter your name"
+                      class="w-full px-4 py-3 bg-background-dark border border-border-dark rounded-xl text-white text-sm outline-none focus:border-primary transition-colors placeholder:text-slate-600"
+                    />
+                    <div class="flex gap-2">
+                      <button
+                        onclick="saveName()"
+                        id="saveNameBtn"
+                        class="px-5 py-2.5 bg-primary hover:bg-primary/90 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1"
+                      >
+                        <i data-lucide="check" class="icon-sm"></i> Save
+                      </button>
+                      <button
+                        onclick="toggleNameEdit(false)"
+                        class="px-5 py-2.5 bg-surface-dark border border-border-dark text-slate-400 hover:text-white text-xs font-bold rounded-xl transition-all"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-wrap gap-2 mt-4">
+                    <span
+                      class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-accent/10 border border-emerald-accent/20 text-emerald-accent text-[10px] font-black uppercase tracking-widest"
+                    >
+                      <i data-lucide="badge-check" class="icon-sm"></i> Verified
+                    </span>
+                    <span
+                      class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-widest"
+                    >
+                      <i data-lucide="user" class="icon-sm"></i> Trader
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
 
+            <!-- Personal Information -->
             <div class="w-full">
               <h3
                 class="text-white font-bold text-sm uppercase tracking-widest flex items-center gap-2 mb-4"
@@ -413,76 +438,48 @@
               <div
                 class="bg-surface-dark border border-border-dark rounded-2xl p-4 sm:p-6 lg:p-8"
               >
-                <div class="space-y-4 sm:space-y-6">
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
-                    <div class="space-y-2">
-                      <p
-                        class="text-xs font-bold text-slate-400 uppercase tracking-wider"
-                      >
-                        First Name
-                      </p>
-                      <div
-                        class="w-full bg-background-dark border border-border-dark rounded-xl text-white text-sm py-3 px-4"
-                      >
-                        Alexander
-                      </div>
-                    </div>
-
-                    <div class="space-y-2">
-                      <p
-                        class="text-xs font-bold text-slate-400 uppercase tracking-wider"
-                      >
-                        Last Name
-                      </p>
-                      <div
-                        class="w-full bg-background-dark border border-border-dark rounded-xl text-white text-sm py-3 px-4"
-                      >
-                        Brave
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
-                    <div class="space-y-2">
-                      <p
-                        class="text-xs font-bold text-slate-400 uppercase tracking-wider"
-                      >
-                        Email Address
-                      </p>
-                      <div
-                        class="w-full bg-background-dark border border-border-dark rounded-xl text-white text-sm py-3 px-4 flex items-center justify-between gap-3"
-                      >
-                        <span class="truncate">a.brave@thebrave.com</span>
-                        <span class="text-emerald-accent flex-shrink-0">
-                          <i data-lucide="badge-check" class="icon"></i>
-                        </span>
-                      </div>
-                    </div>
-
-                    <div class="space-y-2">
-                      <p
-                        class="text-xs font-bold text-slate-400 uppercase tracking-wider"
-                      >
-                        Phone Number
-                      </p>
-                      <div
-                        class="w-full bg-background-dark border border-border-dark rounded-xl text-white text-sm py-3 px-4"
-                      >
-                        +1 (555) 123-4567
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="space-y-2 md:max-w-[calc(50%-0.625rem)]">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
+                  <div class="space-y-2">
                     <p
                       class="text-xs font-bold text-slate-400 uppercase tracking-wider"
                     >
-                      Date of Birth
+                      Full Name
                     </p>
                     <div
+                      id="infoName"
                       class="w-full bg-background-dark border border-border-dark rounded-xl text-white text-sm py-3 px-4"
                     >
-                      June 15, 1985
+                      —
+                    </div>
+                  </div>
+
+                  <div class="space-y-2">
+                    <p
+                      class="text-xs font-bold text-slate-400 uppercase tracking-wider"
+                    >
+                      Email Address
+                    </p>
+                    <div
+                      class="w-full bg-background-dark border border-border-dark rounded-xl text-white text-sm py-3 px-4 flex items-center justify-between gap-3"
+                    >
+                      <span id="infoEmail" class="truncate">—</span>
+                      <span class="text-emerald-accent flex-shrink-0"
+                        ><i data-lucide="badge-check" class="icon"></i
+                      ></span>
+                    </div>
+                  </div>
+
+                  <div class="space-y-2">
+                    <p
+                      class="text-xs font-bold text-slate-400 uppercase tracking-wider"
+                    >
+                      Phone Number
+                    </p>
+                    <div
+                      id="infoPhone"
+                      class="w-full bg-background-dark border border-border-dark rounded-xl text-white text-sm py-3 px-4"
+                    >
+                      —
                     </div>
                   </div>
                 </div>
@@ -493,47 +490,163 @@
       </div>
     </div>
 
+    <script src="./js/api.js"></script>
+    <script src="js/dashmenu.js"></script>
     <script>
-      (function () {
-        const menuToggle = document.getElementById("menuToggle");
-        const mobileSidebar = document.getElementById("mobileSidebar");
-        const closeSidebar = document.getElementById("closeSidebar");
-        const sidebarOverlay = document.getElementById("sidebarOverlay");
-        const body = document.body;
+      lucide.createIcons();
 
-        function openSidebar() {
-          mobileSidebar.classList.add("open");
-          sidebarOverlay.classList.add("open");
-          body.classList.add("mobile-menu-open");
+      const user = JSON.parse(localStorage.getItem("user") || "null");
+      if (!user) window.location.href = "login.html";
+
+      let originalAvatar = null;
+      let pendingAvatarFile = null;
+
+      function showError(msg) {
+        const el = document.getElementById("pageError");
+        el.textContent = msg;
+        el.classList.remove("hidden");
+        document.getElementById("pageSuccess").classList.add("hidden");
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      function showSuccess(msg) {
+        const el = document.getElementById("pageSuccess");
+        el.textContent = msg;
+        el.classList.remove("hidden");
+        document.getElementById("pageError").classList.add("hidden");
+        setTimeout(() => el.classList.add("hidden"), 3500);
+      }
+
+      function populateProfile(u) {
+        if (u.profile) {
+          originalAvatar = u.profile;
+          document.getElementById("avatarWrap").innerHTML =
+            `<img src="${u.profile}" alt="avatar" class="avatar-img" />`;
         }
+        document.getElementById("displayNameText").textContent = u.name || "—";
+        document.getElementById("nameInput").value = u.name || "";
+        document.getElementById("infoName").textContent = u.name || "—";
+        document.getElementById("infoEmail").textContent = u.email || "—";
+        document.getElementById("infoPhone").textContent = u.phone || "—";
+      }
 
-        function closeSidebarFunc() {
-          mobileSidebar.classList.remove("open");
-          sidebarOverlay.classList.remove("open");
-          body.classList.remove("mobile-menu-open");
+      function loadProfile() {
+        if (user) populateProfile(user);
+      }
+
+      // ─── Avatar ───────────────────────────────────────────────
+      function previewAvatar(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        pendingAvatarFile = file;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          document.getElementById("avatarWrap").innerHTML =
+            `<img src="${ev.target.result}" alt="preview" class="avatar-img" />`;
+          document.getElementById("avatarActions").classList.remove("hidden");
+          document.getElementById("avatarActions").classList.add("flex");
+          lucide.createIcons();
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function cancelAvatar() {
+        pendingAvatarFile = null;
+        document.getElementById("avatarFileInput").value = "";
+        document.getElementById("avatarActions").classList.add("hidden");
+        document.getElementById("avatarActions").classList.remove("flex");
+        const wrap = document.getElementById("avatarWrap");
+        if (originalAvatar) {
+          wrap.innerHTML = `<img src="${originalAvatar}" alt="avatar" class="avatar-img" />`;
+        } else {
+          wrap.innerHTML = `<i data-lucide="user" class="icon-hero text-primary"></i>`;
+          lucide.createIcons();
         }
+      }
 
-        if (menuToggle && mobileSidebar && closeSidebar && sidebarOverlay) {
-          menuToggle.addEventListener("click", openSidebar);
-          closeSidebar.addEventListener("click", closeSidebarFunc);
-          sidebarOverlay.addEventListener("click", closeSidebarFunc);
+      async function saveAvatar() {
+        if (!pendingAvatarFile) return;
+        const btn = document.getElementById("saveAvatarBtn");
+        btn.disabled = true;
+        btn.innerHTML = `<span class="spinner"></span>`;
 
-          mobileSidebar.querySelectorAll("a").forEach((link) => {
-            link.addEventListener("click", closeSidebarFunc);
-          });
-
-          document.addEventListener("keydown", (e) => {
-            if (
-              e.key === "Escape" &&
-              mobileSidebar.classList.contains("open")
-            ) {
-              closeSidebarFunc();
-            }
-          });
+        try {
+          const formData = new FormData();
+          formData.append("profile", pendingAvatarFile);
+          const data = await API.putForm("/users/profile", formData);
+          const stored = JSON.parse(localStorage.getItem("user") || "{}");
+          stored.profile = data.profile;
+          localStorage.setItem("user", JSON.stringify(stored));
+          originalAvatar = data.profile;
+          document.getElementById("avatarActions").classList.add("hidden");
+          document.getElementById("avatarActions").classList.remove("flex");
+          pendingAvatarFile = null;
+          showSuccess("Profile photo updated successfully.");
+        } catch (err) {
+          showError(err.message || "Failed to update photo.");
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="check" class="icon-sm"></i> Save Photo`;
+          lucide.createIcons();
         }
+      }
 
-        lucide.createIcons();
-      })();
+      // ─── Name Edit ────────────────────────────────────────────
+      function toggleNameEdit(show) {
+        document.getElementById("nameDisplay").classList.toggle("hidden", show);
+        document.getElementById("nameEdit").classList.toggle("hidden", !show);
+        if (show) document.getElementById("nameInput").focus();
+      }
+
+      async function saveName() {
+        const name = document.getElementById("nameInput").value.trim();
+        if (!name) return showError("Name cannot be empty.");
+        const btn = document.getElementById("saveNameBtn");
+        btn.disabled = true;
+        btn.innerHTML = `<span class="spinner"></span>`;
+
+        try {
+          const formData = new FormData();
+          formData.append("name", name);
+          const data = await API.putForm("/users/profile", formData);
+          const stored = JSON.parse(localStorage.getItem("user") || "{}");
+          stored.name = data.name;
+          localStorage.setItem("user", JSON.stringify(stored));
+          document.getElementById("displayNameText").textContent = data.name;
+          document.getElementById("infoName").textContent = data.name;
+          toggleNameEdit(false);
+          showSuccess("Name updated successfully.");
+        } catch (err) {
+          showError(err.message || "Failed to update name.");
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="check" class="icon-sm"></i> Save`;
+          lucide.createIcons();
+        }
+      }
+
+      document.getElementById("nameInput").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") saveName();
+        if (e.key === "Escape") toggleNameEdit(false);
+      });
+
+      // ─── Logout ───────────────────────────────────────────────
+      async function handleLogout() {
+        try {
+          await API.post("/users/logout");
+        } catch {}
+        localStorage.removeItem("user");
+        window.location.href = "login.html";
+      }
+
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", handleLogout);
+      document
+        .getElementById("mobileLogoutBtn")
+        .addEventListener("click", handleLogout);
+
+      loadProfile();
     </script>
   </body>
 </html>
