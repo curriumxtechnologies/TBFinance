@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html class="dark" lang="en">
   <head>
     <meta charset="utf-8" />
@@ -42,9 +42,9 @@
               primary: "#1152d4",
               "emerald-accent": "#10b981",
               "background-light": "#f6f6f8",
-              "background-dark": "#101622", // Changed from #0a0f18
-              "surface-dark": "#192233", // Changed from #151c2c
-              "border-dark": "#324467", // Changed from #243049
+              "background-dark": "#101622",
+              "surface-dark": "#192233",
+              "border-dark": "#324467",
             },
             fontFamily: {
               display: ["Manrope", "sans-serif"],
@@ -136,6 +136,51 @@
 
       .faq-content > div {
         overflow: hidden;
+      }
+
+      /* Sheet styles (identical to login page) */
+      .sheet-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 0.35s ease,
+          visibility 0.35s ease;
+      }
+      .sheet-overlay.open {
+        opacity: 1;
+        visibility: visible;
+      }
+      .sheet {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1001;
+        background: #0f1825;
+        border-top: 1px solid #243049;
+        border-radius: 1.5rem 1.5rem 0 0;
+        max-height: 85vh;
+        overflow-y: auto;
+        transform: translateY(100%);
+        transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+      }
+      .sheet.open {
+        transform: translateY(0);
+      }
+      .sheet::-webkit-scrollbar {
+        width: 4px;
+      }
+      .sheet::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .sheet::-webkit-scrollbar-thumb {
+        background: #243049;
+        border-radius: 10px;
       }
     </style>
   </head>
@@ -888,12 +933,10 @@
       </section>
     </main>
 
-    <!-- Footer -->
+    <!-- Footer with sheet triggers -->
     <footer class="border-t border-border-dark bg-background-dark pt-16 pb-8">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div
-          class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 mb-14"
-        >
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 mb-14">
           <div class="col-span-2">
             <div class="flex items-center gap-3 mb-5">
               <img
@@ -922,16 +965,20 @@
                 >
               </li>
               <li>
-                <a
-                  href="privacy.html"
-                  class="hover:text-primary transition-colors"
-                  >Privacy Policy</a
+                <button
+                  onclick="openSheet('privacy')"
+                  class="hover:text-primary transition-colors text-left"
                 >
+                  Privacy Policy
+                </button>
               </li>
               <li>
-                <a href="t&c.html" class="hover:text-primary transition-colors"
-                  >Terms of Service</a
+                <button
+                  onclick="openSheet('terms')"
+                  class="hover:text-primary transition-colors text-left"
                 >
+                  Terms of Service
+                </button>
               </li>
             </ul>
           </div>
@@ -984,15 +1031,121 @@
 
         <div class="pt-8 border-t border-border-dark text-center">
           <p class="text-slate-500 text-sm">
-            © 2000 TheBrave Finance Integrated Services. All rights reserved.
+            © 2025 TheBrave Finance Integrated Services. All rights reserved.
+            &nbsp;·&nbsp;
+            <button
+              onclick="openSheet('privacy')"
+              class="hover:text-primary transition-colors"
+            >
+              Privacy Policy
+            </button>
+            &nbsp;·&nbsp;
+            <button
+              onclick="openSheet('terms')"
+              class="hover:text-primary transition-colors"
+            >
+              Terms of Service
+            </button>
           </p>
         </div>
       </div>
     </footer>
 
-    <script>
-      lucide.createIcons();
-    </script>
+    <!-- Sheet Overlay -->
+    <div id="sheetOverlay" class="sheet-overlay" onclick="closeSheet()"></div>
+
+    <!-- Bottom Sheet -->
+    <div id="bottomSheet" class="sheet">
+      <div
+        class="sticky top-0 bg-[#0f1825] px-6 pt-5 pb-4 border-b border-[#1e293b] flex items-center justify-between"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="h-9 w-9 rounded-xl bg-primary/20 flex items-center justify-center"
+          >
+            <i data-lucide="file-text" class="w-4 h-4 text-primary"></i>
+          </div>
+          <h3 id="sheetTitle" class="text-white font-extrabold text-base"></h3>
+        </div>
+        <button
+          onclick="closeSheet()"
+          class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-white/5 transition-all"
+        >
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="flex justify-center pt-2 pb-1">
+        <div class="w-10 h-1 bg-[#243049] rounded-full"></div>
+      </div>
+      <div
+        id="sheetContent"
+        class="px-6 pb-10 pt-2 text-slate-300 text-sm leading-relaxed space-y-6"
+      ></div>
+    </div>
+
     <script src="js/menu.js"></script>
+    <script>
+      // Complete terms and privacy content (identical to login page)
+      const CONTENT = {
+        terms: {
+          title: "Terms of Service",
+          html: `
+            <p class="text-slate-400 text-xs">Last updated: January 1, 2025</p>
+            <div class="space-y-2"><h4 class="text-white font-bold">1. Acceptance of Terms</h4><p>By accessing or using TheBrave Finance ("the Platform"), you agree to be bound by these Terms of Service. If you do not agree to any part of these terms, you may not access or use our services.</p></div>
+            <div class="space-y-2"><h4 class="text-white font-bold">2. Description of Services</h4><p>TheBrave Finance provides financial trading tools, market analysis, VIP signal subscriptions, and account management features. Our platform is designed to assist traders in making informed decisions. We do not provide regulated financial advice.</p></div>
+            <div class="space-y-2"><h4 class="text-white font-bold">3. Eligibility</h4><p>You must be at least 18 years of age to use our services. By registering, you represent and warrant that you are legally permitted to engage in trading activities in your jurisdiction. TheBrave Finance reserves the right to refuse service to anyone at any time.</p></div>
+            <div class="space-y-2"><h4 class="text-white font-bold">4. Account Responsibility</h4><p>You are solely responsible for maintaining the confidentiality of your account credentials, including your MT5 login ID and password. Any activity that occurs under your account is your responsibility. Notify us immediately if you suspect unauthorized access.</p></div>
+            <div class="space-y-2"><h4 class="text-white font-bold">5. Deposits & Payments</h4><p>All deposits are processed in cryptocurrency. Once submitted, deposits cannot be reversed except at the sole discretion of TheBrave Finance. Proof of payment must be accurate and valid. Fraudulent submissions will result in immediate account termination.</p></div>
+            <div class="space-y-2"><h4 class="text-white font-bold">6. VIP Signals</h4><p>VIP signals are provided for informational purposes only. Past performance of any signal does not guarantee future results. All trading involves risk and you may lose some or all of your invested capital. TheBrave Finance is not liable for any trading losses incurred using our signals.</p></div>
+            <div class="space-y-2"><h4 class="text-white font-bold">7. Prohibited Activities</h4><p>You agree not to: use the platform for any unlawful purpose; attempt to gain unauthorized access to any part of the platform; reverse engineer or exploit the platform; or use automated systems to access our services without prior written consent.</p></div>
+            <div class="space-y-2"><h4 class="text-white font-bold">8. Termination</h4><p>We reserve the right to suspend or terminate your account at any time, with or without notice, for conduct that we believe violates these Terms or is harmful to other users, us, or third parties.</p></div>
+            <div class="space-y-2"><h4 class="text-white font-bold">9. Limitation of Liability</h4><p>TheBrave Finance shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of or inability to use the platform, even if we have been advised of the possibility of such damages.</p></div>
+            <div class="space-y-2"><h4 class="text-white font-bold">10. Changes to Terms</h4><p>We reserve the right to modify these Terms at any time. Continued use of the platform after any changes constitutes your acceptance of the new terms. We encourage you to review these Terms periodically.</p></div>
+            <div class="p-4 rounded-xl bg-primary/10 border border-primary/20"><p class="text-blue-400 text-xs">If you have questions about these Terms, please contact our support team through the platform.</p></div>
+          `,
+        },
+        privacy: {
+          title: "Privacy Policy",
+          html: `
+            <p class="text-slate-400 text-xs">Last updated: January 1, 2025</p>
+            <div class="space-y-2"><h4 class="text-white font-bold">1. Introduction</h4><p>TheBrave Finance ("we", "our", "us") is committed to protecting your personal information. This Privacy Policy explains how we collect, use, store, and protect your data when you use our platform.</p></div>
+            <div class="space-y-2"><h4 class="text-white font-bold">2. Information We Collect</h4><p>We collect information you provide directly, including your name, email address, phone number, and profile photo (via Google OAuth). We also collect transactional data such as deposit records, payment proofs, and account activity on our platform.</p></div>
+            <div class="space-y-2"><h4 class="text-white font-bold">3. How We Use Your Information</h4><p>Your information is used to: create and manage your account; process and verify deposits; assign and manage your MT5 trading accounts; deliver VIP signals and subscription services; communicate important account updates; and improve our platform and services.</p></div>
+            <div class="space-y-2"><h4 class="text-white font-bold">4. Google OAuth</h4><p>We use Google's OAuth 2.0 for authentication. When you sign in with Google, we receive your name, email address, and profile photo. We do not have access to your Google password or any other Google account data beyond what is required for authentication.</p></div>
+            <div class="space-y-2"><h4 class="text-white font-bold">5. Data Storage & Security</h4><p>Your data is stored securely on encrypted servers. We use industry-standard security measures including HTTPS, HTTP-only cookies, and hashed credentials to protect your information. While we strive to protect your data, no method of transmission over the internet is 100% secure.</p></div>
+            <div class="space-y-2"><h4 class="text-white font-bold">6. MT5 Credentials</h4><p>Your MT5 login credentials assigned by our administrators are stored in our system to allow you to view them in your dashboard. You are responsible for keeping these credentials confidential. We recommend not sharing your MT5 password with anyone.</p></div>
+            <div class="space-y-2"><h4 class="text-white font-bold">7. Cookies</h4><p>We use secure, HTTP-only cookies to maintain your authenticated session. These cookies are essential for the platform to function and are not used for advertising or tracking purposes. Cookies expire after 30 days of inactivity.</p></div>
+            <div class="space-y-2"><h4 class="text-white font-bold">8. Third-Party Services</h4><p>We use Cloudinary for secure image storage (profile photos and payment proofs). Files uploaded to our platform are stored on Cloudinary's encrypted servers. We do not sell or share your data with any third party for marketing purposes.</p></div>
+            <div class="space-y-2"><h4 class="text-white font-bold">9. Your Rights</h4><p>You have the right to access, correct, or delete your personal data at any time. You may request account deletion by contacting our support team. Upon deletion, your data will be permanently removed from our systems within 30 days.</p></div>
+            <div class="space-y-2"><h4 class="text-white font-bold">10. Changes to This Policy</h4><p>We may update this Privacy Policy from time to time. We will notify you of any significant changes via the platform. Your continued use of the platform after changes constitutes acceptance of the updated policy.</p></div>
+            <div class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20"><p class="text-emerald-400 text-xs">Your privacy matters to us. We never sell your data and never will. TheBrave Finance is built on trust.</p></div>
+          `,
+        },
+      };
+
+      function openSheet(type) {
+        const data = CONTENT[type];
+        if (!data) return;
+        document.getElementById("sheetTitle").textContent = data.title;
+        document.getElementById("sheetContent").innerHTML = data.html;
+        document.getElementById("bottomSheet").classList.add("open");
+        document.getElementById("sheetOverlay").classList.add("open");
+        document.body.style.overflow = "hidden";
+        if (typeof lucide !== "undefined") lucide.createIcons();
+      }
+
+      function closeSheet() {
+        document.getElementById("bottomSheet").classList.remove("open");
+        document.getElementById("sheetOverlay").classList.remove("open");
+        document.body.style.overflow = "";
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeSheet();
+      });
+
+      // Initialize Lucide icons
+      if (typeof lucide !== "undefined") lucide.createIcons();
+    </script>
   </body>
 </html>
