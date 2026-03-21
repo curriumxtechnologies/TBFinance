@@ -214,54 +214,53 @@
         </div>
       </div>
 
-      <!-- Mobile nav -->
+      <!-- mobile menu drawer (hidden by default) -->
       <div
         id="mobileNav"
-        class="md:hidden invisible opacity-0 -translate-y-4 border-t border-border-dark bg-surface-dark"
+        class="absolute inset-x-0 top-16 bg-surface-dark border-b border-border-dark shadow-xl md:hidden invisible opacity-0 -translate-y-full transition-all duration-300 ease-in-out"
       >
-        <nav class="px-6 py-5 space-y-4">
+        <nav class="flex flex-col px-6 py-6 space-y-4 text-base">
           <a
-            class="block text-slate-200 hover:text-white font-medium"
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
             href="index.html"
             >Home</a
           >
           <a
-            class="block text-slate-200 hover:text-white font-medium"
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
             href="aboutus.html"
             >About</a
           >
           <a
-            class="block text-slate-200 hover:text-white font-medium"
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
             href="services.html"
             >Services</a
           >
-          <a class="block text-white font-semibold" href="vip.html"
+          <a
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
+            href="vip.html"
             >VIP Signals</a
           >
           <a
-            class="block text-slate-200 hover:text-white font-medium"
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
             href="recovery.html"
             >Recovery</a
           >
           <a
-            class="block text-slate-200 hover:text-white font-medium"
+            class="text-slate-200 hover:text-white py-2 font-medium border-b border-border-dark/40"
             href="contactus.html"
             >Contact</a
           >
-
-          <div class="pt-4 flex flex-col gap-3">
+          <div class="flex flex-col sm:hidden pt-4 gap-3">
             <a
               href="login.html"
-              class="w-full text-center px-4 py-3 text-sm font-bold text-white bg-background-dark border border-border-dark rounded-lg"
+              class="w-full text-center px-4 py-3 text-sm font-bold text-white bg-surface-dark border border-border-dark rounded-lg"
+              >Login</a
             >
-              Login
-            </a>
             <a
-              href="#pricing"
-              class="w-full text-center px-4 py-3 text-sm font-bold text-white bg-primary rounded-lg"
+              href="register.html"
+              class="w-full text-center px-5 py-3 text-sm font-bold text-white bg-primary rounded-lg shadow-lg shadow-primary/20"
+              >Register</a
             >
-              Join VIP
-            </a>
           </div>
         </nav>
       </div>
@@ -990,6 +989,6 @@
     <script>
       lucide.createIcons();
     </script>
-    <script src="js/dashmenu.js"></script>
+    <script src="js/menu.js"></script>
   </body>
 </html>
