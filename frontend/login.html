@@ -5,30 +5,13 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>TheBrave Finance | Sign In</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="images/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="images/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="images/favicon-16x16.png"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png" />
     <link rel="manifest" href="images/site.webmanifest" />
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -42,47 +25,45 @@
               "surface-dark": "#192233",
               "border-dark": "#324467",
             },
-            fontFamily: {
-              display: ["Manrope", "sans-serif"],
-            },
+            fontFamily: { display: ["Manrope", "sans-serif"] },
           },
         },
       };
     </script>
     <style>
-      body {
-        font-family: "Manrope", sans-serif;
-      }
+      body { font-family: "Manrope", sans-serif; }
       .glass-panel {
         background: rgba(25, 34, 51, 0.7);
         backdrop-filter: blur(12px);
         border: 1px solid rgba(50, 68, 103, 0.5);
       }
-      .lucide {
-        width: 1em;
-        height: 1em;
-        stroke-width: 1.5;
-        display: inline-block;
-        vertical-align: middle;
-        fill: none;
+      .lucide { width: 1em; height: 1em; stroke-width: 1.5; display: inline-block; vertical-align: middle; fill: none; }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
       }
+      .animate-fade-in { animation: fadeIn 0.3s ease-out; }
+
+      .spinner {
+        width: 18px; height: 18px;
+        border: 2px solid rgba(255,255,255,0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        display: inline-block;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
     </style>
   </head>
-  <body
-    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display transition-colors duration-300 min-h-screen flex flex-col"
-  >
-    <!-- Simple Navigation -->
-    <header
-      class="sticky top-0 z-50 w-full border-b border-border-dark bg-background-dark/80 backdrop-blur-md"
-    >
+  <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display transition-colors duration-300 min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <header class="sticky top-0 z-50 w-full border-b border-border-dark bg-background-dark/80 backdrop-blur-md">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
           <a href="index.html" class="flex items-center gap-3">
-            <img
-              src="images/TBF-LOGO.png"
-              alt="The Brave Finance Logo"
-              class="w-8 h-8 object-contain"
-            />
+            <img src="images/TBF-LOGO.png" alt="The Brave Finance Logo" class="w-8 h-8 object-contain" />
             <h2 class="text-white text-xl font-extrabold tracking-tight">
               THEBRAVE <span class="text-primary">FINANCE</span>
             </h2>
@@ -92,81 +73,128 @@
     </header>
 
     <!-- Main Content -->
-    <main
-      class="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
-    >
+    <main class="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-md w-full space-y-8">
+
         <!-- Header -->
         <div class="text-center">
           <h2 class="text-3xl font-extrabold text-white">Welcome back</h2>
-          <p class="mt-2 text-sm text-slate-400">
-            Sign in to access your trading dashboard
-          </p>
+          <p class="mt-2 text-sm text-slate-400">Sign in to access your trading dashboard</p>
         </div>
 
-        <!-- Google Sign Up Button -->
-        <button
-          onclick="handleGoogleSignUp()"
-          class="w-full flex items-center justify-center gap-3 px-4 py-3 border border-border-dark rounded-xl bg-surface-dark hover:bg-surface-dark/80 transition-colors group"
-        >
-          <img
-            src="https://www.google.com/favicon.ico"
-            alt="Google"
-            class="w-5 h-5"
-          />
-          <span
-            class="text-sm font-medium text-white group-hover:text-primary transition-colors"
-            >Sign in with Google</span
+        <!-- Card -->
+        <div class="glass-panel rounded-2xl p-8 space-y-6 animate-fade-in">
+
+          <!-- Error message -->
+          <div id="error-msg" class="hidden text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3 text-center"></div>
+
+          <!-- Google Sign In Button -->
+          <button
+            id="google-btn"
+            onclick="handleGoogleLogin()"
+            class="w-full flex items-center justify-center gap-3 px-4 py-3 border border-border-dark rounded-xl bg-surface-dark hover:bg-surface-dark/80 transition-colors group"
           >
-        </button>
+            <img src="https://www.google.com/favicon.ico" alt="Google" class="w-5 h-5" />
+            <span class="text-sm font-medium text-white group-hover:text-primary transition-colors">
+              Sign in with Google
+            </span>
+          </button>
+
+        </div>
 
         <!-- Terms -->
         <p class="text-xs text-center text-slate-500">
           By continuing, you agree to our
-          <a href="#" class="text-primary hover:text-primary/80"
-            >Terms of Service</a
-          >
-          and
-          <a href="#" class="text-primary hover:text-primary/80"
-            >Privacy Policy</a
-          >
+          <a href="#" class="text-primary hover:text-primary/80">Terms of Service</a> and
+          <a href="#" class="text-primary hover:text-primary/80">Privacy Policy</a>
         </p>
 
-        <!-- Existing members -->
+        <!-- Need an account -->
         <p class="text-center text-sm text-slate-500">
-          Need an Account?
-          <a
-            href="register.html"
-            class="text-primary hover:text-primary/80 font-medium"
-            >Sign up</a
-          >
+          Need an account?
+          <a href="register.html" class="text-primary hover:text-primary/80 font-medium">Sign up</a>
         </p>
       </div>
     </main>
 
-    <!-- Simple Footer -->
+    <!-- Footer -->
     <footer class="border-t border-border-dark py-6">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <p class="text-center text-xs text-slate-500">
-          © 2000 TheBrave Finance Integrated Services. All rights reserved.
-        </p>
+        <p class="text-center text-xs text-slate-500">© 2000 TheBrave Finance Integrated Services. All rights reserved.</p>
       </div>
     </footer>
-    <style>
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      .animate-fade-in {
-        animation: fadeIn 0.3s ease-out;
-      }
-    </style>
+
     <script src="./js/api.js"></script>
+    <script>
+      lucide.createIcons();
+
+      const GOOGLE_CLIENT_ID = "135801485768-d8ft27r5tlbllv3mms4ub4s1udvsu1f8.apps.googleusercontent.com";
+
+      const GOOGLE_BTN_DEFAULT = `
+        <img src="https://www.google.com/favicon.ico" alt="Google" class="w-5 h-5" />
+        <span class="text-sm font-medium text-white">Sign in with Google</span>
+      `;
+
+      function showError(msg) {
+        const el = document.getElementById("error-msg");
+        el.textContent = msg;
+        el.classList.remove("hidden");
+      }
+
+      function hideError() {
+        document.getElementById("error-msg").classList.add("hidden");
+      }
+
+      function setButtonLoading(loading) {
+        const btn = document.getElementById("google-btn");
+        if (loading) {
+          btn.disabled = true;
+          btn.innerHTML = `<span class="spinner"></span>`;
+        } else {
+          btn.disabled = false;
+          btn.innerHTML = GOOGLE_BTN_DEFAULT;
+        }
+      }
+
+      function handleGoogleLogin() {
+        hideError();
+
+        const client = google.accounts.oauth2.initTokenClient({
+          client_id: GOOGLE_CLIENT_ID,
+          scope: "openid email profile",
+          callback: async (response) => {
+            if (response.error) {
+              showError("Google sign-in was cancelled or failed. Please try again.");
+              return;
+            }
+
+            setButtonLoading(true);
+
+            try {
+              const data = await API.post("/users/google", {
+                token: response.access_token,
+                mode: "login",
+              });
+
+              localStorage.setItem("user", JSON.stringify({
+                _id: data._id,
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                profile: data.profile,
+              }));
+
+              window.location.href = "user-dashboard.html";
+
+            } catch (error) {
+              showError(error.message || "Login failed. Please try again.");
+              setButtonLoading(false);
+            }
+          },
+        });
+
+        client.requestAccessToken();
+      }
+    </script>
   </body>
 </html>
