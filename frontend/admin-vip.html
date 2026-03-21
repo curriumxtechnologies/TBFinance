@@ -1,0 +1,342 @@
+<!doctype html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>VIP Payments | TheBrave Admin</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      * { font-family: "Manrope", sans-serif; }
+      body { background: #0a0f18; overflow: hidden; }
+      .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+      .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background: #243049; border-radius: 10px; }
+      .lucide { width: 20px; height: 20px; stroke-width: 2; }
+      .mobile-sidebar { position: fixed; top: 0; left: 0; width: 260px; height: 100%; background: #0f1219; border-right: 1px solid #1e293b; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); z-index: 1000; overflow-y: auto; }
+      .mobile-sidebar.open { transform: translateX(0); }
+      .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 999; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
+      .sidebar-overlay.open { opacity: 1; visibility: visible; }
+      .badge-pending  { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+      .badge-approved { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+      .badge-rejected { background: rgba(239,68,68,0.15);  color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+      .status-pill { padding: 2px 8px; border-radius: 9999px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+      .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+      .modal-backdrop.hidden { display: none; }
+      .nav-active   { background: rgba(17,82,212,0.1); color: #6090ff; border: 1px solid rgba(17,82,212,0.2); font-weight: 700; }
+      .nav-inactive { color: #94a3b8; }
+      .nav-inactive:hover { color: white; background: rgba(255,255,255,0.05); }
+      #toast { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999; transform: translateY(80px); opacity: 0; transition: all 0.3s ease; pointer-events: none; }
+      #toast.show { transform: translateY(0); opacity: 1; }
+    </style>
+  </head>
+
+  <body class="text-slate-100 antialiased">
+
+    <div id="toast" class="px-4 py-3 rounded-xl border text-sm font-medium flex items-center gap-2 shadow-2xl max-w-sm"></div>
+
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+    <!-- Mobile Sidebar -->
+    <div id="mobileSidebar" class="mobile-sidebar lg:hidden">
+      <div class="p-5 flex items-center justify-between border-b border-[#1e293b]">
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
+            <i data-lucide="shield" class="w-4 h-4 text-white"></i>
+          </div>
+          <div>
+            <p class="text-white font-extrabold text-sm leading-none">Admin Portal</p>
+            <p class="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">TheBrave Finance</p>
+          </div>
+        </div>
+        <button id="closeMobileSidebar" class="text-slate-400 hover:text-white p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <nav class="px-3 py-5 space-y-1">
+        <a href="admin-panel.html"   class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="banknote" class="w-4 h-4"></i> Deposit Reviews</a>
+        <a href="admin-vip.html"     class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-active"><i data-lucide="badge-check" class="w-4 h-4"></i> VIP Payments</a>
+        <a href="admin-users.html"   class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="users" class="w-4 h-4"></i> Users & MT5</a>
+        <a href="admin-signals.html" class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="radio" class="w-4 h-4"></i> VIP Signals</a>
+      </nav>
+      <div class="p-4 border-t border-[#1e293b]">
+        <button id="mobileLogoutBtn" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all">
+          <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+        </button>
+      </div>
+    </div>
+
+    <div class="flex h-screen overflow-hidden">
+      <!-- Desktop Sidebar -->
+      <aside class="w-60 flex-shrink-0 bg-[#0f1219] border-r border-[#1e293b] flex-col hidden lg:flex">
+        <div class="p-5 flex items-center gap-3 border-b border-[#1e293b]">
+          <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
+            <i data-lucide="shield" class="w-4 h-4 text-white"></i>
+          </div>
+          <div>
+            <p class="text-white font-extrabold text-sm leading-none">Admin Portal</p>
+            <p class="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">TheBrave Finance</p>
+          </div>
+        </div>
+        <nav class="flex-1 px-3 py-5 space-y-1">
+          <a href="admin-panel.html"   class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="banknote" class="w-4 h-4"></i> Deposit Reviews</a>
+          <a href="admin-vip.html"     class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-active"><i data-lucide="badge-check" class="w-4 h-4"></i> VIP Payments <span id="vipBadge" class="ml-auto hidden bg-amber-500/20 text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded-full"></span></a>
+          <a href="admin-users.html"   class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="users" class="w-4 h-4"></i> Users & MT5</a>
+          <a href="admin-signals.html" class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="radio" class="w-4 h-4"></i> VIP Signals</a>
+        </nav>
+        <div class="p-4 border-t border-[#1e293b]">
+          <button id="adminLogoutBtn" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all">
+            <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+          </button>
+        </div>
+      </aside>
+
+      <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <header class="h-14 flex-shrink-0 border-b border-[#1e293b] bg-[#0f1219]/80 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <button id="menuToggle" class="lg:hidden p-2 text-slate-400 hover:text-white">
+              <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
+            <h1 class="text-base font-bold text-white">🏆 VIP Payments</h1>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="h-6 w-px bg-[#1e293b]"></div>
+            <div class="flex items-center gap-2">
+              <div class="h-8 w-8 rounded-full bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
+                <span id="adminInitial" class="text-xs font-bold text-white">A</span>
+              </div>
+              <span id="adminName" class="text-sm font-medium hidden sm:block text-slate-300">Admin</span>
+            </div>
+          </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 bg-[#0a0f18] space-y-5">
+
+          <!-- Stats -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl p-5">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-slate-500 text-xs uppercase tracking-wider">Pending</p>
+                  <p id="statPending" class="text-2xl font-bold text-white mt-1">—</p>
+                </div>
+                <div class="h-10 w-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
+                  <i data-lucide="clock" class="w-5 h-5 text-amber-400"></i>
+                </div>
+              </div>
+            </div>
+            <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl p-5">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-slate-500 text-xs uppercase tracking-wider">Active VIP Members</p>
+                  <p id="statActive" class="text-2xl font-bold text-emerald-400 mt-1">—</p>
+                </div>
+                <div class="h-10 w-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+                  <i data-lucide="badge-check" class="w-5 h-5 text-emerald-400"></i>
+                </div>
+              </div>
+            </div>
+            <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl p-5">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-slate-500 text-xs uppercase tracking-wider">Total Revenue</p>
+                  <p id="statRevenue" class="text-2xl font-bold text-white mt-1">—</p>
+                </div>
+                <div class="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                  <i data-lucide="trending-up" class="w-5 h-5 text-blue-400"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter + Refresh -->
+          <div class="flex flex-wrap justify-between items-center gap-3">
+            <select id="filterStatus" class="bg-[#0f1219] border border-[#1e293b] rounded-xl px-3 py-2 text-sm text-slate-300 focus:border-blue-600 outline-none">
+              <option value="">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
+            <button onclick="loadVipPayments()" class="bg-[#1e293b] hover:bg-[#2d3a4e] text-slate-300 px-4 py-2 rounded-xl text-sm flex items-center gap-2 transition-all">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i> Refresh
+            </button>
+          </div>
+
+          <!-- Table -->
+          <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl overflow-hidden">
+            <div class="px-5 py-4 border-b border-[#1e293b] flex justify-between items-center">
+              <h3 class="font-bold text-white text-sm">All VIP Payments</h3>
+              <span class="text-xs text-slate-500">Approve to grant 5-day VIP access</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left">
+                <thead class="bg-black/20 border-b border-[#1e293b]">
+                  <tr>
+                    <th class="px-5 py-3 text-[11px] font-bold uppercase text-slate-500">User</th>
+                    <th class="px-5 py-3 text-[11px] font-bold uppercase text-slate-500">Amount</th>
+                    <th class="px-5 py-3 text-[11px] font-bold uppercase text-slate-500">Asset</th>
+                    <th class="px-5 py-3 text-[11px] font-bold uppercase text-slate-500">Tx ID</th>
+                    <th class="px-5 py-3 text-[11px] font-bold uppercase text-slate-500">Proof</th>
+                    <th class="px-5 py-3 text-[11px] font-bold uppercase text-slate-500">Submitted</th>
+                    <th class="px-5 py-3 text-[11px] font-bold uppercase text-slate-500">Expires</th>
+                    <th class="px-5 py-3 text-[11px] font-bold uppercase text-slate-500">Status</th>
+                    <th class="px-5 py-3 text-[11px] font-bold uppercase text-slate-500">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="vipTableBody" class="divide-y divide-[#1e293b]">
+                  <tr><td colspan="9" class="px-5 py-10 text-center text-slate-500 text-sm">Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </main>
+      </div>
+    </div>
+
+    <!-- Proof Modal -->
+    <div id="proofModal" class="modal-backdrop hidden" onclick="closeProofModal()">
+      <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl p-4 max-w-2xl w-full" onclick="event.stopPropagation()">
+        <img id="proofImg" src="" alt="Proof" class="w-full max-h-[70vh] object-contain rounded-xl" />
+        <button onclick="closeProofModal()" class="mt-4 w-full py-2 text-slate-400 hover:text-white text-sm">Close</button>
+      </div>
+    </div>
+
+    <script src="./js/api.js"></script>
+    <script>
+      lucide.createIcons();
+
+      // ─── Auth Guard ───────────────────────────────────────────
+      const admin = JSON.parse(localStorage.getItem("admin") || "null");
+      if (!admin) window.location.href = "admin-login.html";
+      if (admin) {
+        document.getElementById("adminName").textContent    = admin.name || "Admin";
+        document.getElementById("adminInitial").textContent = (admin.name || "A")[0].toUpperCase();
+      }
+
+      // ─── Toast ────────────────────────────────────────────────
+      function toast(msg, type = "success") {
+        const el = document.getElementById("toast");
+        const colors = { success: "bg-emerald-900/90 border-emerald-500/40 text-emerald-300", error: "bg-rose-900/90 border-rose-500/40 text-rose-300" };
+        el.className = `px-4 py-3 rounded-xl border text-sm font-medium flex items-center gap-2 shadow-2xl max-w-sm ${colors[type]}`;
+        el.innerHTML = `<span>${msg}</span>`;
+        el.classList.add("show");
+        setTimeout(() => el.classList.remove("show"), 3500);
+      }
+
+      // ─── Mobile Sidebar ───────────────────────────────────────
+      document.getElementById("menuToggle").addEventListener("click", () => {
+        document.getElementById("mobileSidebar").classList.add("open");
+        document.getElementById("sidebarOverlay").classList.add("open");
+      });
+      document.getElementById("closeMobileSidebar").addEventListener("click", () => {
+        document.getElementById("mobileSidebar").classList.remove("open");
+        document.getElementById("sidebarOverlay").classList.remove("open");
+      });
+      document.getElementById("sidebarOverlay").addEventListener("click", () => {
+        document.getElementById("mobileSidebar").classList.remove("open");
+        document.getElementById("sidebarOverlay").classList.remove("open");
+      });
+
+      // ─── Helpers ──────────────────────────────────────────────
+      function fmtDate(d) { return new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }); }
+      function statusPill(s) {
+        const map = { pending: "badge-pending", approved: "badge-approved", rejected: "badge-rejected" };
+        return `<span class="status-pill ${map[s] || "badge-pending"}">${s}</span>`;
+      }
+      function viewProof(url) { document.getElementById("proofImg").src = url; document.getElementById("proofModal").classList.remove("hidden"); }
+      function closeProofModal() { document.getElementById("proofModal").classList.add("hidden"); }
+
+      // ─── Load VIP Payments ────────────────────────────────────
+      let paymentsData = [];
+
+      async function loadVipPayments() {
+        const tbody = document.getElementById("vipTableBody");
+        tbody.innerHTML = `<tr><td colspan="9" class="px-5 py-10 text-center text-slate-500 text-sm">Loading...</td></tr>`;
+
+        try {
+          paymentsData = await API.get("/vip/payments");
+          renderPayments();
+        } catch (err) {
+          tbody.innerHTML = `<tr><td colspan="9" class="px-5 py-10 text-center text-slate-500 text-sm">Failed to load: ${err.message}</td></tr>`;
+        }
+      }
+
+      function renderPayments() {
+        const tbody    = document.getElementById("vipTableBody");
+        const filter   = document.getElementById("filterStatus").value;
+        const filtered = filter ? paymentsData.filter(p => p.status === filter) : paymentsData;
+
+        // Stats
+        const pending  = paymentsData.filter(p => p.status === "pending").length;
+        const now      = new Date();
+        const active   = paymentsData.filter(p => p.status === "approved" && p.vipAccessExpiry && new Date(p.vipAccessExpiry) > now).length;
+        const revenue  = paymentsData.filter(p => p.status === "approved").reduce((s, p) => s + p.amount, 0);
+
+        document.getElementById("statPending").textContent = pending;
+        document.getElementById("statActive").textContent  = active;
+        document.getElementById("statRevenue").textContent = `$${revenue.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
+
+        const badge = document.getElementById("vipBadge");
+        badge.textContent = pending;
+        badge.classList.toggle("hidden", pending === 0);
+
+        if (!filtered.length) {
+          tbody.innerHTML = `<tr><td colspan="9" class="px-5 py-10 text-center text-slate-500 text-sm">No VIP payments found.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = filtered.map(p => `
+          <tr class="hover:bg-white/5 transition">
+            <td class="px-5 py-4">
+              <div class="font-medium text-white text-sm">${p.user?.name || "—"}</div>
+              <div class="text-[10px] text-slate-500">${p.user?.email || ""}</div>
+            </td>
+            <td class="px-5 py-4 font-bold text-emerald-400 text-sm">$${p.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+            <td class="px-5 py-4 text-sm text-slate-300">${p.asset} (${p.network})</td>
+            <td class="px-5 py-4"><span class="font-mono text-xs text-slate-400">${p.transactionId.slice(0, 14)}...</span></td>
+            <td class="px-5 py-4">
+              ${p.proofOfPayment
+                ? `<button onclick="viewProof('${p.proofOfPayment}')" class="text-blue-400 text-xs underline hover:text-blue-300">View Proof</button>`
+                : `<span class="text-slate-600 text-xs">None</span>`}
+            </td>
+            <td class="px-5 py-4 text-xs text-slate-500">${fmtDate(p.createdAt)}</td>
+            <td class="px-5 py-4 text-xs text-slate-500">${p.vipAccessExpiry ? fmtDate(p.vipAccessExpiry) : "—"}</td>
+            <td class="px-5 py-4">${statusPill(p.status)}</td>
+            <td class="px-5 py-4">
+              ${p.status === "pending" ? `
+                <div class="flex gap-2">
+                  <button onclick="updateStatus('${p._id}', 'approved')" class="bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-white text-xs px-3 py-1.5 rounded-lg transition-all">Approve</button>
+                  <button onclick="updateStatus('${p._id}', 'rejected')" class="bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white text-xs px-3 py-1.5 rounded-lg transition-all">Reject</button>
+                </div>
+              ` : `<span class="text-slate-600 text-xs capitalize">${p.status}</span>`}
+            </td>
+          </tr>
+        `).join("");
+      }
+
+      document.getElementById("filterStatus").addEventListener("change", renderPayments);
+
+      async function updateStatus(id, status) {
+        try {
+          await API.put(`/vip/payment/${id}/status`, { status });
+          toast(`VIP payment ${status}`, "success");
+          loadVipPayments();
+        } catch (err) {
+          toast(err.message || "Failed to update", "error");
+        }
+      }
+
+      // ─── Logout ───────────────────────────────────────────────
+      async function handleLogout() {
+        try { await API.post("/admin/logout"); } catch {}
+        localStorage.removeItem("admin");
+        window.location.href = "admin-login.html";
+      }
+      document.getElementById("adminLogoutBtn").addEventListener("click", handleLogout);
+      document.getElementById("mobileLogoutBtn").addEventListener("click", handleLogout);
+
+      // ─── Init ─────────────────────────────────────────────────
+      loadVipPayments();
+    </script>
+  </body>
+</html>

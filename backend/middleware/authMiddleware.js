@@ -5,15 +5,12 @@ import Admin from "../models/adminModel.js";
 
 const getToken = (req, cookieName) => {
   const authHeader = req.headers?.authorization;
-
   if (authHeader && authHeader.startsWith("Bearer ")) {
     return authHeader.split(" ")[1];
   }
-
   if (req.cookies && req.cookies[cookieName]) {
     return req.cookies[cookieName];
   }
-
   return null;
 };
 
@@ -27,7 +24,6 @@ export const protect = asyncHandler(async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
     const user = await User.findById(decoded.userId).select("-password");
 
     if (!user) {
@@ -53,7 +49,6 @@ export const adminProtect = asyncHandler(async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.ADMIN_JWT_SECRET);
-
     const admin = await Admin.findById(decoded.adminId).select("-password");
 
     if (!admin) {
@@ -67,13 +62,4 @@ export const adminProtect = asyncHandler(async (req, res, next) => {
     res.status(401);
     throw new Error("Not authorized as admin, token failed or expired");
   }
-});
-
-export const superAdminProtect = asyncHandler(async (req, res, next) => {
-  if (!req.admin) {
-    res.status(401);
-    throw new Error("Not authorized as admin");
-  }
-
-  next();
 });

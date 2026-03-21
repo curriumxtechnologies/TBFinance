@@ -129,8 +129,6 @@ const uploadSignal = asyncHandler(async (req, res) => {
     throw new Error("Type must be buy or sell");
   }
 
-  // takeProfits and stopLosses can come as a single string or array
-  // Handle both: "4674.6" or ["4674.6", "4672.6"] or "4674.6,4672.6"
   const parseTPs = (val) => {
     if (!val) return [];
     if (Array.isArray(val)) return val.filter(Boolean);
@@ -146,7 +144,7 @@ const uploadSignal = asyncHandler(async (req, res) => {
     description:  description || "",
     image:        req.file?.path || "",
     status:       status || "active",
-    postedBy:     req.user._id,
+    postedBy:     req.admin?._id || null,  // ← use req.admin not req.user
   });
 
   res.status(201).json(signal);

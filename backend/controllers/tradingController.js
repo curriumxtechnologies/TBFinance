@@ -5,21 +5,19 @@ import Transaction from "../models/transactionModel.js";
 // @desc    Assign demo account to user (admin)
 // @route   POST /api/trading/demo/:userId
 // @access  Private/Admin
+// @desc    Assign demo account to user (admin)
+// @route   POST /api/trading/demo/:userId
+// @access  Private/Admin
 const assignDemoAccount = asyncHandler(async (req, res) => {
-  const { loginId, server, balance } = req.body;
+  const { loginId, password, server, balance } = req.body;
   const { userId } = req.params;
 
-  if (!loginId || !server || !balance) {
+  if (!loginId || !password || !server || balance === undefined) {
     res.status(400);
-    throw new Error("Login ID, server, and balance are required");
+    throw new Error("Login ID, password, server, and balance are required");
   }
 
-  // One demo account per user
-  const existing = await TradingAccount.findOne({
-    user: userId,
-    type: "demo",
-  });
-
+  const existing = await TradingAccount.findOne({ user: userId, type: "demo" });
   if (existing) {
     res.status(400);
     throw new Error("User already has a demo account");
@@ -29,74 +27,40 @@ const assignDemoAccount = asyncHandler(async (req, res) => {
     user: userId,
     type: "demo",
     loginId,
+    password,
     server,
-    balance,
+    balance: Number(balance),
     status: "active",
   });
 
   res.status(201).json(account);
 });
 
-// @desc    Assign live account to user (admin) — only if they have an approved deposit
+// @desc    Assign live account to user (admin)
 // @route   POST /api/trading/live/:userId
 // @access  Private/Admin
 const assignLiveAccount = asyncHandler(async (req, res) => {
-  const { loginId, server } = req.body;
+  const { loginId, password, server, balance } = req.body;
   const { userId } = req.params;
 
-  if (!loginId || !server) {
+  if (!loginId || !password || !server || balance === undefined) {
     res.status(400);
-    throw new Error("Login ID and server are required");
+    throw new Error("Login ID, password, server, and balance are required");
   }
 
-  // Check user has at least one approved deposit
-  const approvedDeposit = await Transaction.findOne({
-    user: userId,
-    type: "deposit",
-    status: "approved",
-  });
-
-  if (!approvedDeposit) {
-    res.status(400);
-    throw new Error("User has no approved deposits. Cannot assign live account.");
-  }
-
-  // One live account per user
-  const existing = await TradingAccount.findOne({
-    user: userId,
-    type: "live",
-  });
-
+  const existing = await TradingAccount.findOne({ user: userId, type: "live" });
   if (existing) {
     res.status(400);
     throw new Error("User already has a live account");
   }
 
-  // Get total approved deposit amount for balance
-  const result = await Transaction.aggregate([
-    {
-      $match: {
-        user: approvedDeposit.user,
-        type: "deposit",
-        status: "approved",
-      },
-    },
-    {
-      $group: {
-        _id: null,
-        totalDeposited: { $sum: "$amount" },
-      },
-    },
-  ]);
-
-  const balance = result[0]?.totalDeposited || 0;
-
   const account = await TradingAccount.create({
     user: userId,
     type: "live",
     loginId,
+    password,
     server,
-    balance,
+    balance: Number(balance),
     status: "active",
   });
 
@@ -130,8 +94,11 @@ const updateAccountBalance = asyncHandler(async (req, res) => {
 // @desc    Update trading account details (admin)
 // @route   PUT /api/trading/:accountId
 // @access  Private/Admin
+// @desc    Update trading account details (admin)
+// @route   PUT /api/trading/:accountId
+// @access  Private/Admin
 const updateAccount = asyncHandler(async (req, res) => {
-  const { loginId, server, status } = req.body;
+  const { loginId, password, server, balance, status } = req.body;
 
   const account = await TradingAccount.findById(req.params.accountId);
 
@@ -140,12 +107,13 @@ const updateAccount = asyncHandler(async (req, res) => {
     throw new Error("Trading account not found");
   }
 
-  if (loginId) account.loginId = loginId;
-  if (server) account.server = server;
-  if (status) account.status = status;
+  if (loginId)            account.loginId  = loginId;
+  if (password)           account.password = password;
+  if (server)             account.server   = server;
+  if (balance !== undefined) account.balance = Number(balance);
+  if (status)             account.status   = status;
 
   const updated = await account.save();
-
   res.status(200).json(updated);
 });
 

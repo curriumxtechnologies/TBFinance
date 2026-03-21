@@ -40,7 +40,7 @@ router.get("/my/total", protect, getMyTotalDeposit);
 router.get("/:id", protect, getTransactionById);
 
 // ✅ Admin routes
-router.get("/", protect, adminProtect, getAllTransactions);
-router.put("/:id/status", protect, adminProtect, updateTransactionStatus);
+router.get("/",  adminProtect, getAllTransactions);
+router.put("/:id/status", adminProtect, updateTransactionStatus);
 
 export default router;

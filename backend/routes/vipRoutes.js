@@ -11,8 +11,7 @@ import {
   updateSignal,
   deleteSignal,
 } from "../controllers/vipController.js";
-import { protect } from "../middleware/authMiddleware.js";
-import { adminProtect } from "../middleware/authMiddleware.js";
+import { protect, adminProtect } from "../middleware/authMiddleware.js";
 import { vipProtect } from "../middleware/vipMiddleware.js";
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
@@ -20,14 +19,12 @@ import { CloudinaryStorage } from "multer-storage-cloudinary";
 
 const router = express.Router();
 
-// ✅ Cloudinary config
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
 });
 
-// ✅ Multer storage for proof of payment
 const paymentStorage = new CloudinaryStorage({
   cloudinary,
   params: {
@@ -36,7 +33,6 @@ const paymentStorage = new CloudinaryStorage({
   },
 });
 
-// ✅ Multer storage for signal images
 const signalStorage = new CloudinaryStorage({
   cloudinary,
   params: {
@@ -45,23 +41,25 @@ const signalStorage = new CloudinaryStorage({
   },
 });
 
-const uploadPayment = multer({ storage: paymentStorage });
+const uploadPayment   = multer({ storage: paymentStorage });
 const uploadSignalImg = multer({ storage: signalStorage });
 
 // ✅ User routes
-router.post("/payment", protect, uploadPayment.single("proofOfPayment"), vipPayment);
-router.get("/my-status", protect, getMyVipStatus);
-router.get("/my-payments", protect, getMyVipPayments);
+router.post("/payment",     protect, uploadPayment.single("proofOfPayment"), vipPayment);
+router.get("/my-status",    protect, getMyVipStatus);
+router.get("/my-payments",  protect, getMyVipPayments);
 
-// ✅ VIP-only routes (must have active VIP access)
-router.get("/signals", protect, vipProtect, getSignals);
+// ✅ Admin routes — MUST come before VIP routes
+router.get("/admin/signals",      adminProtect, getSignals);
+router.get("/admin/signals/:id",  adminProtect, getSignalById);
+router.get("/payments",           adminProtect, getAllVipPayments);
+router.put("/payment/:id/status", adminProtect, updateVipPaymentStatus);
+router.post("/signals",           adminProtect, uploadSignalImg.single("image"), uploadSignal);
+router.put("/signals/:id",        adminProtect, uploadSignalImg.single("image"), updateSignal);
+router.delete("/signals/:id",     adminProtect, deleteSignal);
+
+// ✅ VIP user routes
+router.get("/signals",     protect, vipProtect, getSignals);
 router.get("/signals/:id", protect, vipProtect, getSignalById);
-
-// ✅ Admin routes
-router.get("/payments", protect, adminProtect, getAllVipPayments);
-router.put("/payment/:id/status", protect, adminProtect, updateVipPaymentStatus);
-router.post("/signals", protect, adminProtect, uploadSignalImg.single("image"), uploadSignal);
-router.put("/signals/:id", protect, adminProtect, uploadSignalImg.single("image"), updateSignal);
-router.delete("/signals/:id", protect, adminProtect, deleteSignal);
 
 export default router;

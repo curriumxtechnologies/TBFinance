@@ -1,6 +1,6 @@
 import express from "express";
-import { googleAuth, logoutUser, updateProfile } from "../controllers/userController.js";
-import {protect} from "../middleware/authMiddleware.js";
+import { googleAuth, logoutUser, updateProfile, getUsers } from "../controllers/userController.js";
+import {protect, adminProtect} from "../middleware/authMiddleware.js";
 
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
@@ -37,5 +37,8 @@ cloudinary.api
 router.post("/google", googleAuth);
 router.post("/logout", logoutUser);
 router.put("/profile", protect, upload.single('profile'), updateProfile);
+
+//admin routes
+router.get("/", adminProtect, getUsers);
 
 export default router;

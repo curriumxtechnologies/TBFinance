@@ -1,0 +1,546 @@
+<!doctype html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Users & MT5 | TheBrave Admin</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      * { font-family: "Manrope", sans-serif; }
+      body { background: #0a0f18; overflow: hidden; }
+      .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+      .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background: #243049; border-radius: 10px; }
+      .lucide { width: 20px; height: 20px; stroke-width: 2; }
+      .mobile-sidebar { position: fixed; top: 0; left: 0; width: 260px; height: 100%; background: #0f1219; border-right: 1px solid #1e293b; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); z-index: 1000; overflow-y: auto; }
+      .mobile-sidebar.open { transform: translateX(0); }
+      .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 999; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
+      .sidebar-overlay.open { opacity: 1; visibility: visible; }
+      .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+      .modal-backdrop.hidden { display: none; }
+      .nav-active   { background: rgba(17,82,212,0.1); color: #6090ff; border: 1px solid rgba(17,82,212,0.2); font-weight: 700; }
+      .nav-inactive { color: #94a3b8; }
+      .nav-inactive:hover { color: white; background: rgba(255,255,255,0.05); }
+      .collapse-content { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+      .collapse-content.open { max-height: 700px; }
+      .chevron-icon { transition: transform 0.25s; }
+      .chevron-icon.open { transform: rotate(180deg); }
+      .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.25); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      #toast { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999; transform: translateY(80px); opacity: 0; transition: all 0.3s ease; pointer-events: none; }
+      #toast.show { transform: translateY(0); opacity: 1; }
+    </style>
+  </head>
+
+  <body class="text-slate-100 antialiased">
+
+    <div id="toast" class="px-4 py-3 rounded-xl border text-sm font-medium flex items-center gap-2 shadow-2xl max-w-sm"></div>
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+    <!-- Mobile Sidebar -->
+    <div id="mobileSidebar" class="mobile-sidebar lg:hidden">
+      <div class="p-5 flex items-center justify-between border-b border-[#1e293b]">
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
+            <i data-lucide="shield" class="w-4 h-4 text-white"></i>
+          </div>
+          <div>
+            <p class="text-white font-extrabold text-sm leading-none">Admin Portal</p>
+            <p class="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">TheBrave Finance</p>
+          </div>
+        </div>
+        <button id="closeMobileSidebar" class="text-slate-400 hover:text-white p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <nav class="px-3 py-5 space-y-1">
+        <a href="admin-panel.html"   class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="banknote" class="w-4 h-4"></i> Deposit Reviews</a>
+        <a href="admin-vip.html"     class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="badge-check" class="w-4 h-4"></i> VIP Payments</a>
+        <a href="admin-users.html"   class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-active"><i data-lucide="users" class="w-4 h-4"></i> Users & MT5</a>
+        <a href="admin-signals.html" class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="radio" class="w-4 h-4"></i> VIP Signals</a>
+      </nav>
+      <div class="p-4 border-t border-[#1e293b]">
+        <button id="mobileLogoutBtn" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all">
+          <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+        </button>
+      </div>
+    </div>
+
+    <div class="flex h-screen overflow-hidden">
+      <!-- Desktop Sidebar -->
+      <aside class="w-60 flex-shrink-0 bg-[#0f1219] border-r border-[#1e293b] flex-col hidden lg:flex">
+        <div class="p-5 flex items-center gap-3 border-b border-[#1e293b]">
+          <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
+            <i data-lucide="shield" class="w-4 h-4 text-white"></i>
+          </div>
+          <div>
+            <p class="text-white font-extrabold text-sm leading-none">Admin Portal</p>
+            <p class="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">TheBrave Finance</p>
+          </div>
+        </div>
+        <nav class="flex-1 px-3 py-5 space-y-1">
+          <a href="admin-panel.html"   class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="banknote" class="w-4 h-4"></i> Deposit Reviews</a>
+          <a href="admin-vip.html"     class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="badge-check" class="w-4 h-4"></i> VIP Payments</a>
+          <a href="admin-users.html"   class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-active"><i data-lucide="users" class="w-4 h-4"></i> Users & MT5</a>
+          <a href="admin-signals.html" class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="radio" class="w-4 h-4"></i> VIP Signals</a>
+        </nav>
+        <div class="p-4 border-t border-[#1e293b]">
+          <button id="adminLogoutBtn" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all">
+            <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+          </button>
+        </div>
+      </aside>
+
+      <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <header class="h-14 flex-shrink-0 border-b border-[#1e293b] bg-[#0f1219]/80 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <button id="menuToggle" class="lg:hidden p-2 text-slate-400 hover:text-white">
+              <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
+            <h1 class="text-base font-bold text-white">👥 Users & MT5 Accounts</h1>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="h-6 w-px bg-[#1e293b]"></div>
+            <div class="flex items-center gap-2">
+              <div class="h-8 w-8 rounded-full bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
+                <span id="adminInitial" class="text-xs font-bold text-white">A</span>
+              </div>
+              <span id="adminName" class="text-sm font-medium hidden sm:block text-slate-300">Admin</span>
+            </div>
+          </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 bg-[#0a0f18] space-y-5">
+
+          <div class="flex flex-wrap justify-between items-center gap-3">
+            <p class="text-slate-400 text-xs">Assign, edit, or remove MT5 accounts for users</p>
+            <div class="flex gap-2">
+              <div class="relative">
+                <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
+                <input id="searchUsers" type="text" placeholder="Search users..." class="pl-9 pr-4 py-2 bg-[#0f1219] border border-[#1e293b] rounded-xl text-sm text-white placeholder:text-slate-600 focus:border-blue-600 outline-none w-56" />
+              </div>
+              <button onclick="loadUsers()" class="bg-[#1e293b] hover:bg-[#2d3a4e] text-slate-300 px-3 py-2 rounded-xl text-sm flex items-center gap-2 transition-all">
+                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Eligible banner -->
+          <div id="eligibleBanner" class="hidden p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 items-center gap-3">
+            <i data-lucide="zap" class="w-5 h-5 text-emerald-400 flex-shrink-0"></i>
+            <div>
+              <p class="text-emerald-400 font-bold text-sm" id="eligibleCount">0 users eligible for live account</p>
+              <p class="text-emerald-400/70 text-xs">These users have approved deposits but no live account yet.</p>
+            </div>
+          </div>
+
+          <!-- Users Grid -->
+          <div id="usersGrid" class="grid lg:grid-cols-2 gap-4">
+            <div class="lg:col-span-2 text-center py-16 text-slate-500 text-sm">Loading users...</div>
+          </div>
+
+        </main>
+      </div>
+    </div>
+
+    <!-- MT5 Modal -->
+    <div id="mt5Modal" class="modal-backdrop hidden">
+      <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl w-full max-w-md p-6 shadow-2xl max-h-[90vh] overflow-y-auto custom-scrollbar">
+        <div class="flex justify-between items-center mb-5">
+          <h3 class="text-lg font-bold text-white" id="mt5ModalTitle">Assign MT5 Account</h3>
+          <button onclick="closeMt5Modal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+        <div id="mt5ModalError" class="hidden mb-4 text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3"></div>
+        <div class="mb-4 p-3 bg-black/20 rounded-xl text-sm">
+          <p class="text-slate-400">User: <span id="mt5UserName" class="text-white font-medium">—</span></p>
+          <p class="text-slate-500 text-xs mt-1">ID: <span id="mt5UserId" class="text-slate-400 font-mono text-[10px]">—</span></p>
+        </div>
+        <div class="space-y-4">
+          <div>
+            <label class="text-xs font-bold uppercase text-slate-400 block mb-1.5">Account Type</label>
+            <select id="mt5Type" class="w-full bg-black/40 border border-[#1e293b] rounded-xl px-4 py-2.5 text-white outline-none focus:border-blue-600">
+              <option value="demo">Demo Account</option>
+              <option value="live">Live Account</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-bold uppercase text-slate-400 block mb-1.5">MT5 Login ID</label>
+            <input type="text" id="mt5Login" placeholder="e.g., 12345678" class="w-full bg-black/40 border border-[#1e293b] rounded-xl px-4 py-2.5 text-white placeholder:text-slate-600 outline-none focus:border-blue-600" />
+          </div>
+          <div>
+            <label class="text-xs font-bold uppercase text-slate-400 block mb-1.5">Password</label>
+            <input type="text" id="mt5Password" placeholder="MT5 account password" class="w-full bg-black/40 border border-[#1e293b] rounded-xl px-4 py-2.5 text-white placeholder:text-slate-600 outline-none focus:border-blue-600" />
+          </div>
+          <div>
+            <label class="text-xs font-bold uppercase text-slate-400 block mb-1.5">Server</label>
+            <input type="text" id="mt5Server" placeholder="TheBrave-Demo / TheBrave-Live" class="w-full bg-black/40 border border-[#1e293b] rounded-xl px-4 py-2.5 text-white placeholder:text-slate-600 outline-none focus:border-blue-600" />
+          </div>
+          <div>
+            <label class="text-xs font-bold uppercase text-slate-400 block mb-1.5">Balance (USD)</label>
+            <input type="number" id="mt5Balance" placeholder="0" class="w-full bg-black/40 border border-[#1e293b] rounded-xl px-4 py-2.5 text-white placeholder:text-slate-600 outline-none focus:border-blue-600" />
+          </div>
+          <div class="flex gap-3 pt-2">
+            <button id="mt5SaveBtn" onclick="saveMt5Account()" class="flex-1 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2">
+              <i data-lucide="check" class="w-4 h-4"></i> Save Account
+            </button>
+            <button onclick="closeMt5Modal()" class="px-4 py-3 bg-[#1e293b] hover:bg-[#2d3a4e] text-slate-300 rounded-xl text-sm">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div id="deleteModal" class="modal-backdrop hidden">
+      <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl w-full max-w-sm p-6 shadow-2xl text-center space-y-4">
+        <div class="h-14 w-14 rounded-full bg-rose-500/10 flex items-center justify-center mx-auto">
+          <i data-lucide="trash-2" class="w-6 h-6 text-rose-400"></i>
+        </div>
+        <h3 class="text-white font-bold text-lg">Confirm Delete</h3>
+        <p id="deleteMessage" class="text-slate-400 text-sm">Are you sure?</p>
+        <div class="flex gap-3">
+          <button id="confirmDeleteBtn" class="flex-1 py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl transition-all">Delete</button>
+          <button onclick="closeDeleteModal()" class="flex-1 py-3 bg-[#1e293b] hover:bg-[#2d3a4e] text-slate-300 rounded-xl">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="./js/api.js"></script>
+    <script>
+      lucide.createIcons();
+
+      // ─── Auth Guard ───────────────────────────────────────────
+      const admin = JSON.parse(localStorage.getItem("admin") || "null");
+      if (!admin) window.location.href = "admin-login.html";
+      if (admin) {
+        document.getElementById("adminName").textContent    = admin.name || "Admin";
+        document.getElementById("adminInitial").textContent = (admin.name || "A")[0].toUpperCase();
+      }
+
+      // ─── Toast ────────────────────────────────────────────────
+      function toast(msg, type = "success") {
+        const el = document.getElementById("toast");
+        const colors = { success: "bg-emerald-900/90 border-emerald-500/40 text-emerald-300", error: "bg-rose-900/90 border-rose-500/40 text-rose-300" };
+        el.className = `px-4 py-3 rounded-xl border text-sm font-medium flex items-center gap-2 shadow-2xl max-w-sm ${colors[type]}`;
+        el.innerHTML = `<span>${msg}</span>`;
+        el.classList.add("show");
+        setTimeout(() => el.classList.remove("show"), 3500);
+      }
+
+      // ─── Mobile Sidebar ───────────────────────────────────────
+      document.getElementById("menuToggle").addEventListener("click", () => {
+        document.getElementById("mobileSidebar").classList.add("open");
+        document.getElementById("sidebarOverlay").classList.add("open");
+      });
+      document.getElementById("closeMobileSidebar").addEventListener("click", () => {
+        document.getElementById("mobileSidebar").classList.remove("open");
+        document.getElementById("sidebarOverlay").classList.remove("open");
+      });
+      document.getElementById("sidebarOverlay").addEventListener("click", () => {
+        document.getElementById("mobileSidebar").classList.remove("open");
+        document.getElementById("sidebarOverlay").classList.remove("open");
+      });
+
+      // ─── Delete Modal ─────────────────────────────────────────
+      let deleteCallback = null;
+      function openDeleteModal(msg, cb) {
+        document.getElementById("deleteMessage").textContent = msg;
+        deleteCallback = cb;
+        document.getElementById("deleteModal").classList.remove("hidden");
+      }
+      function closeDeleteModal() {
+        document.getElementById("deleteModal").classList.add("hidden");
+        deleteCallback = null;
+      }
+      document.getElementById("confirmDeleteBtn").addEventListener("click", async () => {
+        if (deleteCallback) await deleteCallback();
+        closeDeleteModal();
+      });
+
+      // ─── State ────────────────────────────────────────────────
+      let usersData   = [];
+      let allAccounts = [];
+      let mt5EditingId  = null;
+      let mt5TargetUser = null;
+
+      // ─── Load Users ───────────────────────────────────────────
+      async function loadUsers() {
+        const grid = document.getElementById("usersGrid");
+        grid.innerHTML = `<div class="lg:col-span-2 text-center py-16 text-slate-500 text-sm">Loading users...</div>`;
+
+        try {
+          const [users, eligible, accounts] = await Promise.all([
+            API.get("/users"),
+            API.get("/trading/eligible-for-live"),
+            API.get("/trading"),
+          ]);
+
+          usersData   = users;
+          allAccounts = accounts;
+
+          const banner = document.getElementById("eligibleBanner");
+          const count  = document.getElementById("eligibleCount");
+          if (eligible.length > 0) {
+            count.textContent = `${eligible.length} user${eligible.length > 1 ? "s" : ""} eligible for live account`;
+            banner.classList.remove("hidden");
+            banner.classList.add("flex");
+          } else {
+            banner.classList.add("hidden");
+          }
+
+          renderUsersGrid();
+        } catch (err) {
+          grid.innerHTML = `<div class="lg:col-span-2 text-center py-16 text-slate-500 text-sm">Failed to load: ${err.message}</div>`;
+        }
+      }
+
+      function renderUsersGrid() {
+        const grid   = document.getElementById("usersGrid");
+        const search = document.getElementById("searchUsers").value.toLowerCase();
+        const filtered = usersData.filter(u =>
+          u.name?.toLowerCase().includes(search) ||
+          u.email?.toLowerCase().includes(search)
+        );
+
+        if (!filtered.length) {
+          grid.innerHTML = `<div class="lg:col-span-2 text-center py-16 text-slate-500 text-sm">No users found.</div>`;
+          return;
+        }
+
+        const colors = [
+          "from-blue-700 to-blue-500",
+          "from-purple-700 to-purple-500",
+          "from-emerald-700 to-emerald-500",
+          "from-rose-700 to-rose-500",
+          "from-amber-700 to-amber-500",
+        ];
+
+        grid.innerHTML = filtered.map(u => {
+          const demo  = allAccounts.find(a => a.user?._id === u._id && a.type === "demo");
+          const live  = allAccounts.find(a => a.user?._id === u._id && a.type === "live");
+          const color = colors[parseInt(u._id?.slice(-1), 16) % colors.length] || colors[0];
+          const safeName = (u.name || "").replace(/'/g, "\\'").replace(/"/g, "&quot;");
+
+          return `
+            <div class="bg-[#0f1219] border border-[#1e293b] rounded-xl overflow-hidden">
+
+              <!-- User Header -->
+              <div class="p-4 flex items-center gap-3 cursor-pointer hover:bg-white/5 transition" onclick="toggleCard('${u._id}')">
+                <div class="h-10 w-10 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  ${u.profile
+                    ? `<img src="${u.profile}" alt="" class="w-full h-full object-cover" />`
+                    : `<span class="text-white font-bold text-sm">${(u.name || "U")[0].toUpperCase()}</span>`}
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-white font-bold text-sm truncate">${u.name || "—"}</p>
+                  <p class="text-slate-500 text-xs truncate">${u.email || ""}</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button onclick="event.stopPropagation(); openAssignModal('${u._id}', '${safeName}', 'demo')"
+                    class="bg-blue-700/20 hover:bg-blue-700 text-blue-400 hover:text-white px-3 py-1.5 rounded-lg text-xs flex items-center gap-1 transition-all whitespace-nowrap">
+                    <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Assign
+                  </button>
+                  <i data-lucide="chevron-down" class="chevron-icon w-4 h-4 text-slate-500 flex-shrink-0" id="chevron-${u._id}"></i>
+                </div>
+              </div>
+
+              <!-- Collapsible Body -->
+              <div class="collapse-content" id="collapse-${u._id}">
+                <div class="border-t border-[#1e293b] p-4 space-y-3">
+
+                  <!-- Demo -->
+                  <div class="bg-black/20 rounded-xl p-3">
+                    <div class="flex items-center justify-between mb-2">
+                      <div class="flex items-center gap-2">
+                        <i data-lucide="laptop" class="w-4 h-4 text-slate-400"></i>
+                        <span class="text-xs font-bold text-slate-400 uppercase">Demo</span>
+                        ${demo
+                          ? `<span class="text-[9px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400">Active</span>`
+                          : `<span class="text-[9px] px-2 py-0.5 rounded bg-slate-500/20 text-slate-400">Not Assigned</span>`}
+                      </div>
+                      <div class="flex gap-1">
+                        ${demo ? `
+                          <button onclick="openEditMt5('${u._id}', '${safeName}', '${demo._id}', 'demo', '${demo.loginId}', '${demo.password || ""}', '${demo.server}', ${demo.balance})"
+                            class="p-1.5 hover:bg-blue-700/20 rounded-lg transition">
+                            <i data-lucide="edit-2" class="w-3.5 h-3.5 text-slate-400"></i>
+                          </button>
+                          <button onclick="confirmDeleteAccount('${demo._id}', 'demo')"
+                            class="p-1.5 hover:bg-rose-500/20 rounded-lg transition">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5 text-slate-400"></i>
+                          </button>
+                        ` : `
+                          <button onclick="openAssignModal('${u._id}', '${safeName}', 'demo')"
+                            class="p-1.5 hover:bg-blue-700/20 rounded-lg transition">
+                            <i data-lucide="plus" class="w-3.5 h-3.5 text-blue-400"></i>
+                          </button>
+                        `}
+                      </div>
+                    </div>
+                    ${demo ? `
+                      <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div><span class="text-slate-500">Login: </span><span class="text-white font-mono">${demo.loginId}</span></div>
+                        <div><span class="text-slate-500">Password: </span><span class="text-white font-mono">${demo.password || "—"}</span></div>
+                        <div><span class="text-slate-500">Server: </span><span class="text-white">${demo.server}</span></div>
+                        <div><span class="text-slate-500">Balance: </span><span class="text-emerald-400 font-bold">$${Number(demo.balance).toLocaleString()}</span></div>
+                      </div>
+                    ` : `<p class="text-slate-600 text-xs text-center py-1">No demo account assigned</p>`}
+                  </div>
+
+                  <!-- Live -->
+                  <div class="bg-black/20 rounded-xl p-3">
+                    <div class="flex items-center justify-between mb-2">
+                      <div class="flex items-center gap-2">
+                        <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
+                        <span class="text-xs font-bold text-slate-400 uppercase">Live</span>
+                        ${live
+                          ? `<span class="text-[9px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400">Active</span>`
+                          : `<span class="text-[9px] px-2 py-0.5 rounded bg-slate-500/20 text-slate-400">Not Assigned</span>`}
+                      </div>
+                      <div class="flex gap-1">
+                        ${live ? `
+                          <button onclick="openEditMt5('${u._id}', '${safeName}', '${live._id}', 'live', '${live.loginId}', '${live.password || ""}', '${live.server}', ${live.balance})"
+                            class="p-1.5 hover:bg-blue-700/20 rounded-lg transition">
+                            <i data-lucide="edit-2" class="w-3.5 h-3.5 text-slate-400"></i>
+                          </button>
+                          <button onclick="confirmDeleteAccount('${live._id}', 'live')"
+                            class="p-1.5 hover:bg-rose-500/20 rounded-lg transition">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5 text-slate-400"></i>
+                          </button>
+                        ` : `
+                          <button onclick="openAssignModal('${u._id}', '${safeName}', 'live')"
+                            class="p-1.5 hover:bg-blue-700/20 rounded-lg transition">
+                            <i data-lucide="plus" class="w-3.5 h-3.5 text-blue-400"></i>
+                          </button>
+                        `}
+                      </div>
+                    </div>
+                    ${live ? `
+                      <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div><span class="text-slate-500">Login: </span><span class="text-white font-mono">${live.loginId}</span></div>
+                        <div><span class="text-slate-500">Password: </span><span class="text-white font-mono">${live.password || "—"}</span></div>
+                        <div><span class="text-slate-500">Server: </span><span class="text-white">${live.server}</span></div>
+                        <div><span class="text-slate-500">Balance: </span><span class="text-emerald-400 font-bold">$${Number(live.balance).toLocaleString()}</span></div>
+                      </div>
+                    ` : `<p class="text-slate-600 text-xs text-center py-1">No live account assigned</p>`}
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          `;
+        }).join("");
+
+        lucide.createIcons();
+      }
+
+      // ─── Collapsible ──────────────────────────────────────────
+      function toggleCard(userId) {
+        document.getElementById(`collapse-${userId}`).classList.toggle("open");
+        document.getElementById(`chevron-${userId}`).classList.toggle("open");
+      }
+
+      // ─── Search ───────────────────────────────────────────────
+      document.getElementById("searchUsers").addEventListener("input", renderUsersGrid);
+
+      // ─── MT5 Modal ────────────────────────────────────────────
+      function openAssignModal(userId, userName, type = "demo") {
+        mt5TargetUser  = userId;
+        mt5EditingId   = null;
+        document.getElementById("mt5ModalTitle").textContent = `Assign ${type === "demo" ? "Demo" : "Live"} Account`;
+        document.getElementById("mt5UserName").textContent   = userName;
+        document.getElementById("mt5UserId").textContent     = userId;
+        document.getElementById("mt5Type").value     = type;
+        document.getElementById("mt5Login").value    = "";
+        document.getElementById("mt5Password").value = "";
+        document.getElementById("mt5Server").value   = type === "demo" ? "TheBrave-Demo" : "TheBrave-Live";
+        document.getElementById("mt5Balance").value  = type === "demo" ? "10000" : "";
+        document.getElementById("mt5ModalError").classList.add("hidden");
+        document.getElementById("mt5Modal").classList.remove("hidden");
+        lucide.createIcons();
+      }
+
+      function openEditMt5(userId, userName, accountId, type, loginId, password, server, balance) {
+        mt5TargetUser = userId;
+        mt5EditingId  = accountId;
+        document.getElementById("mt5ModalTitle").textContent = `Edit ${type === "demo" ? "Demo" : "Live"} Account`;
+        document.getElementById("mt5UserName").textContent   = userName;
+        document.getElementById("mt5UserId").textContent     = userId;
+        document.getElementById("mt5Type").value     = type;
+        document.getElementById("mt5Login").value    = loginId;
+        document.getElementById("mt5Password").value = password;
+        document.getElementById("mt5Server").value   = server;
+        document.getElementById("mt5Balance").value  = balance;
+        document.getElementById("mt5ModalError").classList.add("hidden");
+        document.getElementById("mt5Modal").classList.remove("hidden");
+        lucide.createIcons();
+      }
+
+      function closeMt5Modal() {
+        document.getElementById("mt5Modal").classList.add("hidden");
+        mt5EditingId  = null;
+        mt5TargetUser = null;
+      }
+
+      async function saveMt5Account() {
+        const type     = document.getElementById("mt5Type").value;
+        const loginId  = document.getElementById("mt5Login").value.trim();
+        const password = document.getElementById("mt5Password").value.trim();
+        const server   = document.getElementById("mt5Server").value.trim();
+        const balance  = document.getElementById("mt5Balance").value;
+        const errEl    = document.getElementById("mt5ModalError");
+
+        if (!loginId || !password || !server) {
+          errEl.textContent = "Login ID, password, and server are required.";
+          errEl.classList.remove("hidden");
+          return;
+        }
+
+        const btn = document.getElementById("mt5SaveBtn");
+        btn.disabled = true;
+        btn.innerHTML = `<span class="spinner"></span>`;
+
+        try {
+          if (mt5EditingId) {
+            await API.put(`/trading/${mt5EditingId}`, { loginId, password, server, balance: Number(balance) });
+            toast("Account updated", "success");
+          } else {
+            await API.post(`/trading/${type}/${mt5TargetUser}`, { loginId, password, server, balance: Number(balance) });
+            toast(`${type === "demo" ? "Demo" : "Live"} account assigned`, "success");
+          }
+          closeMt5Modal();
+          loadUsers();
+        } catch (err) {
+          errEl.textContent = err.message || "Failed to save account.";
+          errEl.classList.remove("hidden");
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> Save Account`;
+          lucide.createIcons();
+        }
+      }
+
+      function confirmDeleteAccount(accountId, type) {
+        openDeleteModal(`Remove this ${type} account permanently?`, async () => {
+          try {
+            await API.delete(`/trading/${accountId}`);
+            toast("Account removed", "success");
+            loadUsers();
+          } catch (err) {
+            toast(err.message || "Failed to remove", "error");
+          }
+        });
+      }
+
+      // ─── Logout ───────────────────────────────────────────────
+      async function handleLogout() {
+        try { await API.post("/admin/logout"); } catch {}
+        localStorage.removeItem("admin");
+        window.location.href = "admin-login.html";
+      }
+      document.getElementById("adminLogoutBtn").addEventListener("click", handleLogout);
+      document.getElementById("mobileLogoutBtn").addEventListener("click", handleLogout);
+
+      // ─── Init ─────────────────────────────────────────────────
+      loadUsers();
+    </script>
+  </body>
+</html> 

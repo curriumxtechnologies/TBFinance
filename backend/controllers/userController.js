@@ -168,6 +168,11 @@ const updateProfile = asyncHandler(async (req, res) => {
   });
 });
 
+const getUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({}).select("-password").sort({ createdAt: -1 });
+  res.status(200).json(users);
+});
+
 const logoutUser = asyncHandler(async (req, res) => {
   const isProd = process.env.NODE_ENV === "production";
 
@@ -182,4 +187,4 @@ const logoutUser = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 });
 
-export { googleAuth, updateProfile,  logoutUser };
+export { googleAuth, updateProfile, getUsers,  logoutUser };
