@@ -1288,6 +1288,11 @@
                     "bg-emerald-accent/10 text-emerald-accent border-emerald-accent/20",
                   text: "Approved",
                   message: r.adminMessage || "Recovery team is on your case",
+                  whatsappContact: {
+                    label: "Contact Special Agent",
+                    number: "+16139429020",
+                    link: "https://wa.me/16139429020",
+                  },
                   icon: "check-circle-2",
                   iconWrap: "bg-emerald-accent/10 text-emerald-accent",
                 },
@@ -1354,15 +1359,38 @@
                       </div>
                     </div>
 
-                    <p class="text-xs mt-3 ${
-                      r.status === "approved"
-                        ? "text-emerald-accent"
-                        : r.status === "rejected"
-                          ? "text-rose-400"
-                          : "text-amber-400"
-                    }">
-                      ${statusConfig.message}
-                    </p>
+                    <div class="mt-3">
+                      <p class="text-xs ${
+                        r.status === "approved"
+                          ? "text-emerald-accent"
+                          : r.status === "rejected"
+                            ? "text-rose-400"
+                            : "text-amber-400"
+                      }">
+                        ${statusConfig.message}
+                      </p>
+
+                      ${
+                        r.status === "approved" && statusConfig.whatsappContact
+                          ? `
+                            <div class="mt-3 p-3 rounded-xl bg-emerald-accent/10 border border-emerald-accent/20">
+                              <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-2">
+                                Special Agent Contact
+                              </p>
+
+                              <a
+                                href="${statusConfig.whatsappContact.link}"
+                                target="_blank"
+                                class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all"
+                              >
+                                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                                ${statusConfig.whatsappContact.label}
+                              </a>
+                            </div>
+                          `
+                          : ""
+                      }
+                    </div>
                   </div>
                 </div>
               `;
