@@ -7,11 +7,22 @@ const API = (() => {
 
   function getStoredToken(endpoint = "") {
     const lowerEndpoint = endpoint.toLowerCase();
-
+    const isAdminLoggedIn = localStorage.getItem("admin_token") !== null;
+    const isUserLoggedIn = localStorage.getItem("token") !== null;
+    
+    // If admin is logged in, use admin token for ALL requests
+    // This ensures admin can access both admin and regular user endpoints
+    if (isAdminLoggedIn) {
+      return localStorage.getItem("admin_token");
+    }
+    
+    // If admin is not logged in, check for regular user token
+    // For admin endpoints (like registration/login), use admin_token if available
     if (lowerEndpoint.startsWith("/admin") || lowerEndpoint.startsWith("admin")) {
       return localStorage.getItem("admin_token");
     }
-
+    
+    // Default to regular user token
     return localStorage.getItem("token");
   }
 
@@ -38,6 +49,19 @@ const API = (() => {
       const isJson = contentType.includes("application/json");
       const data = isJson ? await response.json() : await response.text();
 
+      // Handle unauthorized errors - clear admin token if it's invalid
+      if (response.status === 401) {
+        const errorMessage = data?.message || data?.error || "";
+        if (errorMessage.includes("admin") && isAdminLoggedIn()) {
+          // If admin token is invalid, clear it and redirect to login
+          localStorage.removeItem("admin_token");
+          localStorage.removeItem("admin");
+          if (window.location.pathname.includes("admin-panel")) {
+            window.location.href = "admin-login.html";
+          }
+        }
+      }
+
       if (!response.ok) {
         throw new Error(
           data?.message || data?.error || `Request failed with status ${response.status}`
@@ -49,6 +73,16 @@ const API = (() => {
       console.error("API Error:", error);
       throw error;
     }
+  }
+
+  // Helper function to check if admin is logged in
+  function isAdminLoggedIn() {
+    return localStorage.getItem("admin_token") !== null;
+  }
+
+  // Helper function to check if user is logged in
+  function isUserLoggedIn() {
+    return localStorage.getItem("token") !== null;
   }
 
   return {
@@ -104,6 +138,30 @@ const API = (() => {
         body: formData,
         headers,
       });
+    },
+
+    // Helper methods to check auth status
+    isAdminLoggedIn,
+    isUserLoggedIn,
+    
+    // Method to logout admin
+    adminLogout: async () => {
+      try {
+        await API.post("/admin/logout");
+      } finally {
+        localStorage.removeItem("admin_token");
+        localStorage.removeItem("admin");
+      }
+    },
+    
+    // Method to logout user
+    userLogout: async () => {
+      try {
+        await API.post("/logout");
+      } finally {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+      }
     },
   };
 })();
