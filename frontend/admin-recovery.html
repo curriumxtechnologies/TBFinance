@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
-    <title>VIP Payments | TheBrave Admin</title>
+    <title>Recovery Requests | TheBrave Admin</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
@@ -171,34 +171,40 @@
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
+
       <nav class="px-3 py-5 space-y-1">
         <a
           href="admin-panel.html"
           class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"
-          ><i data-lucide="banknote" class="w-4 h-4"></i> Deposit Reviews</a
         >
+          <i data-lucide="banknote" class="w-4 h-4"></i> Deposit Reviews
+        </a>
         <a
           href="admin-vip.html"
-          class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-active"
-          ><i data-lucide="badge-check" class="w-4 h-4"></i> VIP Payments</a
+          class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"
         >
+          <i data-lucide="badge-check" class="w-4 h-4"></i> VIP Payments
+        </a>
         <a
           href="admin-recovery.html"
-          class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"
+          class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-active"
         >
           <i data-lucide="shield-check" class="w-4 h-4"></i> Recovery Requests
         </a>
         <a
           href="admin-users.html"
           class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"
-          ><i data-lucide="users" class="w-4 h-4"></i> Users & MT5</a
         >
+          <i data-lucide="users" class="w-4 h-4"></i> Users & MT5
+        </a>
         <a
           href="admin-signals.html"
           class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"
-          ><i data-lucide="radio" class="w-4 h-4"></i> VIP Signals</a
         >
+          <i data-lucide="radio" class="w-4 h-4"></i> VIP Signals
+        </a>
       </nav>
+
       <div class="p-4 border-t border-[#1e293b]">
         <button
           id="mobileLogoutBtn"
@@ -231,38 +237,48 @@
             </p>
           </div>
         </div>
+
         <nav class="flex-1 px-3 py-5 space-y-1">
           <a
             href="admin-panel.html"
             class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"
-            ><i data-lucide="banknote" class="w-4 h-4"></i> Deposit Reviews</a
           >
+            <i data-lucide="banknote" class="w-4 h-4"></i> Deposit Reviews
+          </a>
+
           <a
             href="admin-vip.html"
-            class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-active"
-            ><i data-lucide="badge-check" class="w-4 h-4"></i> VIP Payments
-            <span
-              id="vipBadge"
-              class="ml-auto hidden bg-amber-500/20 text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded-full"
-            ></span
-          ></a>
-          <a
-            href="admin-recovery.html"
             class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"
           >
-            <i data-lucide="shield-check" class="w-4 h-4"></i> Recovery Requests
+            <i data-lucide="badge-check" class="w-4 h-4"></i> VIP Payments
           </a>
+
+          <a
+            href="admin-recovery.html"
+            class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-active"
+          >
+            <i data-lucide="shield-check" class="w-4 h-4"></i> Recovery Requests
+            <span
+              id="recoveryBadge"
+              class="ml-auto hidden bg-amber-500/20 text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded-full"
+            ></span>
+          </a>
+
           <a
             href="admin-users.html"
             class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"
-            ><i data-lucide="users" class="w-4 h-4"></i> Users & MT5</a
           >
+            <i data-lucide="users" class="w-4 h-4"></i> Users & MT5
+          </a>
+
           <a
             href="admin-signals.html"
             class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"
-            ><i data-lucide="radio" class="w-4 h-4"></i> VIP Signals</a
           >
+            <i data-lucide="radio" class="w-4 h-4"></i> VIP Signals
+          </a>
         </nav>
+
         <div class="p-4 border-t border-[#1e293b]">
           <button
             id="adminLogoutBtn"
@@ -284,23 +300,25 @@
             >
               <i data-lucide="menu" class="w-5 h-5"></i>
             </button>
-            <h1 class="text-base font-bold text-white">🏆 VIP Payments</h1>
+            <h1 class="text-base font-bold text-white">🛡️ Recovery Requests</h1>
           </div>
+
           <div class="flex items-center gap-3">
             <div class="h-6 w-px bg-[#1e293b]"></div>
             <div class="flex items-center gap-2">
               <div
                 class="h-8 w-8 rounded-full bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center"
               >
-                <span id="adminInitial" class="text-xs font-bold text-white"
-                  >A</span
-                >
+                <span id="adminInitial" class="text-xs font-bold text-white">
+                  A
+                </span>
               </div>
               <span
                 id="adminName"
                 class="text-sm font-medium hidden sm:block text-slate-300"
-                >Admin</span
               >
+                Admin
+              </span>
             </div>
           </div>
         </header>
@@ -308,7 +326,6 @@
         <main
           class="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 bg-[#0a0f18] space-y-5"
         >
-          <!-- Stats -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl p-5">
               <div class="flex items-center justify-between">
@@ -330,14 +347,15 @@
                 </div>
               </div>
             </div>
+
             <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl p-5">
               <div class="flex items-center justify-between">
                 <div>
                   <p class="text-slate-500 text-xs uppercase tracking-wider">
-                    Active VIP Members
+                    Approved
                   </p>
                   <p
-                    id="statActive"
+                    id="statApproved"
                     class="text-2xl font-bold text-emerald-400 mt-1"
                   >
                     —
@@ -347,38 +365,32 @@
                   class="h-10 w-10 rounded-xl bg-emerald-500/10 flex items-center justify-center"
                 >
                   <i
-                    data-lucide="badge-check"
+                    data-lucide="check-circle-2"
                     class="w-5 h-5 text-emerald-400"
                   ></i>
                 </div>
               </div>
             </div>
+
             <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl p-5">
               <div class="flex items-center justify-between">
                 <div>
                   <p class="text-slate-500 text-xs uppercase tracking-wider">
-                    Total Revenue
+                    Total Requests
                   </p>
-                  <p
-                    id="statRevenue"
-                    class="text-2xl font-bold text-white mt-1"
-                  >
+                  <p id="statTotal" class="text-2xl font-bold text-white mt-1">
                     —
                   </p>
                 </div>
                 <div
                   class="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center"
                 >
-                  <i
-                    data-lucide="trending-up"
-                    class="w-5 h-5 text-blue-400"
-                  ></i>
+                  <i data-lucide="layers" class="w-5 h-5 text-blue-400"></i>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Filter + Refresh -->
           <div class="flex flex-wrap justify-between items-center gap-3">
             <select
               id="filterStatus"
@@ -389,26 +401,29 @@
               <option value="approved">Approved</option>
               <option value="rejected">Rejected</option>
             </select>
+
             <button
-              onclick="loadVipPayments()"
+              onclick="loadRecoveryRequests()"
               class="bg-[#1e293b] hover:bg-[#2d3a4e] text-slate-300 px-4 py-2 rounded-xl text-sm flex items-center gap-2 transition-all"
             >
               <i data-lucide="refresh-cw" class="w-4 h-4"></i> Refresh
             </button>
           </div>
 
-          <!-- Table -->
           <div
             class="bg-[#0f1219] border border-[#1e293b] rounded-2xl overflow-hidden"
           >
             <div
               class="px-5 py-4 border-b border-[#1e293b] flex justify-between items-center"
             >
-              <h3 class="font-bold text-white text-sm">All VIP Payments</h3>
-              <span class="text-xs text-slate-500"
-                >Approve to grant 5-day VIP access</span
-              >
+              <h3 class="font-bold text-white text-sm">
+                All Recovery Requests
+              </h3>
+              <span class="text-xs text-slate-500">
+                Review payment proof before approval
+              </span>
             </div>
+
             <div class="overflow-x-auto">
               <table class="w-full text-left">
                 <thead class="bg-black/20 border-b border-[#1e293b]">
@@ -421,12 +436,17 @@
                     <th
                       class="px-5 py-3 text-[11px] font-bold uppercase text-slate-500"
                     >
-                      Amount
+                      Lost Amount
                     </th>
                     <th
                       class="px-5 py-3 text-[11px] font-bold uppercase text-slate-500"
                     >
-                      Asset
+                      Platform
+                    </th>
+                    <th
+                      class="px-5 py-3 text-[11px] font-bold uppercase text-slate-500"
+                    >
+                      Payment
                     </th>
                     <th
                       class="px-5 py-3 text-[11px] font-bold uppercase text-slate-500"
@@ -441,12 +461,7 @@
                     <th
                       class="px-5 py-3 text-[11px] font-bold uppercase text-slate-500"
                     >
-                      Submitted
-                    </th>
-                    <th
-                      class="px-5 py-3 text-[11px] font-bold uppercase text-slate-500"
-                    >
-                      Expires
+                      Date
                     </th>
                     <th
                       class="px-5 py-3 text-[11px] font-bold uppercase text-slate-500"
@@ -460,7 +475,8 @@
                     </th>
                   </tr>
                 </thead>
-                <tbody id="vipTableBody" class="divide-y divide-[#1e293b]">
+
+                <tbody id="recoveryTableBody" class="divide-y divide-[#1e293b]">
                   <tr>
                     <td
                       colspan="9"
@@ -506,7 +522,6 @@
     <script>
       lucide.createIcons();
 
-      // ─── Auth Guard ───────────────────────────────────────────
       const admin = JSON.parse(localStorage.getItem("admin") || "null");
       const adminToken = localStorage.getItem("admin_token");
 
@@ -523,7 +538,6 @@
           "A")[0].toUpperCase();
       }
 
-      // ─── Toast ────────────────────────────────────────────────
       function toast(msg, type = "success") {
         const el = document.getElementById("toast");
         const colors = {
@@ -536,17 +550,18 @@
         setTimeout(() => el.classList.remove("show"), 3500);
       }
 
-      // ─── Mobile Sidebar ───────────────────────────────────────
       document.getElementById("menuToggle").addEventListener("click", () => {
         document.getElementById("mobileSidebar").classList.add("open");
         document.getElementById("sidebarOverlay").classList.add("open");
       });
+
       document
         .getElementById("closeMobileSidebar")
         .addEventListener("click", () => {
           document.getElementById("mobileSidebar").classList.remove("open");
           document.getElementById("sidebarOverlay").classList.remove("open");
         });
+
       document
         .getElementById("sidebarOverlay")
         .addEventListener("click", () => {
@@ -554,7 +569,6 @@
           document.getElementById("sidebarOverlay").classList.remove("open");
         });
 
-      // ─── Helpers ──────────────────────────────────────────────
       function fmtDate(d) {
         return new Date(d).toLocaleDateString("en-US", {
           month: "short",
@@ -562,6 +576,7 @@
           year: "numeric",
         });
       }
+
       function statusPill(s) {
         const map = {
           pending: "badge-pending",
@@ -570,127 +585,162 @@
         };
         return `<span class="status-pill ${map[s] || "badge-pending"}">${s}</span>`;
       }
+
       function viewProof(url) {
         document.getElementById("proofImg").src = url;
         document.getElementById("proofModal").classList.remove("hidden");
       }
+
       function closeProofModal() {
         document.getElementById("proofModal").classList.add("hidden");
       }
 
-      // ─── Load VIP Payments ────────────────────────────────────
-      let paymentsData = [];
+      let recoveryData = [];
 
-      async function loadVipPayments() {
-        const tbody = document.getElementById("vipTableBody");
+      async function loadRecoveryRequests() {
+        const tbody = document.getElementById("recoveryTableBody");
         tbody.innerHTML = `<tr><td colspan="9" class="px-5 py-10 text-center text-slate-500 text-sm">Loading...</td></tr>`;
 
         try {
-          paymentsData = await API.get("/vip/payments");
-          renderPayments();
+          recoveryData = await API.get("/recovery-requests");
+          renderRecoveryRequests();
         } catch (err) {
           tbody.innerHTML = `<tr><td colspan="9" class="px-5 py-10 text-center text-slate-500 text-sm">Failed to load: ${err.message}</td></tr>`;
         }
       }
 
-      function renderPayments() {
-        const tbody = document.getElementById("vipTableBody");
+      function renderRecoveryRequests() {
+        const tbody = document.getElementById("recoveryTableBody");
         const filter = document.getElementById("filterStatus").value;
-        const filtered = filter
-          ? paymentsData.filter((p) => p.status === filter)
-          : paymentsData;
 
-        // Stats
-        const pending = paymentsData.filter(
-          (p) => p.status === "pending",
+        const filtered = filter
+          ? recoveryData.filter((r) => r.status === filter)
+          : recoveryData;
+
+        const pending = recoveryData.filter(
+          (r) => r.status === "pending",
         ).length;
-        const now = new Date();
-        const active = paymentsData.filter(
-          (p) =>
-            p.status === "approved" &&
-            p.vipAccessExpiry &&
-            new Date(p.vipAccessExpiry) > now,
+        const approved = recoveryData.filter(
+          (r) => r.status === "approved",
         ).length;
-        const revenue = paymentsData
-          .filter((p) => p.status === "approved")
-          .reduce((s, p) => s + p.amount, 0);
 
         document.getElementById("statPending").textContent = pending;
-        document.getElementById("statActive").textContent = active;
-        document.getElementById("statRevenue").textContent =
-          `$${revenue.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
+        document.getElementById("statApproved").textContent = approved;
+        document.getElementById("statTotal").textContent = recoveryData.length;
 
-        const badge = document.getElementById("vipBadge");
+        const badge = document.getElementById("recoveryBadge");
         badge.textContent = pending;
         badge.classList.toggle("hidden", pending === 0);
 
         if (!filtered.length) {
-          tbody.innerHTML = `<tr><td colspan="9" class="px-5 py-10 text-center text-slate-500 text-sm">No VIP payments found.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="9" class="px-5 py-10 text-center text-slate-500 text-sm">No recovery requests found.</td></tr>`;
           return;
         }
 
         tbody.innerHTML = filtered
           .map(
-            (p) => `
-          <tr class="hover:bg-white/5 transition">
-            <td class="px-5 py-4">
-              <div class="font-medium text-white text-sm">${p.user?.name || "—"}</div>
-              <div class="text-[10px] text-slate-500">${p.user?.email || ""}</div>
-            </td>
-            <td class="px-5 py-4 font-bold text-emerald-400 text-sm">$${p.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
-            <td class="px-5 py-4 text-sm text-slate-300">${p.asset} (${p.network})</td>
-            <td class="px-5 py-4"><span class="font-mono text-xs text-slate-400">${p.transactionId.slice(0, 14)}...</span></td>
-            <td class="px-5 py-4">
-              ${
-                p.proofOfPayment
-                  ? `<button onclick="viewProof('${p.proofOfPayment}')" class="text-blue-400 text-xs underline hover:text-blue-300">View Proof</button>`
-                  : `<span class="text-slate-600 text-xs">None</span>`
-              }
-            </td>
-            <td class="px-5 py-4 text-xs text-slate-500">${fmtDate(p.createdAt)}</td>
-            <td class="px-5 py-4 text-xs text-slate-500">${p.vipAccessExpiry ? fmtDate(p.vipAccessExpiry) : "—"}</td>
-            <td class="px-5 py-4">${statusPill(p.status)}</td>
-            <td class="px-5 py-4">
-              ${
-                p.status === "pending"
-                  ? `
-                <div class="flex gap-2">
-                  <button onclick="updateStatus('${p._id}', 'approved')" class="bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-white text-xs px-3 py-1.5 rounded-lg transition-all">Approve</button>
-                  <button onclick="updateStatus('${p._id}', 'rejected')" class="bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white text-xs px-3 py-1.5 rounded-lg transition-all">Reject</button>
-                </div>
-              `
-                  : `<span class="text-slate-600 text-xs capitalize">${p.status}</span>`
-              }
-            </td>
-          </tr>
-        `,
+            (r) => `
+            <tr class="hover:bg-white/5 transition">
+              <td class="px-5 py-4">
+                <div class="font-medium text-white text-sm">${r.user?.name || r.fullName || "—"}</div>
+                <div class="text-[10px] text-slate-500">${r.user?.email || r.email || ""}</div>
+              </td>
+
+              <td class="px-5 py-4 font-bold text-emerald-400 text-sm">
+                $${Number(r.lostAmount || 0).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                })}
+              </td>
+
+              <td class="px-5 py-4 text-sm text-slate-300">
+                <div>${r.platform || "—"}</div>
+                <div class="text-[10px] text-slate-500 mt-1">${r.asset || "—"} • ${r.incidentType || "—"}</div>
+              </td>
+
+              <td class="px-5 py-4 text-sm text-slate-300">
+                <div>$${Number(r.submissionFee || 0).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                })}</div>
+                <div class="text-[10px] text-slate-500 mt-1">${r.paymentAsset || "USDT"} (${r.paymentNetwork || "—"})</div>
+              </td>
+
+              <td class="px-5 py-4">
+                <span class="font-mono text-xs text-slate-400">
+                  ${(r.transactionId || "").slice(0, 14)}...
+                </span>
+              </td>
+
+              <td class="px-5 py-4">
+                ${
+                  r.proofOfPayment
+                    ? `<button onclick="viewProof('${r.proofOfPayment}')" class="text-blue-400 text-xs underline hover:text-blue-300">View Proof</button>`
+                    : `<span class="text-slate-600 text-xs">None</span>`
+                }
+              </td>
+
+              <td class="px-5 py-4 text-xs text-slate-500">
+                ${fmtDate(r.createdAt)}
+              </td>
+
+              <td class="px-5 py-4">${statusPill(r.status)}</td>
+
+              <td class="px-5 py-4">
+                ${
+                  r.status === "pending"
+                    ? `
+                      <div class="flex gap-2">
+                        <button onclick="updateRecoveryStatus('${r._id}', 'approved')" class="bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-white text-xs px-3 py-1.5 rounded-lg transition-all">Approve</button>
+                        <button onclick="updateRecoveryStatus('${r._id}', 'rejected')" class="bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white text-xs px-3 py-1.5 rounded-lg transition-all">Reject</button>
+                      </div>
+                    `
+                    : `
+                      <div class="text-xs">
+                        <div class="text-slate-400 capitalize">${r.status}</div>
+                        <div class="text-[10px] text-slate-500 mt-1">${r.adminMessage || ""}</div>
+                      </div>
+                    `
+                }
+              </td>
+            </tr>
+          `,
           )
           .join("");
       }
 
       document
         .getElementById("filterStatus")
-        .addEventListener("change", renderPayments);
+        .addEventListener("change", renderRecoveryRequests);
 
-      async function updateStatus(id, status) {
+      async function updateRecoveryStatus(id, status) {
         try {
-          await API.put(`/vip/payment/${id}/status`, { status });
-          toast(`VIP payment ${status}`, "success");
-          loadVipPayments();
+          const body =
+            status === "approved"
+              ? {
+                  status,
+                  adminMessage: "Recovery team is on your case",
+                }
+              : {
+                  status,
+                };
+
+          await API.put(`/recovery-requests/${id}/status`, body);
+          toast(`Recovery request ${status}`, "success");
+          loadRecoveryRequests();
         } catch (err) {
-          toast(err.message || "Failed to update", "error");
+          toast(err.message || "Failed to update request", "error");
         }
       }
 
-      // ─── Logout ───────────────────────────────────────────────
       async function handleLogout() {
         try {
           await API.post("/admin/logout");
         } catch {}
+
         localStorage.removeItem("admin");
         localStorage.removeItem("admin_token");
         window.location.href = "admin-login.html";
       }
+
       document
         .getElementById("adminLogoutBtn")
         .addEventListener("click", handleLogout);
@@ -698,8 +748,7 @@
         .getElementById("mobileLogoutBtn")
         .addEventListener("click", handleLogout);
 
-      // ─── Init ─────────────────────────────────────────────────
-      loadVipPayments();
+      loadRecoveryRequests();
     </script>
   </body>
 </html>

@@ -183,6 +183,12 @@
           ><i data-lucide="badge-check" class="w-4 h-4"></i> VIP Payments</a
         >
         <a
+          href="admin-recovery.html"
+          class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"
+        >
+          <i data-lucide="shield-check" class="w-4 h-4"></i> Recovery Requests
+        </a>
+        <a
           href="admin-users.html"
           class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl cursor-pointer nav-inactive"
           ><i data-lucide="users" class="w-4 h-4"></i> Users & MT5</a
@@ -241,6 +247,12 @@
             ><i data-lucide="badge-check" class="w-4 h-4"></i> VIP Payments</a
           >
           <a
+            href="admin-recovery.html"
+            class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"
+          >
+            <i data-lucide="shield-check" class="w-4 h-4"></i> Recovery Requests
+          </a>
+          <a
             href="admin-users.html"
             class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl cursor-pointer nav-inactive"
             ><i data-lucide="users" class="w-4 h-4"></i> Users & MT5</a
@@ -294,7 +306,7 @@
         </header>
 
         <main
-          class="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 bg-[#0a0f18] space-y-5"
+          class="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 bg-[#0a0f18] space-y-5 pb-8"
         >
           <!-- Stats -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -647,21 +659,37 @@
         }
       }
 
-      // ─── Logout ───────────────────────────────────────────────
+      // ─── Logout with better error handling ───────────────────────────────
       async function handleLogout() {
         try {
-          await API.post("/admin/logout");
-        } catch {}
-        localStorage.removeItem("admin");
-        localStorage.removeItem("admin_token");
-        window.location.href = "admin-login.html";
+          // Optional: Try to notify the server, but don't let it block logout
+          if (API && API.post) {
+            await API.post("/admin/logout").catch((e) =>
+              console.warn("Server logout failed:", e),
+            );
+          }
+        } catch (err) {
+          console.warn("Logout API error:", err);
+        } finally {
+          // Clear all admin-related data regardless of API success
+          localStorage.removeItem("admin");
+          localStorage.removeItem("admin_token");
+
+          // Optional: Clear any other stored data
+          sessionStorage.clear();
+
+          // Redirect to login page
+          window.location.href = "admin-login.html";
+        }
       }
+
+      // Make sure event listeners are attached
       document
         .getElementById("adminLogoutBtn")
-        .addEventListener("click", handleLogout);
+        ?.addEventListener("click", handleLogout);
       document
         .getElementById("mobileLogoutBtn")
-        .addEventListener("click", handleLogout);
+        ?.addEventListener("click", handleLogout);
 
       // ─── Init ─────────────────────────────────────────────────
       loadDeposits();

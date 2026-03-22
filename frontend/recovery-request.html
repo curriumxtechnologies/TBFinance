@@ -42,24 +42,12 @@
             colors: {
               primary: "#1152d4",
               "emerald-accent": "#10b981",
-              "background-light": "#f6f6f8",
               "background-dark": "#0a0f18",
               "surface-dark": "#151c2c",
               "border-dark": "#243049",
-              "status-pending": "#eab308",
-              "status-review": "#3b82f6",
-              "status-progress": "#a855f7",
-              "status-resolved": "#10b981",
             },
             fontFamily: {
               display: ["Manrope", "sans-serif"],
-            },
-            borderRadius: {
-              DEFAULT: "0.375rem",
-              lg: "0.5rem",
-              xl: "0.75rem",
-              "2xl": "1rem",
-              full: "9999px",
             },
           },
         },
@@ -69,12 +57,6 @@
     <style>
       body {
         font-family: "Manrope", sans-serif;
-      }
-
-      .glass-panel {
-        background: rgba(21, 28, 44, 0.7);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(36, 48, 73, 0.5);
       }
 
       .custom-scrollbar::-webkit-scrollbar {
@@ -121,11 +103,6 @@
         flex-shrink: 0;
       }
 
-      .icon-sm {
-        width: 16px;
-        height: 16px;
-      }
-
       .icon-lg {
         width: 22px;
         height: 22px;
@@ -136,33 +113,107 @@
         height: 26px;
       }
 
-      .hero-watermark {
-        width: 180px;
-        height: 180px;
+      .avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
 
-      @media (min-width: 640px) {
-        .hero-watermark {
-          width: 240px;
-          height: 240px;
+      .spinner {
+        width: 18px;
+        height: 18px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        display: inline-block;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
         }
+      }
+
+      .proof-preview {
+        max-height: 130px;
+        object-fit: contain;
+        border-radius: 10px;
+        margin-top: 10px;
+      }
+
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(6px);
+        z-index: 200;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 0.3s ease,
+          visibility 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+      }
+
+      .modal-overlay.open {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal-box {
+        background: #0f1825;
+        border: 1px solid #1e293b;
+        border-radius: 1.5rem;
+        width: 100%;
+        max-width: 560px;
+        max-height: 90vh;
+        overflow-y: auto;
+        transform: translateY(20px) scale(0.97);
+        transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+      }
+
+      .modal-overlay.open .modal-box {
+        transform: translateY(0) scale(1);
+      }
+
+      #toast {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        z-index: 999;
+        transform: translateY(80px);
+        opacity: 0;
+        transition: all 0.3s ease;
+        pointer-events: none;
+      }
+
+      #toast.show {
+        transform: translateY(0);
+        opacity: 1;
       }
     </style>
   </head>
 
   <body
-    class="bg-background-dark text-slate-100 font-display transition-colors duration-300 antialiased overflow-hidden"
+    class="bg-background-dark text-slate-100 font-display antialiased overflow-hidden"
   >
-    <!-- Mobile Sidebar Overlay -->
+    <div
+      id="toast"
+      class="px-4 py-3 rounded-xl border text-sm font-medium flex items-center gap-2 shadow-2xl max-w-sm"
+    ></div>
+
     <div
       id="sidebarOverlay"
       class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"
     ></div>
 
-    <!-- Mobile Sidebar -->
     <aside
       id="mobileSidebar"
-      class="fixed top-0 left-0 h-full w-64 bg-surface-dark border-r border-border-dark flex flex-col z-50 lg:hidden -translate-x-full transition-transform duration-300 ease-in-out"
+      class="fixed top-0 left-0 h-full w-64 bg-surface-dark border-r border-border-dark flex flex-col z-50 lg:hidden"
     >
       <div class="p-6 flex items-center justify-between">
         <div class="flex items-center gap-3">
@@ -235,6 +286,7 @@
 
       <div class="p-4 border-t border-border-dark">
         <button
+          id="mobileLogoutBtn"
           class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
         >
           <i data-lucide="log-out" class="icon"></i>
@@ -244,7 +296,6 @@
     </aside>
 
     <div class="flex h-screen overflow-hidden">
-      <!-- Desktop Sidebar -->
       <aside
         class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex-col hidden lg:flex"
       >
@@ -315,6 +366,7 @@
 
         <div class="p-4 border-t border-border-dark">
           <button
+            id="logoutBtn"
             class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
           >
             <i data-lucide="log-out" class="icon"></i>
@@ -345,31 +397,32 @@
           <div class="flex items-center gap-4 sm:gap-6">
             <div class="h-8 w-px bg-border-dark hidden sm:block"></div>
 
-            <a
-              href="profile.html"
-              class="flex items-center gap-2 sm:gap-3 group"
-            >
-              <div class="text-right hidden sm:block">
-                <p
-                  class="text-xs sm:text-sm font-bold text-white group-hover:text-primary transition-colors"
-                >
-                  Alexander Brave
-                </p>
-                <p
-                  class="text-[10px] sm:text-[11px] text-slate-500 uppercase tracking-widest font-bold"
-                >
-                  Pro Trader
-                </p>
-              </div>
+            <a href="profile.html">
+              <button class="flex items-center gap-2 sm:gap-3 group">
+                <div class="text-right hidden sm:block">
+                  <p
+                    id="headerName"
+                    class="text-xs sm:text-sm font-bold text-white group-hover:text-primary transition-colors"
+                  >
+                    Loading...
+                  </p>
+                  <p
+                    class="text-[10px] sm:text-[11px] text-slate-500 uppercase tracking-widest font-bold"
+                  >
+                    Trader
+                  </p>
+                </div>
 
-              <div
-                class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/20 border border-primary/30 overflow-hidden flex items-center justify-center"
-              >
-                <i
-                  data-lucide="user"
-                  class="w-[18px] h-[18px] sm:w-5 sm:h-5 text-primary"
-                ></i>
-              </div>
+                <div
+                  id="headerAvatarWrap"
+                  class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/20 border border-primary/30 overflow-hidden flex items-center justify-center"
+                >
+                  <i
+                    data-lucide="user"
+                    class="w-[18px] h-[18px] sm:w-5 sm:h-5 text-primary"
+                  ></i>
+                </div>
+              </button>
             </a>
           </div>
         </header>
@@ -377,195 +430,40 @@
         <main
           class="flex-1 overflow-y-auto custom-scrollbar bg-background-dark p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 pb-24 sm:pb-8"
         >
-          <!-- Recovery Hero -->
           <section
-            class="p-5 sm:p-8 rounded-2xl bg-gradient-to-br from-surface-dark to-background-dark border border-border-dark flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative overflow-hidden"
+            class="p-5 sm:p-8 rounded-2xl bg-gradient-to-br from-surface-dark to-background-dark border border-border-dark"
           >
-            <div
-              class="absolute -right-12 -top-12 opacity-[0.03] pointer-events-none"
-            >
-              <i
-                data-lucide="shield-check"
-                class="hero-watermark text-white"
-              ></i>
-            </div>
-
-            <div class="relative z-10 max-w-3xl">
+            <div class="max-w-4xl">
               <div class="flex items-center gap-2 sm:gap-3 mb-3">
                 <span
                   class="px-2 sm:px-3 py-0.5 sm:py-1 bg-emerald-accent text-white text-[8px] sm:text-[10px] font-black rounded-full uppercase tracking-widest"
                 >
-                  Recovery Support
+                  Recovery Intake
                 </span>
                 <span
                   class="text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-widest"
                 >
-                  Lost Investment Funds
+                  Case Submission
                 </span>
               </div>
 
               <h1
                 class="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight"
               >
-                Professional support for
-                <span class="text-emerald-accent">fund recovery</span>
+                Submit your
+                <span class="text-emerald-accent">recovery request</span>
               </h1>
 
               <p
-                class="mt-4 text-slate-400 text-sm sm:text-base leading-relaxed max-w-2xl"
+                class="mt-4 text-slate-400 text-sm sm:text-base leading-relaxed max-w-3xl"
               >
-                If you have lost money to a suspicious broker, blocked
-                investment platform, frozen withdrawal, or deceptive trading
-                service, our recovery team can guide you through a more
-                structured review process. We support clients with case
-                assessment, recovery strategy, and coordination with appropriate
-                authorities where applicable.
+                Fill in your case details, continue to payment, submit proof,
+                and your recovery request will appear below with its current
+                review status.
               </p>
-
-              <div class="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-                <div
-                  class="px-4 py-3 rounded-xl bg-background-dark/60 border border-border-dark"
-                >
-                  <p
-                    class="text-[10px] sm:text-xs text-slate-500 uppercase font-bold tracking-wider"
-                  >
-                    Focus
-                  </p>
-                  <p class="text-sm sm:text-base font-bold text-white mt-1">
-                    Investment fund recovery
-                  </p>
-                </div>
-
-                <div
-                  class="px-4 py-3 rounded-xl bg-background-dark/60 border border-border-dark"
-                >
-                  <p
-                    class="text-[10px] sm:text-xs text-slate-500 uppercase font-bold tracking-wider"
-                  >
-                    Method
-                  </p>
-                  <p class="text-sm sm:text-base font-bold text-white mt-1">
-                    Case-based review
-                  </p>
-                </div>
-
-                <div
-                  class="px-4 py-3 rounded-xl bg-background-dark/60 border border-border-dark"
-                >
-                  <p
-                    class="text-[10px] sm:text-xs text-slate-500 uppercase font-bold tracking-wider"
-                  >
-                    Access
-                  </p>
-                  <p class="text-sm sm:text-base font-bold text-white mt-1">
-                    Direct agent support
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div
-              class="relative z-10 flex flex-col sm:flex-row lg:flex-col gap-3 w-full lg:w-auto"
-            >
-              <a
-                href="https://wa.me/1234567890"
-                class="px-5 sm:px-8 py-3 sm:py-4 bg-emerald-accent text-white text-xs sm:text-sm font-extrabold rounded-xl shadow-lg shadow-emerald-accent/20 hover:bg-emerald-accent/90 transition-all flex items-center justify-center gap-2"
-              >
-                <i data-lucide="message-circle" class="icon"></i>
-                Chat With an Agent
-              </a>
-
-              <a
-                href="#recovery-framework"
-                class="px-5 sm:px-8 py-3 sm:py-4 bg-emerald-accent/10 border border-emerald-accent/30 text-emerald-accent text-xs sm:text-sm font-extrabold rounded-xl hover:bg-emerald-accent/20 transition-all flex items-center justify-center gap-2"
-              >
-                <i data-lucide="info" class="icon"></i>
-                How It Works
-              </a>
             </div>
           </section>
 
-          <!-- Recovery Framework -->
-          <section id="recovery-framework" class="space-y-4 sm:space-y-6">
-            <h3
-              class="text-white font-bold text-xs sm:text-sm uppercase tracking-widest flex items-center gap-2"
-            >
-              <span class="h-px w-6 sm:w-8 bg-emerald-accent"></span>
-              Recovery Framework
-            </h3>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-              <div
-                class="p-5 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors"
-              >
-                <div
-                  class="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-4"
-                >
-                  <i data-lucide="messages-square" class="icon-lg"></i>
-                </div>
-                <h4 class="text-white font-bold text-sm sm:text-base mb-2">
-                  1. Agent Consultation
-                </h4>
-                <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                  Start with a direct conversation about the investment loss,
-                  broker conduct, and available transaction history.
-                </p>
-              </div>
-
-              <div
-                class="p-5 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors"
-              >
-                <div
-                  class="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-4"
-                >
-                  <i data-lucide="file-search" class="icon-lg"></i>
-                </div>
-                <h4 class="text-white font-bold text-sm sm:text-base mb-2">
-                  2. Case Review
-                </h4>
-                <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                  Our team evaluates the case details, account behavior,
-                  communications, and supporting evidence.
-                </p>
-              </div>
-
-              <div
-                class="p-5 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors"
-              >
-                <div
-                  class="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-4"
-                >
-                  <i data-lucide="scale" class="icon-lg"></i>
-                </div>
-                <h4 class="text-white font-bold text-sm sm:text-base mb-2">
-                  3. Strategic Escalation
-                </h4>
-                <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                  Where appropriate, the matter may be guided toward compliance,
-                  investigative, legal, or enforcement channels.
-                </p>
-              </div>
-
-              <div
-                class="p-5 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors"
-              >
-                <div
-                  class="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-4"
-                >
-                  <i data-lucide="shield-check" class="icon-lg"></i>
-                </div>
-                <h4 class="text-white font-bold text-sm sm:text-base mb-2">
-                  4. Guided Support
-                </h4>
-                <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                  You receive direct updates and next-step guidance through the
-                  recovery process.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <!-- Consultation Blocks -->
           <section class="grid lg:grid-cols-12 gap-6">
             <div class="lg:col-span-8 space-y-6">
               <div
@@ -577,236 +475,173 @@
                   <div
                     class="h-8 w-8 sm:h-10 sm:w-10 rounded-lg bg-emerald-accent/10 flex items-center justify-center text-emerald-accent"
                   >
-                    <i data-lucide="briefcase" class="icon-lg"></i>
+                    <i data-lucide="file-text" class="icon-lg"></i>
                   </div>
                   <h3 class="text-base sm:text-lg font-bold text-white">
-                    Direct Recovery Consultation
+                    Recovery Request Form
                   </h3>
                 </div>
 
-                <div class="p-4 sm:p-6 space-y-5">
-                  <p
-                    class="text-slate-400 text-sm sm:text-base leading-relaxed"
-                  >
-                    This recovery service is designed for individuals who have
-                    lost funds through failed investment platforms, deceptive
-                    brokers, blocked withdrawals, cloned trading brands, or
-                    suspicious digital asset activity. Instead of filling a long
-                    request form, you can begin with a direct conversation and
-                    allow an agent to guide the next steps.
-                  </p>
-
-                  <div class="grid sm:grid-cols-2 gap-4">
-                    <div
-                      class="rounded-2xl border border-border-dark bg-background-dark/40 p-4 sm:p-5"
-                    >
-                      <div class="flex items-center gap-3 mb-3">
-                        <i
-                          data-lucide="shield-alert"
-                          class="w-5 h-5 text-emerald-accent"
-                        ></i>
-                        <h4 class="text-white font-bold text-sm sm:text-base">
-                          Fraud-aware review
-                        </h4>
-                      </div>
-                      <p
-                        class="text-slate-400 text-xs sm:text-sm leading-relaxed"
-                      >
-                        Focused support for suspicious investment losses and
-                        inaccessible account balances.
-                      </p>
-                    </div>
-
-                    <div
-                      class="rounded-2xl border border-border-dark bg-background-dark/40 p-4 sm:p-5"
-                    >
-                      <div class="flex items-center gap-3 mb-3">
-                        <i
-                          data-lucide="landmark"
-                          class="w-5 h-5 text-emerald-accent"
-                        ></i>
-                        <h4 class="text-white font-bold text-sm sm:text-base">
-                          Authority coordination
-                        </h4>
-                      </div>
-                      <p
-                        class="text-slate-400 text-xs sm:text-sm leading-relaxed"
-                      >
-                        Cases may be guided through compliance, legal, or
-                        relevant authorities where appropriate.
-                      </p>
-                    </div>
-
-                    <div
-                      class="rounded-2xl border border-border-dark bg-background-dark/40 p-4 sm:p-5"
-                    >
-                      <div class="flex items-center gap-3 mb-3">
-                        <i
-                          data-lucide="search-check"
-                          class="w-5 h-5 text-emerald-accent"
-                        ></i>
-                        <h4 class="text-white font-bold text-sm sm:text-base">
-                          Structured case analysis
-                        </h4>
-                      </div>
-                      <p
-                        class="text-slate-400 text-xs sm:text-sm leading-relaxed"
-                      >
-                        Better than a generic ticket system — your case is
-                        reviewed with more context and direction.
-                      </p>
-                    </div>
-
-                    <div
-                      class="rounded-2xl border border-border-dark bg-background-dark/40 p-4 sm:p-5"
-                    >
-                      <div class="flex items-center gap-3 mb-3">
-                        <i
-                          data-lucide="lock"
-                          class="w-5 h-5 text-emerald-accent"
-                        ></i>
-                        <h4 class="text-white font-bold text-sm sm:text-base">
-                          Confidential support
-                        </h4>
-                      </div>
-                      <p
-                        class="text-slate-400 text-xs sm:text-sm leading-relaxed"
-                      >
-                        Speak privately with an agent and begin your recovery
-                        process directly.
-                      </p>
-                    </div>
-                  </div>
+                <div class="p-4 sm:p-6">
+                  <div
+                    id="formError"
+                    class="hidden mb-6 text-sm text-rose-300 bg-rose-900/40 border border-rose-500/20 rounded-xl px-4 py-3"
+                  ></div>
 
                   <div
-                    class="rounded-2xl border border-emerald-accent/20 bg-emerald-accent/10 p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
-                  >
-                    <div>
-                      <p class="text-white font-bold text-base sm:text-lg">
-                        Need immediate recovery guidance?
-                      </p>
-                      <p class="text-emerald-100 text-xs sm:text-sm mt-1">
-                        Start with a direct agent conversation instead of
-                        submitting a form.
-                      </p>
+                    id="formSuccess"
+                    class="hidden mb-6 text-sm text-emerald-300 bg-emerald-900/30 border border-emerald-accent/20 rounded-xl px-4 py-3"
+                  ></div>
+
+                  <div class="grid sm:grid-cols-2 gap-5">
+                    <div class="space-y-2">
+                      <label
+                        class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1"
+                        >Full Name</label
+                      >
+                      <input
+                        id="fullName"
+                        type="text"
+                        class="block w-full px-4 py-3 bg-background-dark border border-border-dark rounded-xl text-white outline-none focus:border-emerald-accent"
+                        placeholder="Enter your full name"
+                      />
                     </div>
 
-                    <a
-                      href="https://wa.me/1234567890"
-                      class="inline-flex items-center justify-center gap-2 px-6 py-3 sm:py-4 bg-emerald-accent hover:bg-emerald-600 text-white font-black rounded-xl transition-all whitespace-nowrap text-sm"
-                    >
-                      <i data-lucide="message-circle" class="w-5 h-5"></i>
-                      Chat With an Agent
-                    </a>
+                    <div class="space-y-2">
+                      <label
+                        class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1"
+                        >Email Address</label
+                      >
+                      <input
+                        id="email"
+                        type="email"
+                        class="block w-full px-4 py-3 bg-background-dark border border-border-dark rounded-xl text-white outline-none focus:border-emerald-accent"
+                        placeholder="Enter your email"
+                      />
+                    </div>
+
+                    <div class="space-y-2">
+                      <label
+                        class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1"
+                        >Lost Amount (USD)</label
+                      >
+                      <input
+                        id="lostAmount"
+                        type="number"
+                        min="1"
+                        class="block w-full px-4 py-3 bg-background-dark border border-border-dark rounded-xl text-white outline-none focus:border-emerald-accent"
+                        placeholder="e.g. 1500"
+                      />
+                    </div>
+
+                    <div class="space-y-2">
+                      <label
+                        class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1"
+                        >Asset / Currency</label
+                      >
+                      <input
+                        id="asset"
+                        type="text"
+                        class="block w-full px-4 py-3 bg-background-dark border border-border-dark rounded-xl text-white outline-none focus:border-emerald-accent"
+                        placeholder="e.g. USDT, BTC, ETH"
+                      />
+                    </div>
+
+                    <div class="space-y-2">
+                      <label
+                        class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1"
+                        >Platform / Broker / Wallet</label
+                      >
+                      <input
+                        id="platform"
+                        type="text"
+                        class="block w-full px-4 py-3 bg-background-dark border border-border-dark rounded-xl text-white outline-none focus:border-emerald-accent"
+                        placeholder="Name of broker or platform"
+                      />
+                    </div>
+
+                    <div class="space-y-2">
+                      <label
+                        class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1"
+                        >Incident Type</label
+                      >
+                      <select
+                        id="incidentType"
+                        class="block w-full px-4 py-3 bg-background-dark border border-border-dark rounded-xl text-white outline-none focus:border-emerald-accent"
+                      >
+                        <option value="">Select incident type</option>
+                        <option value="blocked-withdrawal">
+                          Blocked Withdrawal
+                        </option>
+                        <option value="broker-fraud">Broker Fraud</option>
+                        <option value="frozen-account">Frozen Account</option>
+                        <option value="investment-scam">Investment Scam</option>
+                        <option value="wallet-issue">Wallet Issue</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+
+                    <div class="sm:col-span-2 space-y-2">
+                      <label
+                        class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1"
+                        >Incident Date</label
+                      >
+                      <input
+                        id="incidentDate"
+                        type="date"
+                        class="block w-full px-4 py-3 bg-background-dark border border-border-dark rounded-xl text-white outline-none focus:border-emerald-accent"
+                      />
+                    </div>
+
+                    <div class="sm:col-span-2 space-y-2">
+                      <label
+                        class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1"
+                        >Case Description</label
+                      >
+                      <textarea
+                        id="description"
+                        rows="5"
+                        class="block w-full px-4 py-3 bg-background-dark border border-border-dark rounded-xl text-white outline-none focus:border-emerald-accent resize-none"
+                        placeholder="Describe what happened, including deposits, withdrawals, communication issues, or suspicious behavior."
+                      ></textarea>
+                    </div>
                   </div>
+
+                  <button
+                    id="continueBtn"
+                    onclick="continueToRecoveryPayment()"
+                    class="mt-6 w-full py-4 bg-emerald-accent hover:bg-emerald-500 text-white font-black rounded-xl transition-all flex items-center justify-center gap-2 text-sm sm:text-base"
+                  >
+                    <i data-lucide="arrow-right-circle" class="w-5 h-5"></i>
+                    Continue to Payment
+                  </button>
                 </div>
               </div>
 
-              <!-- Case Status -->
               <div
                 class="bg-surface-dark border border-border-dark rounded-2xl overflow-hidden"
               >
                 <div
-                  class="px-4 sm:px-6 py-4 border-b border-border-dark flex justify-between items-center"
+                  class="px-4 sm:px-6 py-4 border-b border-border-dark flex items-center justify-between"
                 >
                   <h4 class="text-white font-bold text-sm sm:text-base">
-                    Recovery Status
+                    Recovery Request History
                   </h4>
                   <span
                     class="text-[10px] sm:text-xs text-slate-500 uppercase font-bold tracking-widest"
                   >
-                    Internal Overview
+                    Your Submissions
                   </span>
                 </div>
 
-                <div class="divide-y divide-border-dark">
+                <div
+                  id="recoveryHistoryList"
+                  class="divide-y divide-border-dark"
+                >
                   <div
-                    class="px-4 sm:px-6 py-4 flex items-center gap-3 sm:gap-4"
+                    class="px-4 sm:px-6 py-6 text-center text-slate-500 text-xs"
                   >
-                    <div
-                      class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-status-review/10 flex items-center justify-center text-status-review"
-                    >
-                      <i
-                        data-lucide="file-search"
-                        class="w-4 h-4 sm:w-5 sm:h-5"
-                      ></i>
-                    </div>
-
-                    <div class="flex-1 min-w-0">
-                      <p
-                        class="text-xs sm:text-sm font-bold text-white truncate"
-                      >
-                        Case review and evidence assessment
-                      </p>
-                      <p class="text-[10px] sm:text-xs text-slate-500">
-                        Transaction trail and platform behavior are being
-                        reviewed
-                      </p>
-                    </div>
-
-                    <span
-                      class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap"
-                    >
-                      Active
-                    </span>
-                  </div>
-
-                  <div
-                    class="px-4 sm:px-6 py-4 flex items-center gap-3 sm:gap-4"
-                  >
-                    <div
-                      class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-status-progress/10 flex items-center justify-center text-status-progress"
-                    >
-                      <i data-lucide="scale" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                    </div>
-
-                    <div class="flex-1 min-w-0">
-                      <p
-                        class="text-xs sm:text-sm font-bold text-white truncate"
-                      >
-                        Escalation and recovery strategy
-                      </p>
-                      <p class="text-[10px] sm:text-xs text-slate-500">
-                        Appropriate channels are being considered based on the
-                        case
-                      </p>
-                    </div>
-
-                    <span
-                      class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap"
-                    >
-                      Ongoing
-                    </span>
-                  </div>
-
-                  <div
-                    class="px-4 sm:px-6 py-4 flex items-center gap-3 sm:gap-4"
-                  >
-                    <div
-                      class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-status-pending/10 flex items-center justify-center text-status-pending"
-                    >
-                      <i
-                        data-lucide="clock-3"
-                        class="w-4 h-4 sm:w-5 sm:h-5"
-                      ></i>
-                    </div>
-
-                    <div class="flex-1 min-w-0">
-                      <p
-                        class="text-xs sm:text-sm font-bold text-white truncate"
-                      >
-                        Client follow-up and case updates
-                      </p>
-                      <p class="text-[10px] sm:text-xs text-slate-500">
-                        Your agent continues to provide next-step guidance
-                      </p>
-                    </div>
-
-                    <span
-                      class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap"
-                    >
-                      Monitored
-                    </span>
+                    Loading recovery requests...
                   </div>
                 </div>
               </div>
@@ -817,54 +652,71 @@
                 class="p-5 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark"
               >
                 <h4 class="text-white font-bold text-sm sm:text-base mb-4">
-                  Why clients contact us
+                  How it works
                 </h4>
 
                 <div class="space-y-4">
                   <div class="flex items-start gap-3">
-                    <i
-                      data-lucide="check-circle-2"
-                      class="w-5 h-5 text-emerald-accent mt-0.5"
-                    ></i>
+                    <div
+                      class="h-8 w-8 rounded-full bg-emerald-accent/10 text-emerald-accent flex items-center justify-center text-xs font-black"
+                    >
+                      1
+                    </div>
                     <div>
                       <p class="text-white font-bold text-sm">
-                        Blocked withdrawals
+                        Fill your case details
                       </p>
                       <p class="text-slate-400 text-xs mt-1">
-                        Funds locked inside investment dashboards or inactive
-                        accounts.
+                        Tell us what happened and which platform is involved.
                       </p>
                     </div>
                   </div>
 
                   <div class="flex items-start gap-3">
-                    <i
-                      data-lucide="check-circle-2"
-                      class="w-5 h-5 text-emerald-accent mt-0.5"
-                    ></i>
+                    <div
+                      class="h-8 w-8 rounded-full bg-emerald-accent/10 text-emerald-accent flex items-center justify-center text-xs font-black"
+                    >
+                      2
+                    </div>
                     <div>
                       <p class="text-white font-bold text-sm">
-                        Deceptive brokers
+                        Pay submission fee
                       </p>
                       <p class="text-slate-400 text-xs mt-1">
-                        Suspicious platforms, cloned brands, and misleading
-                        investment offers.
+                        Select network, copy wallet address, and upload proof.
                       </p>
                     </div>
                   </div>
 
                   <div class="flex items-start gap-3">
-                    <i
-                      data-lucide="check-circle-2"
-                      class="w-5 h-5 text-emerald-accent mt-0.5"
-                    ></i>
+                    <div
+                      class="h-8 w-8 rounded-full bg-emerald-accent/10 text-emerald-accent flex items-center justify-center text-xs font-black"
+                    >
+                      3
+                    </div>
                     <div>
                       <p class="text-white font-bold text-sm">
-                        Recovery escalation
+                        Await admin review
                       </p>
                       <p class="text-slate-400 text-xs mt-1">
-                        Case support that may involve documented escalation
-                        where relevant.
+                        Your request will appear below as pending.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start gap-3">
+                    <div
+                      class="h-8 w-8 rounded-full bg-emerald-accent/10 text-emerald-accent flex items-center justify-center text-xs font-black"
+                    >
+                      4
+                    </div>
+                    <div>
+                      <p class="text-white font-bold text-sm">
+                        Case activation
+                      </p>
+                      <p class="text-slate-400 text-xs mt-1">
+                        Once approved, it will show that the recovery team is on
+                        your case.
                       </p>
                     </div>
                   </div>
@@ -872,52 +724,38 @@
               </div>
 
               <div
-                class="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-emerald-accent to-emerald-700 text-white relative overflow-hidden"
+                class="p-5 sm:p-6 rounded-2xl bg-amber-500/10 border border-amber-500/20"
               >
-                <div class="absolute -right-4 -top-4 opacity-10">
-                  <i data-lucide="headset" class="w-24 h-24"></i>
-                </div>
-
-                <h4 class="text-lg sm:text-xl font-bold mb-2">
-                  Speak to recovery support
-                </h4>
-                <p class="text-emerald-100 text-sm mb-5">
-                  No long request form. No delay. Just direct contact with an
-                  agent.
-                </p>
-
-                <a
-                  class="flex items-center gap-3 p-4 bg-white/10 hover:bg-white/20 rounded-xl transition-colors border border-white/10"
-                  href="https://wa.me/1234567890"
-                >
-                  <i data-lucide="message-square" class="w-5 h-5"></i>
-                  <div class="text-sm">
-                    <p class="font-bold">Chat With an Agent</p>
-                    <p
-                      class="opacity-70 text-[10px] uppercase font-bold tracking-widest"
-                    >
-                      Fast response
+                <div class="flex items-start gap-3">
+                  <i
+                    data-lucide="triangle-alert"
+                    class="w-5 h-5 text-amber-400 mt-0.5"
+                  ></i>
+                  <div>
+                    <p class="text-amber-300 font-bold text-sm">
+                      Important Note
+                    </p>
+                    <p class="text-slate-300 text-xs mt-2 leading-relaxed">
+                      Ensure you submit the correct payment network and valid
+                      transaction ID. Incorrect details may delay your case
+                      review.
                     </p>
                   </div>
-                </a>
+                </div>
               </div>
 
               <div
-                class="p-5 sm:p-6 rounded-2xl border border-border-dark bg-surface-dark/50"
+                class="p-5 sm:p-6 rounded-2xl bg-primary/10 border border-primary/20"
               >
                 <p
-                  class="text-emerald-accent text-[10px] sm:text-xs font-black uppercase tracking-widest mb-2"
+                  class="text-primary text-[10px] sm:text-xs font-black uppercase tracking-widest mb-2"
                 >
-                  Recovery Focus
+                  Submission Fee
                 </p>
-                <p
-                  class="text-white font-bold leading-tight text-sm sm:text-base"
-                >
-                  Lost investment funds
-                </p>
+                <p class="text-white font-bold text-2xl">$23.8</p>
                 <p class="text-slate-400 text-xs mt-2">
-                  Structured support for suspicious investment platforms, frozen
-                  accounts, and inaccessible balances.
+                  Required before your recovery request is submitted for admin
+                  review.
                 </p>
               </div>
             </div>
@@ -926,7 +764,631 @@
       </div>
     </div>
 
+    <div
+      id="paymentModal"
+      class="modal-overlay"
+      onclick="handlePaymentOverlayClick(event)"
+    >
+      <div class="modal-box">
+        <div
+          class="px-6 pt-6 pb-4 border-b border-[#1e293b] flex items-center justify-between"
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="h-10 w-10 rounded-xl bg-emerald-accent/10 flex items-center justify-center"
+            >
+              <i data-lucide="wallet" class="w-5 h-5 text-emerald-accent"></i>
+            </div>
+            <div>
+              <h3 class="text-white font-extrabold text-base leading-none">
+                Recovery Payment
+              </h3>
+              <p class="text-slate-500 text-[11px] mt-1">
+                Complete payment to submit your request
+              </p>
+            </div>
+          </div>
+
+          <button
+            onclick="closePaymentModal()"
+            class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-white/5 transition-all"
+          >
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <div class="px-6 py-5 space-y-4">
+          <div
+            id="paymentError"
+            class="hidden text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-xl px-4 py-3"
+          ></div>
+
+          <div
+            class="p-4 rounded-xl bg-emerald-accent/10 border border-emerald-accent/20"
+          >
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <p
+                  class="text-slate-300 text-xs uppercase font-bold tracking-wider"
+                >
+                  Submission Fee
+                </p>
+                <p class="text-white text-xl font-black mt-1">$23.8</p>
+              </div>
+              <div
+                class="h-11 w-11 rounded-xl bg-emerald-accent text-white flex items-center justify-center"
+              >
+                <i data-lucide="badge-dollar-sign" class="w-5 h-5"></i>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label
+              class="text-xs font-bold uppercase text-slate-400 tracking-wider block mb-1.5"
+              >Network</label
+            >
+            <select
+              id="paymentNetwork"
+              onchange="updateRecoveryWalletAddress()"
+              class="w-full px-4 py-3 bg-black/40 border border-[#1e293b] rounded-xl text-white outline-none focus:border-emerald-accent text-sm transition-colors"
+            >
+              <option value="">Select network</option>
+              <option value="USDT_TRC20">USDT — TRC20 (Tron)</option>
+              <option value="USDT_BEP20">USDT — BEP20 (BSC)</option>
+              <option value="BTC">BTC — Bitcoin Network</option>
+            </select>
+          </div>
+
+          <div
+            id="paymentWalletBox"
+            class="hidden p-4 rounded-xl bg-black/30 border border-emerald-accent/20"
+          >
+            <p
+              class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2"
+            >
+              Send payment to this address
+            </p>
+
+            <div class="flex items-start gap-2">
+              <p
+                id="paymentWalletAddress"
+                class="text-xs sm:text-sm font-mono text-white break-all flex-1 leading-relaxed"
+              ></p>
+              <button
+                onclick="copyRecoveryWalletAddress()"
+                class="flex-shrink-0 p-2 rounded-lg bg-emerald-accent/10 hover:bg-emerald-accent/20 text-emerald-accent transition-colors"
+                title="Copy address"
+              >
+                <i data-lucide="copy" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <p
+              id="recoveryCopyConfirm"
+              class="text-[10px] text-emerald-accent hidden mt-2"
+            >
+              ✓ Address copied!
+            </p>
+          </div>
+
+          <div>
+            <label
+              class="text-xs font-bold uppercase text-slate-400 tracking-wider block mb-1.5"
+              >Transaction ID / Hash</label
+            >
+            <input
+              type="text"
+              id="paymentTransactionId"
+              placeholder="Enter payment transaction ID"
+              class="w-full px-4 py-3 bg-black/40 border border-[#1e293b] rounded-xl text-white placeholder:text-slate-600 outline-none focus:border-emerald-accent text-sm font-mono transition-colors"
+            />
+          </div>
+
+          <div>
+            <label
+              class="text-xs font-bold uppercase text-slate-400 tracking-wider block mb-1.5"
+              >Proof of Payment</label
+            >
+            <div
+              id="paymentDropzone"
+              onclick="document.getElementById('paymentProofFile').click()"
+              class="border-2 border-dashed border-[#1e293b] rounded-xl p-6 flex flex-col items-center justify-center bg-black/20 hover:bg-black/30 transition-colors cursor-pointer"
+            >
+              <div
+                class="h-12 w-12 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 mb-3"
+              >
+                <i data-lucide="file-up" class="w-6 h-6"></i>
+              </div>
+              <p class="text-white font-bold text-sm mb-1">
+                Click to upload payment proof
+              </p>
+              <p class="text-slate-500 text-xs">Receipt, screenshot or PDF</p>
+
+              <img
+                id="paymentProofPreview"
+                class="proof-preview hidden"
+                src=""
+                alt="Preview"
+              />
+              <p
+                id="paymentProofFileName"
+                class="text-emerald-accent text-xs mt-2 hidden"
+              ></p>
+            </div>
+
+            <input
+              id="paymentProofFile"
+              type="file"
+              accept="image/*,application/pdf"
+              class="hidden"
+              onchange="handlePaymentFileChange(event)"
+            />
+          </div>
+        </div>
+
+        <div class="px-6 pb-6 flex gap-3">
+          <button
+            id="paidBtn"
+            onclick="submitRecoveryRequest()"
+            class="flex-1 py-3 bg-emerald-accent hover:bg-emerald-600 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm"
+          >
+            <i data-lucide="check-circle-2" class="w-4 h-4"></i> I've Paid
+          </button>
+
+          <button
+            onclick="closePaymentModal()"
+            class="px-4 py-3 bg-[#1e293b] hover:bg-[#2d3a4e] text-slate-300 rounded-xl text-sm transition-all"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="./js/api.js"></script>
     <script>
+      lucide.createIcons();
+
+      const user = JSON.parse(localStorage.getItem("user") || "null");
+      const token = localStorage.getItem("token");
+
+      if (!user || !token) {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        window.location.href = "login.html";
+      }
+
+      const RECOVERY_SUBMISSION_FEE = 23.8;
+
+      const RECOVERY_WALLETS = {
+        USDT_TRC20: "TPZn89u6DCWku3VrCU5FvxJiRdsDoAEioZ",
+        USDT_BEP20: "0x3375D0a3E967C328B8b8E86a2E75e51Ea745eD4A",
+        BTC: "bc1qhx3zg7nrcz37v5hq6u4ee6fyv5xucstrr7pxxa",
+      };
+
+      let recoveryFormDraft = null;
+      let selectedPaymentProof = null;
+
+      function showToast(msg, type = "success") {
+        const el = document.getElementById("toast");
+        const colors = {
+          success: "bg-emerald-900/90 border-emerald-500/40 text-emerald-300",
+          error: "bg-rose-900/90 border-rose-500/40 text-rose-300",
+        };
+
+        el.className = `px-4 py-3 rounded-xl border text-sm font-medium flex items-center gap-2 shadow-2xl max-w-sm ${colors[type]}`;
+        el.innerHTML = `<span>${msg}</span>`;
+        el.classList.add("show");
+
+        setTimeout(() => el.classList.remove("show"), 4000);
+      }
+
+      function showError(msg) {
+        const el = document.getElementById("formError");
+        el.textContent = msg;
+        el.classList.remove("hidden");
+        document.getElementById("formSuccess").classList.add("hidden");
+      }
+
+      function showSuccess(msg) {
+        const el = document.getElementById("formSuccess");
+        el.textContent = msg;
+        el.classList.remove("hidden");
+        document.getElementById("formError").classList.add("hidden");
+      }
+
+      function showPaymentError(msg) {
+        const el = document.getElementById("paymentError");
+        el.textContent = msg;
+        el.classList.remove("hidden");
+      }
+
+      function clearPaymentError() {
+        document.getElementById("paymentError").classList.add("hidden");
+      }
+
+      function loadUserInfo() {
+        document.getElementById("headerName").textContent =
+          user.name || "Trader";
+        document.getElementById("fullName").value = user.name || "";
+        document.getElementById("email").value = user.email || "";
+
+        if (user.profile) {
+          document.getElementById("headerAvatarWrap").innerHTML =
+            `<img src="${user.profile}" alt="avatar" class="avatar-img" />`;
+        }
+      }
+
+      function continueToRecoveryPayment() {
+        document.getElementById("formError").classList.add("hidden");
+        document.getElementById("formSuccess").classList.add("hidden");
+
+        const fullName = document.getElementById("fullName").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const lostAmount = document.getElementById("lostAmount").value.trim();
+        const asset = document.getElementById("asset").value.trim();
+        const platform = document.getElementById("platform").value.trim();
+        const incidentType = document.getElementById("incidentType").value;
+        const incidentDate = document.getElementById("incidentDate").value;
+        const description = document.getElementById("description").value.trim();
+
+        if (
+          !fullName ||
+          !email ||
+          !lostAmount ||
+          Number(lostAmount) <= 0 ||
+          !asset ||
+          !platform ||
+          !incidentType ||
+          !description
+        ) {
+          showError("Please complete all required recovery details.");
+          return;
+        }
+
+        recoveryFormDraft = {
+          fullName,
+          email,
+          lostAmount,
+          asset,
+          platform,
+          incidentType,
+          incidentDate,
+          description,
+        };
+
+        clearPaymentError();
+        document.getElementById("paymentNetwork").value = "";
+        document.getElementById("paymentTransactionId").value = "";
+        document.getElementById("paymentWalletBox").classList.add("hidden");
+        document.getElementById("paymentProofFile").value = "";
+        document.getElementById("paymentProofPreview").classList.add("hidden");
+        document.getElementById("paymentProofFileName").classList.add("hidden");
+        selectedPaymentProof = null;
+
+        document.getElementById("paymentModal").classList.add("open");
+        document.body.style.overflow = "hidden";
+        lucide.createIcons();
+      }
+
+      function closePaymentModal() {
+        document.getElementById("paymentModal").classList.remove("open");
+        document.body.style.overflow = "";
+      }
+
+      function handlePaymentOverlayClick(e) {
+        if (e.target === document.getElementById("paymentModal")) {
+          closePaymentModal();
+        }
+      }
+
+      function updateRecoveryWalletAddress() {
+        const selected = document.getElementById("paymentNetwork").value;
+        const box = document.getElementById("paymentWalletBox");
+        const addrEl = document.getElementById("paymentWalletAddress");
+
+        if (!selected) {
+          box.classList.add("hidden");
+          return;
+        }
+
+        addrEl.textContent = RECOVERY_WALLETS[selected];
+        box.classList.remove("hidden");
+        document.getElementById("recoveryCopyConfirm").classList.add("hidden");
+        lucide.createIcons();
+      }
+
+      function copyRecoveryWalletAddress() {
+        const address = document.getElementById(
+          "paymentWalletAddress",
+        ).textContent;
+        navigator.clipboard.writeText(address).then(() => {
+          const confirm = document.getElementById("recoveryCopyConfirm");
+          confirm.classList.remove("hidden");
+          setTimeout(() => confirm.classList.add("hidden"), 2500);
+        });
+      }
+
+      function handlePaymentFileChange(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        selectedPaymentProof = file;
+
+        document.getElementById("paymentProofFileName").textContent = file.name;
+        document
+          .getElementById("paymentProofFileName")
+          .classList.remove("hidden");
+
+        if (file.type.startsWith("image/")) {
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            const preview = document.getElementById("paymentProofPreview");
+            preview.src = ev.target.result;
+            preview.classList.remove("hidden");
+          };
+          reader.readAsDataURL(file);
+        } else {
+          document
+            .getElementById("paymentProofPreview")
+            .classList.add("hidden");
+        }
+      }
+
+      const paymentDropzone = document.getElementById("paymentDropzone");
+      paymentDropzone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        paymentDropzone.classList.add("border-emerald-accent");
+      });
+      paymentDropzone.addEventListener("dragleave", () => {
+        paymentDropzone.classList.remove("border-emerald-accent");
+      });
+      paymentDropzone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        paymentDropzone.classList.remove("border-emerald-accent");
+        const file = e.dataTransfer.files[0];
+        if (file) {
+          const dt = new DataTransfer();
+          dt.items.add(file);
+          document.getElementById("paymentProofFile").files = dt.files;
+          handlePaymentFileChange({ target: { files: [file] } });
+        }
+      });
+
+      function setPaidLoading(loading) {
+        const btn = document.getElementById("paidBtn");
+        if (loading) {
+          btn.disabled = true;
+          btn.innerHTML = `<span class="spinner"></span>`;
+        } else {
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4"></i> I've Paid`;
+          lucide.createIcons();
+        }
+      }
+
+      async function submitRecoveryRequest() {
+        clearPaymentError();
+
+        if (!recoveryFormDraft) {
+          showPaymentError("Recovery form data is missing.");
+          return;
+        }
+
+        const paymentNetwork = document.getElementById("paymentNetwork").value;
+        const transactionId = document
+          .getElementById("paymentTransactionId")
+          .value.trim();
+
+        if (!paymentNetwork) {
+          showPaymentError("Please select a payment network.");
+          return;
+        }
+
+        if (!transactionId) {
+          showPaymentError("Please enter your payment transaction ID.");
+          return;
+        }
+
+        if (!selectedPaymentProof) {
+          showPaymentError("Please upload your payment proof.");
+          return;
+        }
+
+        const paymentAddress = RECOVERY_WALLETS[paymentNetwork];
+        const paymentAsset = paymentNetwork === "BTC" ? "BTC" : "USDT";
+
+        setPaidLoading(true);
+
+        try {
+          const formData = new FormData();
+          formData.append("fullName", recoveryFormDraft.fullName);
+          formData.append("email", recoveryFormDraft.email);
+          formData.append("lostAmount", recoveryFormDraft.lostAmount);
+          formData.append("asset", recoveryFormDraft.asset);
+          formData.append("platform", recoveryFormDraft.platform);
+          formData.append("incidentType", recoveryFormDraft.incidentType);
+          formData.append("incidentDate", recoveryFormDraft.incidentDate || "");
+          formData.append("description", recoveryFormDraft.description);
+
+          formData.append("paymentNetwork", paymentNetwork);
+          formData.append("paymentAsset", paymentAsset);
+          formData.append("paymentAddress", paymentAddress);
+          formData.append("transactionId", transactionId);
+          formData.append("submissionFee", String(RECOVERY_SUBMISSION_FEE));
+          formData.append("proofOfPayment", selectedPaymentProof);
+
+          await API.postForm("/recovery-requests", formData);
+
+          closePaymentModal();
+          resetRecoveryForm();
+          await loadRecoveryHistory();
+
+          showSuccess(
+            "Recovery request submitted successfully. Your request is now pending admin approval.",
+          );
+          showToast("Recovery request submitted successfully.", "success");
+        } catch (err) {
+          showPaymentError(err.message || "Failed to submit recovery request.");
+        } finally {
+          setPaidLoading(false);
+        }
+      }
+
+      function resetRecoveryForm() {
+        document.getElementById("fullName").value = user.name || "";
+        document.getElementById("email").value = user.email || "";
+        document.getElementById("lostAmount").value = "";
+        document.getElementById("asset").value = "";
+        document.getElementById("platform").value = "";
+        document.getElementById("incidentType").value = "";
+        document.getElementById("incidentDate").value = "";
+        document.getElementById("description").value = "";
+
+        document.getElementById("paymentNetwork").value = "";
+        document.getElementById("paymentTransactionId").value = "";
+        document.getElementById("paymentProofFile").value = "";
+        document.getElementById("paymentProofPreview").classList.add("hidden");
+        document.getElementById("paymentProofFileName").classList.add("hidden");
+        document.getElementById("paymentWalletBox").classList.add("hidden");
+        document.getElementById("recoveryCopyConfirm").classList.add("hidden");
+
+        recoveryFormDraft = null;
+        selectedPaymentProof = null;
+      }
+
+      async function loadRecoveryHistory() {
+        const list = document.getElementById("recoveryHistoryList");
+
+        try {
+          const requests = await API.get("/recovery-requests/my");
+
+          if (!requests.length) {
+            list.innerHTML = `
+              <div class="px-4 sm:px-6 py-6 text-center text-slate-500 text-xs">
+                No recovery requests yet.
+              </div>
+            `;
+            return;
+          }
+
+          list.innerHTML = requests
+            .map((r) => {
+              const statusConfig = {
+                pending: {
+                  badge: "bg-amber-400/10 text-amber-400 border-amber-400/20",
+                  text: "Pending",
+                  message: "Awaiting admin approval",
+                  icon: "clock-3",
+                  iconWrap: "bg-amber-400/10 text-amber-400",
+                },
+                approved: {
+                  badge:
+                    "bg-emerald-accent/10 text-emerald-accent border-emerald-accent/20",
+                  text: "Approved",
+                  message: r.adminMessage || "Recovery team is on your case",
+                  icon: "check-circle-2",
+                  iconWrap: "bg-emerald-accent/10 text-emerald-accent",
+                },
+                rejected: {
+                  badge: "bg-rose-500/10 text-rose-400 border-rose-500/20",
+                  text: "Rejected",
+                  message: r.adminMessage || "Your request was not approved",
+                  icon: "x-circle",
+                  iconWrap: "bg-rose-500/10 text-rose-400",
+                },
+              }[r.status] || {
+                badge: "bg-slate-500/10 text-slate-400 border-slate-400/20",
+                text: "Pending",
+                message: "Awaiting admin approval",
+                icon: "clock-3",
+                iconWrap: "bg-slate-500/10 text-slate-400",
+              };
+
+              return `
+                <div class="px-4 sm:px-6 py-4 flex items-start gap-3 sm:gap-4">
+                  <div class="h-9 w-9 sm:h-10 sm:w-10 rounded-full ${statusConfig.iconWrap} flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="${statusConfig.icon}" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                  </div>
+
+                  <div class="flex-1 min-w-0">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                      <div>
+                        <p class="text-white font-bold text-sm truncate">
+                          ${r.asset} recovery — $${Number(
+                            r.lostAmount || 0,
+                          ).toLocaleString("en-US", {
+                            minimumFractionDigits: 2,
+                          })}
+                        </p>
+                        <p class="text-[11px] text-slate-500 mt-1">
+                          ${r.platform} • ${new Date(
+                            r.createdAt,
+                          ).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })}
+                        </p>
+                      </div>
+
+                      <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${statusConfig.badge} whitespace-nowrap self-start">
+                        ${statusConfig.text}
+                      </span>
+                    </div>
+
+                    <div class="mt-3 grid sm:grid-cols-2 gap-2 text-xs">
+                      <div class="text-slate-400">
+                        <span class="text-slate-500">Incident:</span>
+                        ${r.incidentType || "--"}
+                      </div>
+                      <div class="text-slate-400">
+                        <span class="text-slate-500">Submission Fee:</span>
+                        $${Number(r.submissionFee || 0).toLocaleString(
+                          "en-US",
+                          {
+                            minimumFractionDigits: 2,
+                          },
+                        )}
+                      </div>
+                    </div>
+
+                    <p class="text-xs mt-3 ${
+                      r.status === "approved"
+                        ? "text-emerald-accent"
+                        : r.status === "rejected"
+                          ? "text-rose-400"
+                          : "text-amber-400"
+                    }">
+                      ${statusConfig.message}
+                    </p>
+                  </div>
+                </div>
+              `;
+            })
+            .join("");
+
+          lucide.createIcons();
+        } catch (err) {
+          list.innerHTML = `
+            <div class="px-4 sm:px-6 py-6 text-center text-slate-500 text-xs">
+              Failed to load recovery requests.
+            </div>
+          `;
+        }
+      }
+
+      async function handleLogout() {
+        try {
+          await API.post("/users/logout");
+        } catch {}
+
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        window.location.href = "login.html";
+      }
+
       (function () {
         const menuToggle = document.getElementById("menuToggle");
         const mobileSidebar = document.getElementById("mobileSidebar");
@@ -962,11 +1424,24 @@
             ) {
               closeSidebarFunc();
             }
+
+            if (e.key === "Escape") {
+              closePaymentModal();
+            }
           });
         }
-
-        lucide.createIcons();
       })();
+
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", handleLogout);
+      document
+        .getElementById("mobileLogoutBtn")
+        .addEventListener("click", handleLogout);
+
+      loadUserInfo();
+      loadRecoveryHistory();
+      lucide.createIcons();
     </script>
   </body>
 </html>
