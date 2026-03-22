@@ -438,7 +438,17 @@
                       <th
                         class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-slate-500"
                       >
-                        Amount
+                        Deposit
+                      </th>
+                      <th
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-slate-500"
+                      >
+                        Fee
+                      </th>
+                      <th
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-slate-500"
+                      >
+                        Credited
                       </th>
                       <th
                         class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-slate-500"
@@ -592,7 +602,7 @@
           renderPage(1);
         } catch (err) {
           document.getElementById("desktopTableBody").innerHTML =
-            `<tr><td colspan="5" class="px-6 py-10 text-center text-slate-500 text-xs">Failed to load transactions.</td></tr>`;
+            `<tr><td colspan="7" class="px-6 py-10 text-center text-slate-500 text-xs">Failed to load transactions.</td></tr>`;
           document.getElementById("mobileCardList").innerHTML =
             `<div class="text-center text-slate-500 text-xs py-8">Failed to load transactions.</div>`;
         }
@@ -602,7 +612,7 @@
       function updateStats() {
         const total = allTransactions
           .filter((t) => t.status === "approved")
-          .reduce((sum, t) => sum + t.amount, 0);
+          .reduce((sum, t) => sum + (Number(t.creditedAmount) || 0), 0);
         const pending = allTransactions.filter(
           (t) => t.status === "pending",
         ).length;
@@ -649,37 +659,68 @@
         // ── Desktop Table ─────────────────────────────────────
         const tbody = document.getElementById("desktopTableBody");
         if (!pageData.length) {
-          tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-10 text-center text-slate-500 text-xs">No transactions found.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-10 text-center text-slate-500 text-xs">No transactions found.</td></tr>`;
         } else {
           tbody.innerHTML = pageData
             .map((t) => {
               const { date, time } = formatDate(t.createdAt);
+              const amount = Number(t.amount) || 0;
+              const fee = Number(t.fee) || 0;
+              const creditedAmount = Number(t.creditedAmount) || 0;
+
               return `
-              <tr class="hover:bg-white/[0.02] transition-colors cursor-pointer" onclick="showTransactionDetails('${t._id}')">
-                <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                  <div class="text-xs sm:text-sm text-white">${date}</div>
-                  <div class="text-[8px] sm:text-[10px] text-slate-500">${time}</div>
-                </td>
-                <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                  <div class="flex items-center gap-2 group">
-                    <span class="text-xs sm:text-sm font-mono text-slate-300">#${t.transactionId.slice(0, 12)}</span>
-                    <button onclick="event.stopPropagation(); copyText('${t.transactionId}')" class="text-slate-600 hover:text-primary opacity-0 group-hover:opacity-100 transition-all">
-                      <i data-lucide="copy" class="w-4 h-4"></i>
-                    </button>
-                  </div>
-                </td>
-                <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                  <span class="text-xs sm:text-sm font-bold text-white">$${t.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
-                </td>
-                <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                  <div class="flex items-center gap-2">
-                    ${assetIcon(t.asset, t.network)}
-                    <span class="text-[10px] sm:text-xs text-slate-300">${t.asset} (${t.network})</span>
-                  </div>
-                </td>
-                <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">${statusBadge(t.status)}</td>
-              </tr>
-            `;
+      <tr class="hover:bg-white/[0.02] transition-colors cursor-pointer" onclick="showTransactionDetails('${t._id}')">
+        <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+          <div class="text-xs sm:text-sm text-white">${date}</div>
+          <div class="text-[8px] sm:text-[10px] text-slate-500">${time}</div>
+        </td>
+        <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+          <div class="flex items-center gap-2 group">
+            <span class="text-xs sm:text-sm font-mono text-slate-300">#${t.transactionId.slice(0, 12)}</span>
+            <button onclick="event.stopPropagation(); copyText('${t.transactionId}')" class="text-slate-600 hover:text-primary opacity-0 group-hover:opacity-100 transition-all">
+              <i data-lucide="copy" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </td>
+        <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+          <span class="text-xs sm:text-sm font-bold text-white">$${amount.toLocaleString(
+            "en-US",
+            {
+              minimumFractionDigits: 2,
+            },
+          )}</span>
+        </td>
+        <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+          <span class="text-xs sm:text-sm font-bold text-rose-400">
+            ${
+              t.status === "approved"
+                ? `-$${fee.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                  })}`
+                : "--"
+            }
+          </span>
+        </td>
+        <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+          <span class="text-xs sm:text-sm font-bold text-emerald-accent">
+            ${
+              t.status === "approved"
+                ? `$${creditedAmount.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                  })}`
+                : "--"
+            }
+          </span>
+        </td>
+        <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+          <div class="flex items-center gap-2">
+            ${assetIcon(t.asset, t.network)}
+            <span class="text-[10px] sm:text-xs text-slate-300">${t.asset} (${t.network})</span>
+          </div>
+        </td>
+        <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">${statusBadge(t.status)}</td>
+      </tr>
+    `;
             })
             .join("");
         }
@@ -692,35 +733,69 @@
           mobileList.innerHTML = pageData
             .map((t) => {
               const { date, time } = formatDate(t.createdAt);
+              const amount = Number(t.amount) || 0;
+              const fee = Number(t.fee) || 0;
+              const creditedAmount = Number(t.creditedAmount) || 0;
+
               const statusMap = {
                 approved:
                   "bg-emerald-accent/10 text-emerald-accent border-emerald-accent/20",
                 pending: "bg-amber-400/10 text-amber-400 border-amber-400/20",
                 rejected: "bg-rose-500/10 text-rose-500 border-rose-500/20",
               };
+
               return `
-              <div class="bg-surface-dark border border-border-dark rounded-xl p-4 cursor-pointer" onclick="showTransactionDetails('${t._id}')">
-                <div class="flex justify-between items-start mb-3">
-                  <div>
-                    <div class="text-xs text-slate-400">${date} · ${time}</div>
-                    <div class="text-sm font-mono text-slate-300 mt-1">#${t.transactionId.slice(0, 12)}</div>
-                  </div>
-                  <span class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider border ${statusMap[t.status] || statusMap.pending}">${t.status}</span>
-                </div>
-                <div class="flex justify-between items-center">
-                  <div class="flex items-center gap-2">
-                    ${assetIcon(t.asset, t.network)}
-                    <div>
-                      <div class="text-xs text-slate-400">${t.asset} (${t.network})</div>
-                      <div class="text-sm font-bold text-white">$${t.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
-                    </div>
-                  </div>
-                  <button class="text-slate-400 hover:text-primary transition-colors" onclick="event.stopPropagation(); showTransactionDetails('${t._id}')">
-                    <i data-lucide="info" class="w-5 h-5"></i>
-                  </button>
-                </div>
-              </div>
-            `;
+      <div class="bg-surface-dark border border-border-dark rounded-xl p-4 cursor-pointer" onclick="showTransactionDetails('${t._id}')">
+        <div class="flex justify-between items-start mb-3">
+          <div>
+            <div class="text-xs text-slate-400">${date} · ${time}</div>
+            <div class="text-sm font-mono text-slate-300 mt-1">#${t.transactionId.slice(0, 12)}</div>
+          </div>
+          <span class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider border ${statusMap[t.status] || statusMap.pending}">${t.status}</span>
+        </div>
+
+        <div class="flex items-center gap-2 mb-3">
+          ${assetIcon(t.asset, t.network)}
+          <div class="text-xs text-slate-400">${t.asset} (${t.network})</div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <div class="text-[10px] text-slate-500 uppercase">Deposit</div>
+            <div class="text-sm font-bold text-white">$${amount.toLocaleString(
+              "en-US",
+              {
+                minimumFractionDigits: 2,
+              },
+            )}</div>
+          </div>
+          <div>
+            <div class="text-[10px] text-slate-500 uppercase">Fee</div>
+            <div class="text-sm font-bold text-rose-400">
+              ${
+                t.status === "approved"
+                  ? `-$${fee.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}`
+                  : "--"
+              }
+            </div>
+          </div>
+          <div>
+            <div class="text-[10px] text-slate-500 uppercase">Credited</div>
+            <div class="text-sm font-bold text-emerald-accent">
+              ${
+                t.status === "approved"
+                  ? `$${creditedAmount.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}`
+                  : "--"
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
             })
             .join("");
         }
@@ -801,8 +876,28 @@
               <span class="text-white text-sm">${date} · ${time}</span>
             </div>
             <div class="flex justify-between items-center pb-2 border-b border-border-dark">
-              <span class="text-slate-400 text-sm">Amount</span>
-              <span class="text-white font-bold text-lg">$${t.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
+              <span class="text-slate-400 text-sm">Deposit Amount</span>
+              <span class="text-white font-bold text-lg">$${(Number(t.amount) || 0).toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
+            </div>
+            <div class="flex justify-between items-center pb-2 border-b border-border-dark">
+              <span class="text-slate-400 text-sm">Processing Fee</span>
+              <span class="text-rose-400 font-bold text-sm">
+                ${
+                  t.status === "approved"
+                    ? `-$${(Number(t.fee) || 0).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
+                    : "--"
+                }
+              </span>
+            </div>
+            <div class="flex justify-between items-center pb-2 border-b border-border-dark">
+              <span class="text-slate-400 text-sm">Credited Amount</span>
+              <span class="text-emerald-accent font-bold text-sm">
+                ${
+                  t.status === "approved"
+                    ? `$${(Number(t.creditedAmount) || 0).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
+                    : "--"
+                }
+              </span>
             </div>
             <div class="flex justify-between items-center pb-2 border-b border-border-dark">
               <span class="text-slate-400 text-sm">Asset</span>

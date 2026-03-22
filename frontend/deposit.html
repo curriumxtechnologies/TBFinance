@@ -369,6 +369,25 @@
                   </p>
                 </div>
               </div>
+              <div
+                class="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 flex gap-3"
+              >
+                <i
+                  data-lucide="percent"
+                  class="w-5 h-5 text-rose-500 flex-shrink-0 mt-0.5"
+                ></i>
+                <div>
+                  <p
+                    class="text-xs font-bold text-rose-500 uppercase tracking-wider mb-1"
+                  >
+                    Processing Fee
+                  </p>
+                  <p class="text-xs text-slate-300 leading-relaxed">
+                    A 5% processing fee will be deducted from all deposits
+                    during confirmation.
+                  </p>
+                </div>
+              </div>
             </div>
 
             <!-- Deposit Form -->
@@ -406,6 +425,14 @@
                         min="1"
                       />
                     </div>
+                    <p
+                      id="depositPreview"
+                      class="text-xs text-slate-400 mt-2 hidden"
+                    >
+                      You will be credited
+                      <span class="text-emerald-accent font-bold">$0.00</span>
+                      after a 5% processing fee.
+                    </p>
                   </div>
 
                   <!-- Asset / Network + Wallet Address revealed below -->
@@ -572,9 +599,9 @@
       // ─── Wallet Addresses ─────────────────────────────────────
       // Replace these with your actual wallet addresses
       const WALLET_ADDRESSES = {
-        USDT_TRC20: "TXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        USDT_BEP20: "0xXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        BTC: "bc1XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        USDT_TRC20: "TPZn89u6DCWku3VrCU5FvxJiRdsDoAEioZ",
+        USDT_BEP20: "0x3375D0a3E967C328B8b8E86a2E75e51Ea745eD4A",
+        BTC: "bc1qhx3zg7nrcz37v5hq6u4ee6fyv5xucstrr7pxxa",
       };
 
       // ─── Show wallet address when network is selected ─────────
@@ -645,6 +672,35 @@
           document.getElementById("proofFile").files = dt.files;
           handleFileChange({ target: { files: [file] } });
         }
+      });
+
+      const depositAmountInput = document.getElementById("depositAmount");
+      const depositPreview = document.getElementById("depositPreview");
+
+      depositAmountInput.addEventListener("input", () => {
+        const amount = parseFloat(depositAmountInput.value);
+
+        if (!amount || amount <= 0) {
+          depositPreview.classList.add("hidden");
+          return;
+        }
+
+        const fee = amount * 0.05;
+        const creditedAmount = amount - fee;
+
+        depositPreview.innerHTML = `
+    You will be credited <span class="text-emerald-accent font-bold">$${creditedAmount.toLocaleString(
+      "en-US",
+      { minimumFractionDigits: 2, maximumFractionDigits: 2 },
+    )}</span>
+    after a 5% processing fee of
+    <span class="text-rose-400 font-bold">$${fee.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}</span>.
+  `;
+
+        depositPreview.classList.remove("hidden");
       });
 
       // ─── Helpers ─────────────────────────────────────────────

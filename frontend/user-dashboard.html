@@ -2,13 +2,33 @@
 <html class="dark" lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+    <meta
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+      name="viewport"
+    />
     <title>Dashboard | TheBrave Finance</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="images/favicon-16x16.png"
+    />
     <link rel="manifest" href="images/site.webmanifest" />
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -30,230 +50,566 @@
       };
     </script>
     <style>
-      body { font-family: "Manrope", sans-serif; }
-      .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-      .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-      .custom-scrollbar::-webkit-scrollbar-thumb { background: #243049; border-radius: 10px; }
-      #mobileSidebar { transition: transform 0.3s ease-in-out; transform: translateX(-100%); }
-      #mobileSidebar.open { transform: translateX(0); }
-      #sidebarOverlay { transition: opacity 0.3s ease-in-out; opacity: 0; pointer-events: none; }
-      #sidebarOverlay.open { opacity: 1; pointer-events: auto; }
-      .lucide { width: 20px; height: 20px; stroke-width: 2; }
-      .avatar-img { width: 100%; height: 100%; object-fit: cover; }
+      body {
+        font-family: "Manrope", sans-serif;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #243049;
+        border-radius: 10px;
+      }
+      #mobileSidebar {
+        transition: transform 0.3s ease-in-out;
+        transform: translateX(-100%);
+      }
+      #mobileSidebar.open {
+        transform: translateX(0);
+      }
+      #sidebarOverlay {
+        transition: opacity 0.3s ease-in-out;
+        opacity: 0;
+        pointer-events: none;
+      }
+      #sidebarOverlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .lucide {
+        width: 20px;
+        height: 20px;
+        stroke-width: 2;
+      }
+      .avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
-      /* Withdrawal Modal */
-      .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); z-index: 200; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; display: flex; align-items: center; justify-content: center; padding: 1rem; }
-      .modal-overlay.open { opacity: 1; visibility: visible; }
-      .modal-box { background: #0f1825; border: 1px solid #1e293b; border-radius: 1.5rem; width: 100%; max-width: 460px; transform: translateY(20px) scale(0.97); transition: transform 0.3s cubic-bezier(0.32,0.72,0,1); }
-      .modal-overlay.open .modal-box { transform: translateY(0) scale(1); }
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(6px);
+        z-index: 200;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 0.3s ease,
+          visibility 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+      }
 
-      /* Spinner */
-      .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.25); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
-      @keyframes spin { to { transform: rotate(360deg); } }
+      .modal-overlay.open {
+        opacity: 1;
+        visibility: visible;
+      }
 
-      /* Toast */
-      #toast { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999; transform: translateY(80px); opacity: 0; transition: all 0.3s ease; pointer-events: none; }
-      #toast.show { transform: translateY(0); opacity: 1; }
+      .modal-box {
+        background: #0f1825;
+        border: 1px solid #1e293b;
+        border-radius: 1.5rem;
+        width: 100%;
+        max-width: 460px;
+        transform: translateY(20px) scale(0.97);
+        transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+      }
+
+      .modal-overlay.open .modal-box {
+        transform: translateY(0) scale(1);
+      }
+
+      .spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        display: inline-block;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      #toast {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        z-index: 999;
+        transform: translateY(80px);
+        opacity: 0;
+        transition: all 0.3s ease;
+        pointer-events: none;
+      }
+
+      #toast.show {
+        transform: translateY(0);
+        opacity: 1;
+      }
     </style>
   </head>
 
-  <body class="bg-background-dark text-slate-100 font-display antialiased overflow-hidden">
+  <body
+    class="bg-background-dark text-slate-100 font-display antialiased overflow-hidden"
+  >
+    <div
+      id="toast"
+      class="px-4 py-3 rounded-xl border text-sm font-medium flex items-center gap-2 shadow-2xl max-w-sm"
+    ></div>
 
-    <!-- Toast -->
-    <div id="toast" class="px-4 py-3 rounded-xl border text-sm font-medium flex items-center gap-2 shadow-2xl max-w-sm"></div>
+    <div
+      id="sidebarOverlay"
+      class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"
+    ></div>
 
-    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"></div>
-
-    <!-- Mobile Sidebar -->
-    <aside id="mobileSidebar" class="fixed top-0 left-0 h-full w-64 bg-surface-dark border-r border-border-dark flex flex-col z-50 lg:hidden">
+    <aside
+      id="mobileSidebar"
+      class="fixed top-0 left-0 h-full w-64 bg-surface-dark border-r border-border-dark flex flex-col z-50 lg:hidden"
+    >
       <div class="p-6 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <img src="images/TBF-LOGO.png" alt="TheBrave Logo" class="h-8 w-auto sm:h-10 object-contain" />
-          <h2 class="text-white text-lg font-extrabold tracking-tight uppercase">TBF</h2>
+          <img
+            src="images/TBF-LOGO.png"
+            alt="TheBrave Logo"
+            class="h-8 w-auto sm:h-10 object-contain"
+          />
+          <h2
+            class="text-white text-lg font-extrabold tracking-tight uppercase"
+          >
+            TBF
+          </h2>
         </div>
-        <button id="closeSidebar" class="text-slate-400 hover:text-white p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <button id="closeSidebar" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
       </div>
+
       <nav class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto">
-        <a class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20" href="user-dashboard.html"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</a>
-        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="deposit.html"><i data-lucide="wallet" class="w-5 h-5"></i> Deposit</a>
-        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="deposit-history.html"><i data-lucide="history" class="w-5 h-5"></i> Deposit History</a>
-        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="vip-sub.html"><i data-lucide="badge-check" class="w-5 h-5"></i> VIP Subscription</a>
-        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="recovery-request.html"><i data-lucide="shield-check" class="w-5 h-5"></i> Recovery Requests</a>
-        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="profile.html"><i data-lucide="user" class="w-5 h-5"></i> Profile</a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20"
+          href="user-dashboard.html"
+          ><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</a
+        >
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="deposit.html"
+          ><i data-lucide="wallet" class="w-5 h-5"></i> Deposit</a
+        >
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="deposit-history.html"
+          ><i data-lucide="history" class="w-5 h-5"></i> Deposit History</a
+        >
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="vip-sub.html"
+          ><i data-lucide="badge-check" class="w-5 h-5"></i> VIP Subscription</a
+        >
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="recovery-request.html"
+          ><i data-lucide="shield-check" class="w-5 h-5"></i> Recovery
+          Requests</a
+        >
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="profile.html"
+          ><i data-lucide="user" class="w-5 h-5"></i> Profile</a
+        >
       </nav>
+
       <div class="p-4 border-t border-border-dark">
-        <button id="mobileLogoutBtn" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all">
+        <button
+          id="mobileLogoutBtn"
+          class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
+        >
           <i data-lucide="log-out" class="w-5 h-5"></i> Logout
         </button>
       </div>
     </aside>
 
     <div class="flex h-screen overflow-hidden">
-      <!-- Desktop Sidebar -->
-      <aside class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex-col hidden lg:flex">
+      <aside
+        class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex-col hidden lg:flex"
+      >
         <div class="p-6 flex items-center gap-3">
-          <img src="images/TBF-LOGO.png" alt="TheBrave Logo" class="h-8 w-auto sm:h-10 object-contain" />
-          <h2 class="text-white text-lg font-extrabold tracking-tight uppercase">TBF</h2>
+          <img
+            src="images/TBF-LOGO.png"
+            alt="TheBrave Logo"
+            class="h-8 w-auto sm:h-10 object-contain"
+          />
+          <h2
+            class="text-white text-lg font-extrabold tracking-tight uppercase"
+          >
+            TBF
+          </h2>
         </div>
-        <nav class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto">
-          <a class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20" href="user-dashboard.html"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</a>
-          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="deposit.html"><i data-lucide="wallet" class="w-5 h-5"></i> Deposit</a>
-          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="deposit-history.html"><i data-lucide="history" class="w-5 h-5"></i> Deposit History</a>
-          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="vip-sub.html"><i data-lucide="badge-check" class="w-5 h-5"></i> VIP Subscription</a>
-          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="recovery-request.html"><i data-lucide="shield-check" class="w-5 h-5"></i> Recovery Requests</a>
-          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="profile.html"><i data-lucide="user" class="w-5 h-5"></i> Profile</a>
+
+        <nav
+          class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto"
+        >
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20"
+            href="user-dashboard.html"
+            ><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</a
+          >
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+            href="deposit.html"
+            ><i data-lucide="wallet" class="w-5 h-5"></i> Deposit</a
+          >
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+            href="deposit-history.html"
+            ><i data-lucide="history" class="w-5 h-5"></i> Deposit History</a
+          >
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+            href="vip-sub.html"
+            ><i data-lucide="badge-check" class="w-5 h-5"></i> VIP
+            Subscription</a
+          >
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+            href="recovery-request.html"
+            ><i data-lucide="shield-check" class="w-5 h-5"></i> Recovery
+            Requests</a
+          >
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+            href="profile.html"
+            ><i data-lucide="user" class="w-5 h-5"></i> Profile</a
+          >
         </nav>
+
         <div class="p-4 border-t border-border-dark">
-          <button id="logoutBtn" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all">
+          <button
+            id="logoutBtn"
+            class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
+          >
             <i data-lucide="log-out" class="w-5 h-5"></i> Logout
           </button>
         </div>
       </aside>
 
       <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <!-- Header -->
-        <header class="h-16 flex-shrink-0 border-b border-border-dark bg-surface-dark/50 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between">
+        <header
+          class="h-16 flex-shrink-0 border-b border-border-dark bg-surface-dark/50 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between"
+        >
           <div class="flex items-center gap-3">
-            <button id="menuToggle" class="block lg:hidden p-2 text-slate-400 hover:text-white transition-colors">
+            <button
+              id="menuToggle"
+              class="block lg:hidden p-2 text-slate-400 hover:text-white transition-colors"
+            >
               <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
-            <span class="text-slate-500 text-xs sm:text-sm font-medium">Home</span>
+            <span class="text-slate-500 text-xs sm:text-sm font-medium"
+              >Home</span
+            >
           </div>
+
           <div class="flex items-center gap-4 sm:gap-6">
             <div class="h-8 w-px bg-border-dark hidden sm:block"></div>
             <a href="profile.html">
               <button class="flex items-center gap-2 sm:gap-3 group">
                 <div class="text-right hidden sm:block">
-                  <p id="headerName" class="text-xs sm:text-sm font-bold text-white group-hover:text-primary transition-colors">Loading...</p>
-                  <p class="text-[10px] sm:text-[11px] text-slate-500 uppercase tracking-widest font-bold">Trader</p>
+                  <p
+                    id="headerName"
+                    class="text-xs sm:text-sm font-bold text-white group-hover:text-primary transition-colors"
+                  >
+                    Loading...
+                  </p>
+                  <p
+                    class="text-[10px] sm:text-[11px] text-slate-500 uppercase tracking-widest font-bold"
+                  >
+                    Trader
+                  </p>
                 </div>
-                <div id="headerAvatarWrap" class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/20 border border-primary/30 overflow-hidden flex items-center justify-center">
-                  <i data-lucide="user" class="w-4 h-4 sm:w-5 sm:h-5 text-primary"></i>
+                <div
+                  id="headerAvatarWrap"
+                  class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/20 border border-primary/30 overflow-hidden flex items-center justify-center"
+                >
+                  <i
+                    data-lucide="user"
+                    class="w-4 h-4 sm:w-5 sm:h-5 text-primary"
+                  ></i>
                 </div>
               </button>
             </a>
           </div>
         </header>
 
-        <!-- Main -->
-        <main class="flex-1 overflow-y-auto custom-scrollbar bg-background-dark p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 pb-24 sm:pb-8">
+        <main
+          class="flex-1 overflow-y-auto custom-scrollbar bg-background-dark p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 pb-24 sm:pb-8"
+        >
           <div>
-            <h1 class="text-xl sm:text-2xl font-bold text-white">Welcome back, <span id="welcomeName">...</span></h1>
-            <p class="text-slate-400 text-xs sm:text-sm mt-1">Here is what's happening with your accounts today.</p>
+            <h1 class="text-xl sm:text-2xl font-bold text-white">
+              Welcome back, <span id="welcomeName">...</span>
+            </h1>
+            <p class="text-slate-400 text-xs sm:text-sm mt-1">
+              Here is what's happening with your accounts today.
+            </p>
           </div>
 
-          <!-- Stats Grid -->
           <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
-
-            <!-- Account Balance -->
-            <div class="p-4 rounded-2xl bg-surface-dark border border-border-dark flex flex-col gap-3">
+            <div
+              class="p-4 rounded-2xl bg-surface-dark border border-border-dark flex flex-col gap-3"
+            >
               <div>
-                <p class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Account Balance</p>
-                <h3 id="totalDeposited" class="text-2xl font-black text-emerald-accent">$0.00</h3>
+                <p
+                  class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1"
+                >
+                  Account Balance
+                </p>
+                <h3
+                  id="totalDeposited"
+                  class="text-2xl font-black text-emerald-accent"
+                >
+                  $0.00
+                </h3>
               </div>
-              <a href="deposit.html" class="w-full py-1.5 bg-emerald-accent/10 hover:bg-emerald-accent text-emerald-accent hover:text-white text-xs font-bold rounded-lg border border-emerald-accent/20 transition-all text-center block">
+              <a
+                href="deposit.html"
+                class="w-full py-1.5 bg-emerald-accent/10 hover:bg-emerald-accent text-emerald-accent hover:text-white text-xs font-bold rounded-lg border border-emerald-accent/20 transition-all text-center block"
+              >
                 Deposit Now
               </a>
-              <button onclick="openWithdrawModal()" class="w-full py-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white text-xs font-bold rounded-lg border border-rose-500/20 transition-all text-center flex items-center justify-center gap-1.5">
-                <i data-lucide="arrow-up-from-line" class="w-3 h-3"></i> Withdraw
+              <button
+                onclick="openWithdrawModal()"
+                class="w-full py-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white text-xs font-bold rounded-lg border border-rose-500/20 transition-all text-center flex items-center justify-center gap-1.5"
+              >
+                <i data-lucide="arrow-up-from-line" class="w-3 h-3"></i>
+                Withdraw
               </button>
             </div>
 
-            <!-- Live Account -->
-            <div id="liveAccountCard" class="p-4 rounded-2xl bg-surface-dark border border-border-dark flex flex-col gap-3">
+            <div
+              id="liveAccountCard"
+              class="p-4 rounded-2xl bg-surface-dark border border-border-dark flex flex-col gap-3"
+            >
               <div>
                 <div class="flex items-center justify-between mb-1.5 gap-2">
-                  <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Live Account</p>
-                  <span class="px-2 py-0.5 bg-rose-500/10 text-rose-400 text-[10px] font-black rounded border border-rose-400/20 uppercase tracking-tighter">Inactive</span>
+                  <p
+                    class="text-slate-500 text-xs font-bold uppercase tracking-wider"
+                  >
+                    Live Account
+                  </p>
+                  <span
+                    class="px-2 py-0.5 bg-rose-500/10 text-rose-400 text-[10px] font-black rounded border border-rose-400/20 uppercase tracking-tighter"
+                    >Inactive</span
+                  >
                 </div>
-                <p class="text-xs text-slate-400">Deposit to get your live MT5 account activated.</p>
+                <p class="text-xs text-slate-400">
+                  Deposit to get your live MT5 account activated.
+                </p>
               </div>
-              <a href="deposit.html" class="w-full py-1.5 bg-primary/10 hover:bg-primary text-primary hover:text-white text-xs font-bold rounded-lg border border-primary/20 transition-all text-center block">
+              <a
+                href="deposit.html"
+                class="w-full py-1.5 bg-primary/10 hover:bg-primary text-primary hover:text-white text-xs font-bold rounded-lg border border-primary/20 transition-all text-center block"
+              >
                 Deposit to Activate
               </a>
             </div>
 
-            <!-- Demo Account -->
-            <div id="demoAccountCard" class="p-4 rounded-2xl bg-surface-dark border border-border-dark">
+            <div
+              id="demoAccountCard"
+              class="p-4 rounded-2xl bg-surface-dark border border-border-dark"
+            >
               <div class="flex items-center justify-between mb-2 gap-2">
-                <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Demo Account</p>
-                <span class="px-2 py-0.5 bg-slate-500/10 text-slate-400 text-[10px] font-black rounded border border-slate-400/20 uppercase tracking-tighter">Not Assigned</span>
+                <p
+                  class="text-slate-500 text-xs font-bold uppercase tracking-wider"
+                >
+                  Demo Account
+                </p>
+                <span
+                  class="px-2 py-0.5 bg-slate-500/10 text-slate-400 text-[10px] font-black rounded border border-slate-400/20 uppercase tracking-tighter"
+                  >Not Assigned</span
+                >
               </div>
-              <p class="text-xs text-slate-500">Your demo account will be assigned shortly.</p>
+              <p class="text-xs text-slate-500">
+                Your demo account will be assigned shortly.
+              </p>
             </div>
 
-            <!-- VIP Status -->
-            <div id="vipStatusCard" class="p-4 rounded-2xl bg-surface-dark border border-border-dark flex flex-col gap-2">
+            <div
+              id="vipStatusCard"
+              class="p-4 rounded-2xl bg-surface-dark border border-border-dark flex flex-col gap-2"
+            >
               <div class="flex items-center justify-between gap-2">
-                <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">VIP Status</p>
-                <span class="px-2 py-0.5 bg-rose-500/10 text-rose-400 text-[10px] font-black rounded border border-rose-400/20 uppercase tracking-tighter">Inactive</span>
+                <p
+                  class="text-slate-500 text-xs font-bold uppercase tracking-wider"
+                >
+                  VIP Status
+                </p>
+                <span
+                  class="px-2 py-0.5 bg-rose-500/10 text-rose-400 text-[10px] font-black rounded border border-rose-400/20 uppercase tracking-tighter"
+                  >Inactive</span
+                >
               </div>
-              <p class="text-slate-400 text-xs flex-1">Subscribe to access VIP trading signals.</p>
-              <a href="vip-sub.html" class="text-primary text-xs font-bold flex items-center gap-1 hover:underline">
+              <p class="text-slate-400 text-xs flex-1">
+                Subscribe to access VIP trading signals.
+              </p>
+              <a
+                href="vip-sub.html"
+                class="text-primary text-xs font-bold flex items-center gap-1 hover:underline"
+              >
                 Subscribe <i data-lucide="arrow-right" class="w-3 h-3"></i>
               </a>
             </div>
 
-            <!-- Recent Deposits Chart -->
-            <div class="p-4 rounded-2xl bg-surface-dark border border-border-dark">
-              <p class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Recent Deposits</p>
-              <h3 id="recentDepositAmount" class="text-xl font-bold text-white mb-3">$0.00</h3>
-              <div style="height: 40px; position: relative;">
+            <div
+              class="p-4 rounded-2xl bg-surface-dark border border-border-dark"
+            >
+              <p
+                class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1"
+              >
+                Recent Deposits
+              </p>
+              <h3
+                id="recentDepositAmount"
+                class="text-xl font-bold text-white mb-3"
+              >
+                $0.00
+              </h3>
+              <div style="height: 40px; position: relative">
                 <canvas id="depositChart"></canvas>
               </div>
               <p class="text-[10px] text-slate-500 mt-2">Last 30 days</p>
             </div>
           </div>
 
-          <!-- Quick Actions and Activity -->
           <div class="grid lg:grid-cols-12 gap-6">
             <div class="lg:col-span-8 space-y-6">
-              <h4 class="text-white font-bold text-xs sm:text-sm uppercase tracking-widest">Quick Actions</h4>
+              <h4
+                class="text-white font-bold text-xs sm:text-sm uppercase tracking-widest"
+              >
+                Quick Actions
+              </h4>
+
               <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-                <a href="deposit.html" class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-primary transition-all text-center group block">
-                  <i data-lucide="credit-card" class="w-7 h-7 sm:w-8 sm:h-8 text-primary mb-2 mx-auto group-hover:scale-110 transition-transform"></i>
-                  <span class="text-[10px] sm:text-xs font-bold text-slate-300">Fund Account</span>
+                <a
+                  href="deposit.html"
+                  class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-primary transition-all text-center group block"
+                >
+                  <i
+                    data-lucide="credit-card"
+                    class="w-7 h-7 sm:w-8 sm:h-8 text-primary mb-2 mx-auto group-hover:scale-110 transition-transform"
+                  ></i>
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-300"
+                    >Fund Account</span
+                  >
                 </a>
-                <a href="vip-sub.html" class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-emerald-accent transition-all text-center group block">
-                  <i data-lucide="chart-no-axes-column-increasing" class="w-7 h-7 sm:w-8 sm:h-8 text-emerald-accent mb-2 mx-auto group-hover:scale-110 transition-transform"></i>
-                  <span class="text-[10px] sm:text-xs font-bold text-slate-300">Join VIP Room</span>
+                <a
+                  href="vip-sub.html"
+                  class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-emerald-accent transition-all text-center group block"
+                >
+                  <i
+                    data-lucide="chart-no-axes-column-increasing"
+                    class="w-7 h-7 sm:w-8 sm:h-8 text-emerald-accent mb-2 mx-auto group-hover:scale-110 transition-transform"
+                  ></i>
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-300"
+                    >Join VIP Room</span
+                  >
                 </a>
-                <a href="recovery-request.html" class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-primary transition-all text-center group block">
-                  <i data-lucide="shield-plus" class="w-7 h-7 sm:w-8 sm:h-8 text-primary mb-2 mx-auto group-hover:scale-110 transition-transform"></i>
-                  <span class="text-[10px] sm:text-xs font-bold text-slate-300">Request Recovery</span>
+                <a
+                  href="recovery-request.html"
+                  class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-primary transition-all text-center group block"
+                >
+                  <i
+                    data-lucide="shield-plus"
+                    class="w-7 h-7 sm:w-8 sm:h-8 text-primary mb-2 mx-auto group-hover:scale-110 transition-transform"
+                  ></i>
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-300"
+                    >Request Recovery</span
+                  >
                 </a>
-                <a href="contact-support.html" class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-slate-300 transition-all text-center group block">
-                  <i data-lucide="headset" class="w-7 h-7 sm:w-8 sm:h-8 text-slate-400 mb-2 mx-auto group-hover:scale-110 transition-transform"></i>
-                  <span class="text-[10px] sm:text-xs font-bold text-slate-300">Contact Support</span>
+                <a
+                  href="contact-support.html"
+                  class="p-3 sm:p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-slate-300 transition-all text-center group block"
+                >
+                  <i
+                    data-lucide="headset"
+                    class="w-7 h-7 sm:w-8 sm:h-8 text-slate-400 mb-2 mx-auto group-hover:scale-110 transition-transform"
+                  ></i>
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-300"
+                    >Contact Support</span
+                  >
                 </a>
               </div>
 
-              <!-- Deposit History -->
-              <div class="bg-surface-dark border border-border-dark rounded-2xl overflow-hidden">
-                <div class="px-4 sm:px-6 py-4 border-b border-border-dark flex justify-between items-center">
-                  <h4 class="text-white font-bold text-sm sm:text-base">Deposit History</h4>
-                  <a href="deposit-history.html" class="text-primary text-xs font-bold hover:underline">View All</a>
+              <div
+                class="bg-surface-dark border border-border-dark rounded-2xl overflow-hidden"
+              >
+                <div
+                  class="px-4 sm:px-6 py-4 border-b border-border-dark flex justify-between items-center"
+                >
+                  <h4 class="text-white font-bold text-sm sm:text-base">
+                    Deposit History
+                  </h4>
+                  <a
+                    href="deposit-history.html"
+                    class="text-primary text-xs font-bold hover:underline"
+                    >View All</a
+                  >
                 </div>
-                <div id="depositHistoryList" class="divide-y divide-border-dark">
-                  <div class="px-4 sm:px-6 py-6 text-center text-slate-500 text-xs">Loading transactions...</div>
+                <div
+                  id="depositHistoryList"
+                  class="divide-y divide-border-dark"
+                >
+                  <div
+                    class="px-4 sm:px-6 py-6 text-center text-slate-500 text-xs"
+                  >
+                    Loading transactions...
+                  </div>
                 </div>
               </div>
             </div>
 
             <div class="lg:col-span-4 space-y-6">
-              <h4 class="text-white font-bold text-xs sm:text-sm uppercase tracking-widest">Trading Tips</h4>
+              <h4
+                class="text-white font-bold text-xs sm:text-sm uppercase tracking-widest"
+              >
+                Trading Tips
+              </h4>
               <div class="space-y-4">
-                <div class="p-5 rounded-2xl bg-gradient-to-br from-primary/10 to-surface-dark border border-primary/20">
-                  <h5 class="text-white font-bold text-sm mb-2">Risk Management</h5>
-                  <p class="text-slate-400 text-xs">Never risk more than 2% of your account on a single trade.</p>
+                <div
+                  class="p-5 rounded-2xl bg-gradient-to-br from-primary/10 to-surface-dark border border-primary/20"
+                >
+                  <h5 class="text-white font-bold text-sm mb-2">
+                    Risk Management
+                  </h5>
+                  <p class="text-slate-400 text-xs">
+                    Never risk more than 2% of your account on a single trade.
+                  </p>
                 </div>
-                <div class="p-5 rounded-2xl bg-surface-dark border border-border-dark">
-                  <h5 class="text-white font-bold text-sm mb-2">Market Structure</h5>
-                  <p class="text-slate-400 text-xs">Always trade in the direction of the higher timeframe trend.</p>
+                <div
+                  class="p-5 rounded-2xl bg-surface-dark border border-border-dark"
+                >
+                  <h5 class="text-white font-bold text-sm mb-2">
+                    Market Structure
+                  </h5>
+                  <p class="text-slate-400 text-xs">
+                    Always trade in the direction of the higher timeframe trend.
+                  </p>
                 </div>
-                <div class="p-5 rounded-2xl bg-surface-dark border border-border-dark">
+                <div
+                  class="p-5 rounded-2xl bg-surface-dark border border-border-dark"
+                >
                   <h5 class="text-white font-bold text-sm mb-2">Discipline</h5>
-                  <p class="text-slate-400 text-xs">Avoid overtrading. Stick to your strategy.</p>
+                  <p class="text-slate-400 text-xs">
+                    Avoid overtrading. Stick to your strategy.
+                  </p>
                 </div>
               </div>
             </div>
@@ -262,99 +618,161 @@
       </div>
     </div>
 
-    <!-- ── Withdrawal Modal ──────────────────────────────────── -->
-    <div id="withdrawModal" class="modal-overlay" onclick="handleOverlayClick(event)">
+    <div
+      id="withdrawModal"
+      class="modal-overlay"
+      onclick="handleOverlayClick(event)"
+    >
       <div class="modal-box">
-
-        <!-- Modal Header -->
-        <div class="px-6 pt-6 pb-4 border-b border-[#1e293b] flex items-center justify-between">
+        <div
+          class="px-6 pt-6 pb-4 border-b border-[#1e293b] flex items-center justify-between"
+        >
           <div class="flex items-center gap-3">
-            <div class="h-9 w-9 rounded-xl bg-rose-500/15 flex items-center justify-center">
-              <i data-lucide="arrow-up-from-line" class="w-4 h-4 text-rose-400"></i>
+            <div
+              class="h-9 w-9 rounded-xl bg-rose-500/15 flex items-center justify-center"
+            >
+              <i
+                data-lucide="arrow-up-from-line"
+                class="w-4 h-4 text-rose-400"
+              ></i>
             </div>
             <div>
-              <h3 class="text-white font-extrabold text-base leading-none">Request Withdrawal</h3>
-              <p class="text-slate-500 text-[11px] mt-0.5">Instructions will be sent to your email</p>
+              <h3 class="text-white font-extrabold text-base leading-none">
+                Request Withdrawal
+              </h3>
+              <p class="text-slate-500 text-[11px] mt-0.5">
+                Instructions will be sent to your email
+              </p>
             </div>
           </div>
-          <button onclick="closeWithdrawModal()" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-white/5 transition-all">
+          <button
+            onclick="closeWithdrawModal()"
+            class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-white/5 transition-all"
+          >
             <i data-lucide="x" class="w-5 h-5"></i>
           </button>
         </div>
 
-        <!-- Modal Body -->
         <div class="px-6 py-5 space-y-4">
+          <div
+            id="withdrawError"
+            class="hidden text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-xl px-4 py-3"
+          ></div>
 
-          <!-- Error -->
-          <div id="withdrawError" class="hidden text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-xl px-4 py-3"></div>
-
-          <!-- Amount -->
           <div>
-            <label class="text-xs font-bold uppercase text-slate-400 tracking-wider block mb-1.5">Withdrawal Amount (USD)</label>
+            <label
+              class="text-xs font-bold uppercase text-slate-400 tracking-wider block mb-1.5"
+              >Withdrawal Amount (USD)</label
+            >
             <div class="relative">
-              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">$</span>
-              <input type="number" id="withdrawAmount" placeholder="0.00" min="1"
-                class="w-full pl-8 pr-4 py-2.5 bg-black/40 border border-[#1e293b] rounded-xl text-white placeholder:text-slate-600 outline-none focus:border-rose-500 text-sm transition-colors" />
+              <span
+                class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm"
+                >$</span
+              >
+              <input
+                type="number"
+                id="withdrawAmount"
+                placeholder="0.00"
+                min="1"
+                class="w-full pl-8 pr-4 py-2.5 bg-black/40 border border-[#1e293b] rounded-xl text-white placeholder:text-slate-600 outline-none focus:border-rose-500 text-sm transition-colors"
+              />
             </div>
-            <p class="text-[10px] text-slate-600 mt-1">Available balance: <span id="modalBalance" class="text-slate-400 font-bold">$0.00</span></p>
+            <p class="text-[10px] text-slate-600 mt-1">
+              Available balance:
+              <span id="modalBalance" class="text-slate-400 font-bold"
+                >$0.00</span
+              >
+            </p>
           </div>
 
-          <!-- Wallet Address -->
           <div>
-            <label class="text-xs font-bold uppercase text-slate-400 tracking-wider block mb-1.5">Destination Wallet Address</label>
-            <input type="text" id="withdrawWallet" placeholder="e.g., TXyz123...abc or 0x123...456"
-              class="w-full px-4 py-2.5 bg-black/40 border border-[#1e293b] rounded-xl text-white placeholder:text-slate-600 outline-none focus:border-rose-500 text-sm font-mono transition-colors" />
+            <label
+              class="text-xs font-bold uppercase text-slate-400 tracking-wider block mb-1.5"
+              >Destination Wallet Address</label
+            >
+            <input
+              type="text"
+              id="withdrawWallet"
+              placeholder="e.g., TXyz123...abc or 0x123...456"
+              class="w-full px-4 py-2.5 bg-black/40 border border-[#1e293b] rounded-xl text-white placeholder:text-slate-600 outline-none focus:border-rose-500 text-sm font-mono transition-colors"
+            />
           </div>
 
-          <!-- Network -->
           <div>
-            <label class="text-xs font-bold uppercase text-slate-400 tracking-wider block mb-1.5">Network</label>
-            <select id="withdrawNetwork"
-              class="w-full px-4 py-2.5 bg-black/40 border border-[#1e293b] rounded-xl text-white outline-none focus:border-rose-500 text-sm transition-colors">
+            <label
+              class="text-xs font-bold uppercase text-slate-400 tracking-wider block mb-1.5"
+              >Network</label
+            >
+            <select
+              id="withdrawNetwork"
+              class="w-full px-4 py-2.5 bg-black/40 border border-[#1e293b] rounded-xl text-white outline-none focus:border-rose-500 text-sm transition-colors"
+            >
               <option value="">Select network</option>
               <option value="USDT TRC20">USDT — TRC20 (Tron)</option>
               <option value="USDT BEP20">USDT — BEP20 (BSC)</option>
               <option value="BTC">BTC — Bitcoin Network</option>
-              <option value="ETH ERC20">ETH — ERC20 (Ethereum)</option>
-              <option value="USDC ERC20">USDC — ERC20 (Ethereum)</option>
             </select>
           </div>
 
-          <!-- Email (readonly) -->
           <div>
-            <label class="text-xs font-bold uppercase text-slate-400 tracking-wider block mb-1.5">Confirmation Email</label>
+            <label
+              class="text-xs font-bold uppercase text-slate-400 tracking-wider block mb-1.5"
+              >Confirmation Email</label
+            >
             <div class="relative">
-              <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500"></i>
-              <input type="email" id="withdrawEmail" readonly
-                class="w-full pl-10 pr-4 py-2.5 bg-black/20 border border-[#1e293b] rounded-xl text-slate-400 outline-none text-sm cursor-not-allowed" />
+              <i
+                data-lucide="mail"
+                class="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500"
+              ></i>
+              <input
+                type="email"
+                id="withdrawEmail"
+                readonly
+                class="w-full pl-10 pr-4 py-2.5 bg-black/20 border border-[#1e293b] rounded-xl text-slate-400 outline-none text-sm cursor-not-allowed"
+              />
             </div>
-            <p class="text-[10px] text-slate-600 mt-1">Withdrawal instructions will be sent here.</p>
+            <p class="text-[10px] text-slate-600 mt-1">
+              Withdrawal instructions will be sent here.
+            </p>
           </div>
 
-          <!-- Gas fee notice -->
-          <div id="gasFeeNotice" class="hidden p-3.5 rounded-xl bg-amber-400/8 border border-amber-400/20">
+          <div
+            id="gasFeeNotice"
+            class="hidden p-3.5 rounded-xl bg-amber-400/8 border border-amber-400/20"
+          >
             <div class="flex items-start gap-2.5">
-              <i data-lucide="zap" class="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5"></i>
+              <i
+                data-lucide="zap"
+                class="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5"
+              ></i>
               <div>
                 <p class="text-amber-400 text-xs font-bold">Gas Fee Required</p>
-                <p class="text-amber-400/70 text-[11px] mt-0.5">A gas fee of <strong id="gasFeeAmount" class="text-amber-400"></strong> (10% of withdrawal) will be required to process your transaction. Instructions will be sent to your email.</p>
+                <p class="text-amber-400/70 text-[11px] mt-0.5">
+                  A gas fee of
+                  <strong id="gasFeeAmount" class="text-amber-400"></strong>
+                  (10% of withdrawal) will be required to process your
+                  transaction. Instructions will be sent to your email.
+                </p>
               </div>
             </div>
           </div>
-
         </div>
 
-        <!-- Modal Footer -->
         <div class="px-6 pb-6 flex gap-3">
-          <button id="withdrawSubmitBtn" onclick="submitWithdrawal()"
-            class="flex-1 py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
+          <button
+            id="withdrawSubmitBtn"
+            onclick="submitWithdrawal()"
+            class="flex-1 py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm"
+          >
             <i data-lucide="send" class="w-4 h-4"></i> Submit Withdrawal
           </button>
-          <button onclick="closeWithdrawModal()" class="px-4 py-3 bg-[#1e293b] hover:bg-[#2d3a4e] text-slate-300 rounded-xl text-sm transition-all">
+          <button
+            onclick="closeWithdrawModal()"
+            class="px-4 py-3 bg-[#1e293b] hover:bg-[#2d3a4e] text-slate-300 rounded-xl text-sm transition-all"
+          >
             Cancel
           </button>
         </div>
-
       </div>
     </div>
 
@@ -363,56 +781,80 @@
     <script>
       lucide.createIcons();
 
-      // ─── Auth Guard ───────────────────────────────────────────
       const user = JSON.parse(localStorage.getItem("user") || "null");
-      if (!user) window.location.href = "login.html";
+      const token = localStorage.getItem("token");
 
-      // ─── Toast ────────────────────────────────────────────────
+      if (!user || !token) {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        window.location.href = "login.html";
+      }
+
+      let currentBalance = 0;
+      let chartInstance = null;
+
       function showToast(msg, type = "success") {
         const el = document.getElementById("toast");
         const colors = {
           success: "bg-emerald-900/90 border-emerald-500/40 text-emerald-300",
-          error:   "bg-rose-900/90 border-rose-500/40 text-rose-300",
+          error: "bg-rose-900/90 border-rose-500/40 text-rose-300",
         };
+
         el.className = `px-4 py-3 rounded-xl border text-sm font-medium flex items-center gap-2 shadow-2xl max-w-sm ${colors[type]}`;
         el.innerHTML = `<span>${msg}</span>`;
         el.classList.add("show");
+
         setTimeout(() => el.classList.remove("show"), 4000);
       }
 
-      // ─── User Info ────────────────────────────────────────────
       function loadUserInfo() {
         if (!user) return;
-        document.getElementById("welcomeName").textContent = user.name?.split(" ")[0] || "Trader";
-        document.getElementById("headerName").textContent  = user.name || "Trader";
+
+        document.getElementById("welcomeName").textContent =
+          user.name?.split(" ")[0] || "Trader";
+        document.getElementById("headerName").textContent =
+          user.name || "Trader";
+
         if (user.profile) {
           document.getElementById("headerAvatarWrap").innerHTML =
             `<img src="${user.profile}" alt="avatar" class="avatar-img" />`;
         }
       }
 
-      // ─── Total Deposit ────────────────────────────────────────
-      let currentBalance = 0;
-
       async function loadTotalDeposit() {
         try {
-          const data  = await API.get("/transactions/my/total");
-          currentBalance = data.totalDeposited || 0;
+          const data = await API.get("/transactions/my/total");
+          currentBalance = data.availableBalance || 0;
+
           document.getElementById("totalDeposited").textContent =
-            `$${currentBalance.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
-        } catch {
+            `$${currentBalance.toLocaleString("en-US", {
+              minimumFractionDigits: 2,
+            })}`;
+
+          document.getElementById("modalBalance").textContent =
+            `$${currentBalance.toLocaleString("en-US", {
+              minimumFractionDigits: 2,
+            })}`;
+        } catch (err) {
+          currentBalance = 0;
           document.getElementById("totalDeposited").textContent = "$0.00";
+          document.getElementById("modalBalance").textContent = "$0.00";
         }
       }
 
-      // ─── VIP Status ───────────────────────────────────────────
       async function loadVipStatus() {
         const card = document.getElementById("vipStatusCard");
+
         try {
           const { isVip, daysLeft, expiry } = await API.get("/vip/my-status");
 
           if (isVip) {
-            const expiryDate = new Date(expiry).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+            const expiryDate = new Date(expiry).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            });
+
             card.innerHTML = `
               <div class="flex items-center justify-between gap-2">
                 <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">VIP Status</p>
@@ -426,8 +868,9 @@
               </div>
             `;
           } else {
-            const payments   = await API.get("/vip/my-payments");
-            const hasPending = payments.some(p => p.status === "pending");
+            const payments = await API.get("/vip/my-payments");
+            const hasPending = payments.some((p) => p.status === "pending");
+
             if (hasPending) {
               card.innerHTML = `
                 <div class="flex items-center justify-between gap-2">
@@ -448,16 +891,20 @@
               `;
             }
           }
+
           lucide.createIcons();
-        } catch { /* silently keep default */ }
+        } catch {
+          // keep default UI
+        }
       }
 
-      // ─── Password Toggle ──────────────────────────────────────
       const passwordVisible = { demo: false, live: false };
+
       function togglePassword(type, password) {
         passwordVisible[type] = !passwordVisible[type];
         const textEl = document.getElementById(`${type}PasswordText`);
         const iconEl = document.getElementById(`${type}EyeIcon`);
+
         if (passwordVisible[type]) {
           textEl.textContent = password;
           iconEl.setAttribute("data-lucide", "eye-off");
@@ -465,20 +912,23 @@
           textEl.textContent = "•".repeat(password.length || 8);
           iconEl.setAttribute("data-lucide", "eye");
         }
+
         lucide.createIcons();
       }
 
-      // ─── Trading Accounts ─────────────────────────────────────
       async function loadTradingAccounts() {
         try {
           const { demo, live } = await API.get("/trading/my");
 
           const demoCard = document.getElementById("demoAccountCard");
           if (demo) {
-            const sc = demo.status === "active"
-              ? "bg-emerald-accent/10 text-emerald-accent border-emerald-accent/20"
-              : "bg-rose-500/10 text-rose-400 border-rose-400/20";
+            const sc =
+              demo.status === "active"
+                ? "bg-emerald-accent/10 text-emerald-accent border-emerald-accent/20"
+                : "bg-rose-500/10 text-rose-400 border-rose-400/20";
+
             const demoPass = demo.password || "";
+
             demoCard.innerHTML = `
               <div class="flex items-center justify-between mb-2 gap-2">
                 <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Demo Account</p>
@@ -503,10 +953,13 @@
 
           const liveCard = document.getElementById("liveAccountCard");
           if (live) {
-            const sc = live.status === "active"
-              ? "bg-emerald-accent/10 text-emerald-accent border-emerald-accent/20"
-              : "bg-rose-500/10 text-rose-400 border-rose-400/20";
+            const sc =
+              live.status === "active"
+                ? "bg-emerald-accent/10 text-emerald-accent border-emerald-accent/20"
+                : "bg-rose-500/10 text-rose-400 border-rose-400/20";
+
             const livePass = live.password || "";
+
             liveCard.innerHTML = `
               <div>
                 <div class="flex items-center justify-between mb-2 gap-2">
@@ -530,18 +983,21 @@
               </div>
             `;
           }
+
           lucide.createIcons();
-        } catch { /* silently fail */ }
+        } catch {
+          // silently fail
+        }
       }
 
-      // ─── Withdrawal Modal ─────────────────────────────────────
       function openWithdrawModal() {
-        // Pre-fill email and balance
-        document.getElementById("withdrawEmail").value   = user?.email || "";
+        document.getElementById("withdrawEmail").value = user?.email || "";
         document.getElementById("modalBalance").textContent =
-          `$${currentBalance.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
-        document.getElementById("withdrawAmount").value  = "";
-        document.getElementById("withdrawWallet").value  = "";
+          `$${currentBalance.toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+          })}`;
+        document.getElementById("withdrawAmount").value = "";
+        document.getElementById("withdrawWallet").value = "";
         document.getElementById("withdrawNetwork").value = "";
         document.getElementById("withdrawError").classList.add("hidden");
         document.getElementById("gasFeeNotice").classList.add("hidden");
@@ -556,19 +1012,25 @@
       }
 
       function handleOverlayClick(e) {
-        if (e.target === document.getElementById("withdrawModal")) closeWithdrawModal();
+        if (e.target === document.getElementById("withdrawModal")) {
+          closeWithdrawModal();
+        }
       }
 
-      // Update gas fee preview as user types amount
       document.addEventListener("DOMContentLoaded", () => {
         const amountInput = document.getElementById("withdrawAmount");
+
         if (amountInput) {
           amountInput.addEventListener("input", () => {
             const val = parseFloat(amountInput.value);
             const notice = document.getElementById("gasFeeNotice");
+
             if (val > 0) {
               const fee = (val * 0.1).toFixed(2);
-              document.getElementById("gasFeeAmount").textContent = `$${parseFloat(fee).toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
+              document.getElementById("gasFeeAmount").textContent =
+                `$${parseFloat(fee).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                })}`;
               notice.classList.remove("hidden");
             } else {
               notice.classList.add("hidden");
@@ -578,10 +1040,12 @@
       });
 
       async function submitWithdrawal() {
-        const amount  = parseFloat(document.getElementById("withdrawAmount").value);
-        const wallet  = document.getElementById("withdrawWallet").value.trim();
+        const amount = parseFloat(
+          document.getElementById("withdrawAmount").value,
+        );
+        const wallet = document.getElementById("withdrawWallet").value.trim();
         const network = document.getElementById("withdrawNetwork").value;
-        const errEl   = document.getElementById("withdrawError");
+        const errEl = document.getElementById("withdrawError");
 
         errEl.classList.add("hidden");
 
@@ -590,11 +1054,24 @@
           errEl.classList.remove("hidden");
           return;
         }
+
+        if (amount > currentBalance) {
+          errEl.textContent = `Insufficient balance. Your available balance is $${currentBalance.toLocaleString(
+            "en-US",
+            {
+              minimumFractionDigits: 2,
+            },
+          )}`;
+          errEl.classList.remove("hidden");
+          return;
+        }
+
         if (!wallet) {
           errEl.textContent = "Please enter your destination wallet address.";
           errEl.classList.remove("hidden");
           return;
         }
+
         if (!network) {
           errEl.textContent = "Please select a network.";
           errEl.classList.remove("hidden");
@@ -606,11 +1083,31 @@
         btn.innerHTML = `<span class="spinner"></span>`;
 
         try {
-          await API.post("/withdrawals", { amount, walletAddress: wallet, network });
+          const response = await API.post("/withdrawals", {
+            amount,
+            walletAddress: wallet,
+            network,
+          });
+
+          if (response?.balance?.availableBalance !== undefined) {
+            currentBalance = response.balance.availableBalance;
+            document.getElementById("totalDeposited").textContent =
+              `$${currentBalance.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+              })}`;
+            document.getElementById("modalBalance").textContent =
+              `$${currentBalance.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+              })}`;
+          } else {
+            await loadTotalDeposit();
+          }
+
           closeWithdrawModal();
-          showToast("Withdrawal request submitted. Check your email for instructions.", "success");
+          showToast("Withdrawal request submitted successfully.", "success");
         } catch (err) {
-          errEl.textContent = err.message || "Failed to submit withdrawal. Please try again.";
+          errEl.textContent =
+            err.message || "Failed to submit withdrawal. Please try again.";
           errEl.classList.remove("hidden");
         } finally {
           btn.disabled = false;
@@ -619,47 +1116,60 @@
         }
       }
 
-      // Close on Escape
-      document.addEventListener("keydown", e => {
+      document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") closeWithdrawModal();
       });
 
-      // ─── Transactions + Chart ─────────────────────────────────
-      let chartInstance = null;
-
       async function loadTransactionsAndChart() {
         const list = document.getElementById("depositHistoryList");
+
         try {
           const transactions = await API.get("/transactions/my");
 
           const thirtyDaysAgo = new Date();
           thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
           const dayMap = {};
           for (let i = 29; i >= 0; i--) {
             const d = new Date();
             d.setDate(d.getDate() - i);
-            dayMap[d.toLocaleDateString("en-US", { month: "short", day: "numeric" })] = 0;
+            dayMap[
+              d.toLocaleDateString("en-US", { month: "short", day: "numeric" })
+            ] = 0;
           }
 
           let recentTotal = 0;
-          transactions.forEach(t => {
+
+          transactions.forEach((t) => {
             const date = new Date(t.createdAt);
+
             if (date >= thirtyDaysAgo) {
-              const key = date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-              if (dayMap[key] !== undefined) dayMap[key] += t.amount;
-              if (t.status === "approved") recentTotal += t.amount;
+              const key = date.toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              });
+
+              if (dayMap[key] !== undefined && t.status === "approved") {
+                dayMap[key] += Number(t.creditedAmount || 0);
+              }
+
+              if (t.status === "approved") {
+                recentTotal += Number(t.creditedAmount || 0);
+              }
             }
           });
 
           document.getElementById("recentDepositAmount").textContent =
-            `$${recentTotal.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
+            `$${recentTotal.toLocaleString("en-US", {
+              minimumFractionDigits: 2,
+            })}`;
 
           const labels = Object.keys(dayMap);
           const values = Object.values(dayMap);
 
           if (chartInstance) chartInstance.destroy();
-          const ctx = document.getElementById("depositChart").getContext("2d");
 
+          const ctx = document.getElementById("depositChart").getContext("2d");
           const gradient = ctx.createLinearGradient(0, 0, 0, 40);
           gradient.addColorStop(0, "rgba(99, 102, 241, 0.3)");
           gradient.addColorStop(1, "rgba(99, 102, 241, 0.0)");
@@ -668,18 +1178,20 @@
             type: "line",
             data: {
               labels,
-              datasets: [{
-                data: values,
-                borderColor: "#818cf8",
-                borderWidth: 1.5,
-                pointBackgroundColor: "#818cf8",
-                pointBorderColor: "#818cf8",
-                pointRadius: 2.5,
-                pointHoverRadius: 4,
-                fill: true,
-                backgroundColor: gradient,
-                tension: 0.4,
-              }],
+              datasets: [
+                {
+                  data: values,
+                  borderColor: "#818cf8",
+                  borderWidth: 1.5,
+                  pointBackgroundColor: "#818cf8",
+                  pointBorderColor: "#818cf8",
+                  pointRadius: 2.5,
+                  pointHoverRadius: 4,
+                  fill: true,
+                  backgroundColor: gradient,
+                  tension: 0.4,
+                },
+              ],
             },
             options: {
               responsive: true,
@@ -697,8 +1209,11 @@
                   bodyFont: { size: 11, weight: "bold", family: "Manrope" },
                   padding: 8,
                   callbacks: {
-                    title: items => items[0].label,
-                    label: ctx => ctx.raw > 0 ? ` $${ctx.raw.toLocaleString()}` : " No deposit",
+                    title: (items) => items[0].label,
+                    label: (ctx) =>
+                      ctx.raw > 0
+                        ? ` $${ctx.raw.toLocaleString()}`
+                        : " No deposit",
                   },
                 },
               },
@@ -715,26 +1230,67 @@
           }
 
           const recent = transactions.slice(0, 4);
-          list.innerHTML = recent.map(t => {
-            const cfg = {
-              approved: { icon: "check-circle-2", color: "text-emerald-accent", bg: "bg-emerald-accent/10", label: `Deposit of $${t.amount.toLocaleString()} confirmed`, sub: `Tx: #${t.transactionId.slice(0, 16)}` },
-              pending:  { icon: "clock-3",        color: "text-amber-400",       bg: "bg-amber-400/10",      label: "Deposit pending", sub: "Waiting for payment verification" },
-              rejected: { icon: "x-circle",       color: "text-rose-400",        bg: "bg-rose-500/10",       label: `Deposit of $${t.amount.toLocaleString()} rejected`, sub: `Tx: #${t.transactionId.slice(0, 16)}` },
-            }[t.status] || { icon: "clock-3", color: "text-slate-400", bg: "bg-slate-500/10", label: "Deposit pending", sub: "" };
 
-            return `
-              <div class="px-4 sm:px-6 py-4 flex items-center gap-3 sm:gap-4">
-                <div class="h-8 w-8 sm:h-10 sm:w-10 rounded-full ${cfg.bg} flex items-center justify-center ${cfg.color} flex-shrink-0">
-                  <i data-lucide="${cfg.icon}" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <p class="text-xs sm:text-sm font-bold text-white truncate">${cfg.label}</p>
-                  <p class="text-[10px] sm:text-xs text-slate-500">${cfg.sub}</p>
-                </div>
-                <span class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap">${formatTimeAgo(new Date(t.createdAt))}</span>
-              </div>
-            `;
-          }).join("");
+          list.innerHTML = recent
+            .map((t) => {
+              const amount = Number(t.amount) || 0;
+              const fee = Number(t.fee) || 0;
+              const creditedAmount = Number(t.creditedAmount) || 0;
+
+              const cfg = {
+                approved: {
+                  icon: "check-circle-2",
+                  color: "text-emerald-accent",
+                  bg: "bg-emerald-accent/10",
+                  label: `Credited $${creditedAmount.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                  })}`,
+                  sub: `Deposit: $${amount.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                  })} • Fee: $${fee.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                  })}`,
+                },
+                pending: {
+                  icon: "clock-3",
+                  color: "text-amber-400",
+                  bg: "bg-amber-400/10",
+                  label: `Deposit of $${amount.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                  })} pending`,
+                  sub: "Waiting for payment verification",
+                },
+                rejected: {
+                  icon: "x-circle",
+                  color: "text-rose-400",
+                  bg: "bg-rose-500/10",
+                  label: `Deposit of $${amount.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                  })} rejected`,
+                  sub: `Tx: #${(t.transactionId || "").slice(0, 16)}`,
+                },
+              }[t.status] || {
+                icon: "clock-3",
+                color: "text-slate-400",
+                bg: "bg-slate-500/10",
+                label: "Deposit pending",
+                sub: "",
+              };
+
+              return `
+      <div class="px-4 sm:px-6 py-4 flex items-center gap-3 sm:gap-4">
+        <div class="h-8 w-8 sm:h-10 sm:w-10 rounded-full ${cfg.bg} flex items-center justify-center ${cfg.color} flex-shrink-0">
+          <i data-lucide="${cfg.icon}" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-xs sm:text-sm font-bold text-white truncate">${cfg.label}</p>
+          <p class="text-[10px] sm:text-xs text-slate-500">${cfg.sub}</p>
+        </div>
+        <span class="text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap">${formatTimeAgo(new Date(t.createdAt))}</span>
+      </div>
+    `;
+            })
+            .join("");
 
           lucide.createIcons();
         } catch {
@@ -742,7 +1298,6 @@
         }
       }
 
-      // ─── Time Ago ─────────────────────────────────────────────
       function formatTimeAgo(date) {
         const s = Math.floor((new Date() - date) / 1000);
         if (s < 60) return "Just now";
@@ -752,30 +1307,40 @@
         return `${Math.floor(s / 86400)} days ago`;
       }
 
-      // ─── Logout ───────────────────────────────────────────────
       async function handleLogout() {
-        try { await API.post("/users/logout"); } catch {}
+        try {
+          await API.post("/users/logout");
+        } catch {}
+
         localStorage.removeItem("user");
+        localStorage.removeItem("token");
         window.location.href = "login.html";
       }
-      document.getElementById("logoutBtn").addEventListener("click", handleLogout);
-      document.getElementById("mobileLogoutBtn").addEventListener("click", handleLogout);
 
-      // ─── Mobile Sidebar ───────────────────────────────────────
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", handleLogout);
+      document
+        .getElementById("mobileLogoutBtn")
+        .addEventListener("click", handleLogout);
+
       document.getElementById("menuToggle").addEventListener("click", () => {
         document.getElementById("mobileSidebar").classList.add("open");
         document.getElementById("sidebarOverlay").classList.add("open");
       });
+
       document.getElementById("closeSidebar").addEventListener("click", () => {
         document.getElementById("mobileSidebar").classList.remove("open");
         document.getElementById("sidebarOverlay").classList.remove("open");
       });
-      document.getElementById("sidebarOverlay").addEventListener("click", () => {
-        document.getElementById("mobileSidebar").classList.remove("open");
-        document.getElementById("sidebarOverlay").classList.remove("open");
-      });
 
-      // ─── Init ─────────────────────────────────────────────────
+      document
+        .getElementById("sidebarOverlay")
+        .addEventListener("click", () => {
+          document.getElementById("mobileSidebar").classList.remove("open");
+          document.getElementById("sidebarOverlay").classList.remove("open");
+        });
+
       loadUserInfo();
       loadTotalDeposit();
       loadVipStatus();

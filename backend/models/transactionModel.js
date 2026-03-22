@@ -16,6 +16,14 @@ const transactionSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    fee: {
+      type: Number,
+      default: 0,
+    },
+    creditedAmount: {
+      type: Number,
+      default: 0,
+    },
     asset: {
       type: String,
       required: true,
