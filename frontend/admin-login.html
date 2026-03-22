@@ -2,73 +2,150 @@
 <html class="dark" lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>Admin Login | TheBrave Finance</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-      * { font-family: "Manrope", sans-serif; }
-      body { background: linear-gradient(135deg, #0a0f18 0%, #0c1220 100%); min-height: 100vh; }
-      .glass-card { background: rgba(15, 18, 25, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(36, 48, 73, 0.5); }
-      .input-glow:focus { box-shadow: 0 0 0 3px rgba(17, 82, 212, 0.2); border-color: #1152d4; }
-      .shake-animation { animation: shake 0.4s ease-in-out; }
+      * {
+        font-family: "Manrope", sans-serif;
+      }
+      body {
+        background: linear-gradient(135deg, #0a0f18 0%, #0c1220 100%);
+        min-height: 100vh;
+      }
+      .glass-card {
+        background: rgba(15, 18, 25, 0.85);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(36, 48, 73, 0.5);
+      }
+      .input-glow:focus {
+        box-shadow: 0 0 0 3px rgba(17, 82, 212, 0.2);
+        border-color: #1152d4;
+      }
+      .shake-animation {
+        animation: shake 0.4s ease-in-out;
+      }
       @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-8px); }
-        75% { transform: translateX(8px); }
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-8px);
+        }
+        75% {
+          transform: translateX(8px);
+        }
       }
-      .particle { position: absolute; background: rgba(17, 82, 212, 0.3); border-radius: 50%; pointer-events: none; animation: float 20s infinite linear; }
+      .particle {
+        position: absolute;
+        background: rgba(17, 82, 212, 0.3);
+        border-radius: 50%;
+        pointer-events: none;
+        animation: float 20s infinite linear;
+      }
       @keyframes float {
-        0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-        10% { opacity: 0.5; }
-        90% { opacity: 0.5; }
-        100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+        0% {
+          transform: translateY(100vh) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.5;
+        }
+        90% {
+          opacity: 0.5;
+        }
+        100% {
+          transform: translateY(-20vh) rotate(360deg);
+          opacity: 0;
+        }
       }
-      .lucide { width: 20px; height: 20px; stroke-width: 1.8; }
-      .spinner { width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
-      @keyframes spin { to { transform: rotate(360deg); } }
+      .lucide {
+        width: 20px;
+        height: 20px;
+        stroke-width: 1.8;
+      }
+      .spinner {
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        display: inline-block;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
     </style>
   </head>
 
   <body class="flex items-center justify-center p-4 relative overflow-hidden">
-
-    <div id="particles-container" class="fixed inset-0 overflow-hidden pointer-events-none"></div>
+    <div
+      id="particles-container"
+      class="fixed inset-0 overflow-hidden pointer-events-none"
+    ></div>
 
     <div class="relative z-10 w-full max-w-md">
-
       <!-- Logo & Brand -->
       <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center p-3 bg-gradient-to-br from-blue-600/20 to-blue-600/20 rounded-2xl mb-4">
-          <div class="h-16 w-16 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-2xl">
+        <div
+          class="inline-flex items-center justify-center p-3 bg-gradient-to-br from-blue-600/20 to-blue-600/20 rounded-2xl mb-4"
+        >
+          <div
+            class="h-16 w-16 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-2xl"
+          >
             <i data-lucide="shield" class="w-8 h-8 text-white"></i>
           </div>
         </div>
-        <h1 class="text-3xl font-black text-white tracking-tight">Admin Portal</h1>
-        <p class="text-slate-400 text-sm mt-2">Secure access for authorized administrators only</p>
+        <h1 class="text-3xl font-black text-white tracking-tight">
+          Admin Portal
+        </h1>
+        <p class="text-slate-400 text-sm mt-2">
+          Secure access for authorized administrators only
+        </p>
       </div>
 
       <!-- Login Card -->
       <div class="glass-card rounded-2xl p-8 shadow-2xl">
-
         <!-- Alerts -->
-        <div id="errorAlert" class="hidden mb-5 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-sm flex items-center gap-2">
+        <div
+          id="errorAlert"
+          class="hidden mb-5 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-sm flex items-center gap-2"
+        >
           <i data-lucide="alert-circle" class="w-4 h-4 flex-shrink-0"></i>
           <span id="errorMessage">Invalid credentials</span>
         </div>
-        <div id="successAlert" class="hidden mb-5 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm flex items-center gap-2">
+        <div
+          id="successAlert"
+          class="hidden mb-5 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm flex items-center gap-2"
+        >
           <i data-lucide="check-circle" class="w-4 h-4 flex-shrink-0"></i>
           <span id="successMessage">Login successful! Redirecting...</span>
         </div>
 
         <!-- Form -->
         <form id="adminLoginForm" class="space-y-5">
-
           <!-- Email -->
           <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Admin Email</label>
+            <label
+              class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2"
+              >Admin Email</label
+            >
             <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <div
+                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+              >
                 <i data-lucide="mail" class="w-5 h-5 text-slate-500"></i>
               </div>
               <input
@@ -83,9 +160,14 @@
 
           <!-- Password -->
           <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Password</label>
+            <label
+              class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2"
+              >Password</label
+            >
             <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <div
+                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+              >
                 <i data-lucide="lock" class="w-5 h-5 text-slate-500"></i>
               </div>
               <input
@@ -95,7 +177,11 @@
                 placeholder="••••••••"
                 autocomplete="current-password"
               />
-              <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-300 transition-colors">
+              <button
+                type="button"
+                id="togglePassword"
+                class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-300 transition-colors"
+              >
                 <i data-lucide="eye" id="eyeIcon" class="w-5 h-5"></i>
               </button>
             </div>
@@ -112,7 +198,9 @@
           </button>
 
           <div class="text-center">
-            <div class="flex items-center justify-center gap-2 text-[10px] text-slate-600">
+            <div
+              class="flex items-center justify-center gap-2 text-[10px] text-slate-600"
+            >
               <i data-lucide="shield-check" class="w-3 h-3"></i>
               <span>Secure admin area • Protected access only</span>
             </div>
@@ -121,7 +209,9 @@
       </div>
 
       <div class="text-center mt-6">
-        <p class="text-[10px] text-slate-600">TheBrave Finance Admin Portal • Unauthorized access is prohibited</p>
+        <p class="text-[10px] text-slate-600">
+          TheBrave Finance Admin Portal • Unauthorized access is prohibited
+        </p>
       </div>
     </div>
 
@@ -129,7 +219,6 @@
     <script>
       lucide.createIcons();
 
-      // ─── Particles ────────────────────────────────────────────
       (function createParticles() {
         const container = document.getElementById("particles-container");
         for (let i = 0; i < 40; i++) {
@@ -137,39 +226,46 @@
           p.className = "particle";
           const size = Math.random() * 4 + 2;
           p.style.cssText = `
-            width:${size}px; height:${size}px;
-            left:${Math.random() * 100}%;
-            animation-duration:${Math.random() * 15 + 10}s;
-            animation-delay:${Math.random() * 15}s;
-            background:rgba(17,82,212,${Math.random() * 0.4 + 0.1});
-          `;
+        width:${size}px; height:${size}px;
+        left:${Math.random() * 100}%;
+        animation-duration:${Math.random() * 15 + 10}s;
+        animation-delay:${Math.random() * 15}s;
+        background:rgba(17,82,212,${Math.random() * 0.4 + 0.1});
+      `;
           container.appendChild(p);
         }
       })();
 
-      // ─── Already logged in? ───────────────────────────────────
       const existingAdmin = JSON.parse(localStorage.getItem("admin") || "null");
-      if (existingAdmin) window.location.href = "admin-panel.html";
+      const existingAdminToken = localStorage.getItem("admin_token");
+      if (existingAdmin && existingAdminToken) {
+        window.location.href = "admin-panel.html";
+      }
 
-      // ─── Toggle Password ──────────────────────────────────────
-      document.getElementById("togglePassword").addEventListener("click", () => {
-        const input = document.getElementById("adminPassword");
-        const icon  = document.getElementById("eyeIcon");
-        const isPassword = input.type === "password";
-        input.type = isPassword ? "text" : "password";
-        icon.setAttribute("data-lucide", isPassword ? "eye-off" : "eye");
-        lucide.createIcons();
-      });
+      document
+        .getElementById("togglePassword")
+        .addEventListener("click", () => {
+          const input = document.getElementById("adminPassword");
+          const icon = document.getElementById("eyeIcon");
+          const isPassword = input.type === "password";
+          input.type = isPassword ? "text" : "password";
+          icon.setAttribute("data-lucide", isPassword ? "eye-off" : "eye");
+          lucide.createIcons();
+        });
 
-      // ─── Helpers ──────────────────────────────────────────────
       function showError(msg) {
         const el = document.getElementById("errorAlert");
         document.getElementById("errorMessage").textContent = msg;
         el.classList.remove("hidden");
         document.getElementById("successAlert").classList.add("hidden");
-        document.getElementById("adminLoginForm").classList.add("shake-animation");
+        document
+          .getElementById("adminLoginForm")
+          .classList.add("shake-animation");
+
         setTimeout(() => {
-          document.getElementById("adminLoginForm").classList.remove("shake-animation");
+          document
+            .getElementById("adminLoginForm")
+            .classList.remove("shake-animation");
           el.classList.add("hidden");
         }, 4000);
       }
@@ -193,47 +289,62 @@
         }
       }
 
-      // ─── Login Submit ─────────────────────────────────────────
-      document.getElementById("adminLoginForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
+      document
+        .getElementById("adminLoginForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
 
-        const email    = document.getElementById("adminEmail").value.trim();
-        const password = document.getElementById("adminPassword").value;
+          const email = document.getElementById("adminEmail").value.trim();
+          const password = document.getElementById("adminPassword").value;
 
-        if (!email || !password) {
-          showError("Please enter both email and password.");
-          return;
-        }
+          if (!email || !password) {
+            showError("Please enter both email and password.");
+            return;
+          }
 
-        setLoading(true);
+          setLoading(true);
 
-        try {
-          const data = await API.post("/admin/login", { email, password });
+          try {
+            const data = await API.post("/admin/login", { email, password });
 
-          // Save admin info to localStorage
-          localStorage.setItem("admin", JSON.stringify({
-            _id:   data._id,
-            name:  data.name,
-            email: data.email,
-          }));
+            if (!data?.token) {
+              throw new Error("Login succeeded but no token was returned.");
+            }
 
-          showSuccess("Login successful! Redirecting to admin panel...");
+            localStorage.setItem("admin_token", data.token);
 
-          setTimeout(() => {
-            window.location.href = "admin-panel.html";
-          }, 1200);
+            localStorage.setItem(
+              "admin",
+              JSON.stringify({
+                _id: data._id,
+                name: data.name,
+                email: data.email,
+              }),
+            );
 
-        } catch (err) {
-          showError(err.message || "Invalid admin credentials. Access denied.");
-        } finally {
-          setLoading(false);
-        }
-      });
+            showSuccess("Login successful! Redirecting to admin panel...");
 
-      // Allow Enter key
-      document.getElementById("adminPassword").addEventListener("keydown", e => {
-        if (e.key === "Enter") document.getElementById("adminLoginForm").dispatchEvent(new Event("submit"));
-      });
+            setTimeout(() => {
+              window.location.href = "admin-panel.html";
+            }, 1200);
+          } catch (err) {
+            showError(
+              err.message || "Invalid admin credentials. Access denied.",
+            );
+          } finally {
+            setLoading(false);
+          }
+        });
+
+      document
+        .getElementById("adminPassword")
+        .addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            document
+              .getElementById("adminLoginForm")
+              .dispatchEvent(new Event("submit"));
+          }
+        });
     </script>
   </body>
 </html>

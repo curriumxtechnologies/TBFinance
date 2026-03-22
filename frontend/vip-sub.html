@@ -2,14 +2,34 @@
 <html class="dark" lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+    <meta
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+      name="viewport"
+    />
     <title>VIP Subscription | TheBrave Finance</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="images/favicon-16x16.png"
+    />
     <link rel="manifest" href="images/site.webmanifest" />
     <script id="tailwind-config">
       tailwind.config = {
@@ -29,49 +49,157 @@
       };
     </script>
     <style>
-      body { font-family: "Manrope", sans-serif; }
-      .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-      .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-      .custom-scrollbar::-webkit-scrollbar-thumb { background: #243049; border-radius: 10px; }
-      #mobileSidebar { transition: transform 0.3s ease-in-out; transform: translateX(-100%); }
-      #mobileSidebar.open { transform: translateX(0); }
-      #sidebarOverlay { transition: opacity 0.3s ease-in-out; opacity: 0; pointer-events: none; }
-      #sidebarOverlay.open { opacity: 1; pointer-events: auto; }
-      .icon { width: 20px; height: 20px; stroke-width: 2.2; flex-shrink: 0; }
-      .icon-sm { width: 16px; height: 16px; }
-      .icon-lg { width: 22px; height: 22px; }
-      .avatar-img { width: 100%; height: 100%; object-fit: cover; }
-      .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
-      @keyframes spin { to { transform: rotate(360deg); } }
-      .proof-preview { max-height: 100px; object-fit: contain; border-radius: 8px; margin-top: 8px; }
-      #paymentModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 100; align-items: center; justify-content: center; padding: 1rem; }
-      #paymentModal.open { display: flex; }
+      body {
+        font-family: "Manrope", sans-serif;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #243049;
+        border-radius: 10px;
+      }
+      #mobileSidebar {
+        transition: transform 0.3s ease-in-out;
+        transform: translateX(-100%);
+      }
+      #mobileSidebar.open {
+        transform: translateX(0);
+      }
+      #sidebarOverlay {
+        transition: opacity 0.3s ease-in-out;
+        opacity: 0;
+        pointer-events: none;
+      }
+      #sidebarOverlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .icon {
+        width: 20px;
+        height: 20px;
+        stroke-width: 2.2;
+        flex-shrink: 0;
+      }
+      .icon-sm {
+        width: 16px;
+        height: 16px;
+      }
+      .icon-lg {
+        width: 22px;
+        height: 22px;
+      }
+      .avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .spinner {
+        width: 18px;
+        height: 18px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        display: inline-block;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .proof-preview {
+        max-height: 100px;
+        object-fit: contain;
+        border-radius: 8px;
+        margin-top: 8px;
+      }
+      #paymentModal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
+        z-index: 100;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+      }
+      #paymentModal.open {
+        display: flex;
+      }
     </style>
   </head>
 
-  <body class="bg-background-dark text-slate-100 font-display antialiased overflow-hidden">
-
-    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"></div>
+  <body
+    class="bg-background-dark text-slate-100 font-display antialiased overflow-hidden"
+  >
+    <div
+      id="sidebarOverlay"
+      class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"
+    ></div>
 
     <!-- Mobile Sidebar -->
-    <aside id="mobileSidebar" class="fixed top-0 left-0 h-full w-64 bg-surface-dark border-r border-border-dark flex flex-col z-50 lg:hidden">
+    <aside
+      id="mobileSidebar"
+      class="fixed top-0 left-0 h-full w-64 bg-surface-dark border-r border-border-dark flex flex-col z-50 lg:hidden"
+    >
       <div class="p-6 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <img src="images/TBF-LOGO.png" alt="TheBrave Logo" class="h-8 w-auto sm:h-10 object-contain" />
-          <h2 class="text-white text-lg font-extrabold tracking-tight uppercase">TBF</h2>
+          <img
+            src="images/TBF-LOGO.png"
+            alt="TheBrave Logo"
+            class="h-8 w-auto sm:h-10 object-contain"
+          />
+          <h2
+            class="text-white text-lg font-extrabold tracking-tight uppercase"
+          >
+            TBF
+          </h2>
         </div>
-        <button id="closeSidebar" class="text-slate-400 hover:text-white p-1"><i data-lucide="x" class="icon"></i></button>
+        <button id="closeSidebar" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="icon"></i>
+        </button>
       </div>
       <nav class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto">
-        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="user-dashboard.html"><i data-lucide="layout-dashboard" class="icon"></i> Dashboard</a>
-        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="deposit.html"><i data-lucide="wallet" class="icon"></i> Deposit</a>
-        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="deposit-history.html"><i data-lucide="history" class="icon"></i> Deposit History</a>
-        <a class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20" href="vip-sub.html"><i data-lucide="badge-check" class="icon"></i> VIP Subscription</a>
-        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="recovery-request.html"><i data-lucide="shield-check" class="icon"></i> Recovery Requests</a>
-        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="profile.html"><i data-lucide="user" class="icon"></i> Profile</a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="user-dashboard.html"
+          ><i data-lucide="layout-dashboard" class="icon"></i> Dashboard</a
+        >
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="deposit.html"
+          ><i data-lucide="wallet" class="icon"></i> Deposit</a
+        >
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="deposit-history.html"
+          ><i data-lucide="history" class="icon"></i> Deposit History</a
+        >
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20"
+          href="vip-sub.html"
+          ><i data-lucide="badge-check" class="icon"></i> VIP Subscription</a
+        >
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="recovery-request.html"
+          ><i data-lucide="shield-check" class="icon"></i> Recovery Requests</a
+        >
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="profile.html"
+          ><i data-lucide="user" class="icon"></i> Profile</a
+        >
       </nav>
       <div class="p-4 border-t border-border-dark">
-        <button id="mobileLogoutBtn" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all">
+        <button
+          id="mobileLogoutBtn"
+          class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
+        >
           <i data-lucide="log-out" class="icon"></i> Logout
         </button>
       </div>
@@ -79,21 +207,61 @@
 
     <div class="flex h-screen overflow-hidden">
       <!-- Desktop Sidebar -->
-      <aside class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex-col hidden lg:flex">
+      <aside
+        class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex-col hidden lg:flex"
+      >
         <div class="p-6 flex items-center gap-3">
-          <img src="images/TBF-LOGO.png" alt="TheBrave Logo" class="h-8 w-auto sm:h-10 object-contain" />
-          <h2 class="text-white text-lg font-extrabold tracking-tight uppercase">TBF</h2>
+          <img
+            src="images/TBF-LOGO.png"
+            alt="TheBrave Logo"
+            class="h-8 w-auto sm:h-10 object-contain"
+          />
+          <h2
+            class="text-white text-lg font-extrabold tracking-tight uppercase"
+          >
+            TBF
+          </h2>
         </div>
-        <nav class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto">
-          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="user-dashboard.html"><i data-lucide="layout-dashboard" class="icon"></i> Dashboard</a>
-          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="deposit.html"><i data-lucide="wallet" class="icon"></i> Deposit</a>
-          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="deposit-history.html"><i data-lucide="history" class="icon"></i> Deposit History</a>
-          <a class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20" href="vip-sub.html"><i data-lucide="badge-check" class="icon"></i> VIP Subscription</a>
-          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="recovery-request.html"><i data-lucide="shield-check" class="icon"></i> Recovery Requests</a>
-          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="profile.html"><i data-lucide="user" class="icon"></i> Profile</a>
+        <nav
+          class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto"
+        >
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+            href="user-dashboard.html"
+            ><i data-lucide="layout-dashboard" class="icon"></i> Dashboard</a
+          >
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+            href="deposit.html"
+            ><i data-lucide="wallet" class="icon"></i> Deposit</a
+          >
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+            href="deposit-history.html"
+            ><i data-lucide="history" class="icon"></i> Deposit History</a
+          >
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20"
+            href="vip-sub.html"
+            ><i data-lucide="badge-check" class="icon"></i> VIP Subscription</a
+          >
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+            href="recovery-request.html"
+            ><i data-lucide="shield-check" class="icon"></i> Recovery
+            Requests</a
+          >
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+            href="profile.html"
+            ><i data-lucide="user" class="icon"></i> Profile</a
+          >
         </nav>
         <div class="p-4 border-t border-border-dark">
-          <button id="logoutBtn" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all">
+          <button
+            id="logoutBtn"
+            class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
+          >
             <i data-lucide="log-out" class="icon"></i> Logout
           </button>
         </div>
@@ -101,9 +269,14 @@
 
       <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         <!-- Header -->
-        <header class="h-16 flex-shrink-0 border-b border-border-dark bg-surface-dark/50 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between">
+        <header
+          class="h-16 flex-shrink-0 border-b border-border-dark bg-surface-dark/50 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between"
+        >
           <div class="flex items-center gap-3">
-            <button id="menuToggle" class="block lg:hidden p-2 text-slate-400 hover:text-white transition-colors">
+            <button
+              id="menuToggle"
+              class="block lg:hidden p-2 text-slate-400 hover:text-white transition-colors"
+            >
               <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
             <div class="flex items-center text-xs sm:text-sm font-medium">
@@ -114,82 +287,200 @@
           </div>
           <div class="flex items-center gap-4 sm:gap-6">
             <div class="h-8 w-px bg-border-dark hidden sm:block"></div>
-            <a href="profile.html" class="flex items-center gap-2 sm:gap-3 group">
+            <a
+              href="profile.html"
+              class="flex items-center gap-2 sm:gap-3 group"
+            >
               <div class="text-right hidden sm:block">
-                <p id="headerName" class="text-xs sm:text-sm font-bold text-white group-hover:text-emerald-accent transition-colors">Loading...</p>
-                <p class="text-[10px] sm:text-[11px] text-slate-500 uppercase tracking-widest font-bold">Trader</p>
+                <p
+                  id="headerName"
+                  class="text-xs sm:text-sm font-bold text-white group-hover:text-emerald-accent transition-colors"
+                >
+                  Loading...
+                </p>
+                <p
+                  class="text-[10px] sm:text-[11px] text-slate-500 uppercase tracking-widest font-bold"
+                >
+                  Trader
+                </p>
               </div>
-              <div id="headerAvatarWrap" class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-emerald-accent/20 border border-emerald-accent/30 overflow-hidden flex items-center justify-center">
-                <i data-lucide="user" class="w-[18px] h-[18px] sm:w-5 sm:h-5 text-emerald-accent"></i>
+              <div
+                id="headerAvatarWrap"
+                class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-emerald-accent/20 border border-emerald-accent/30 overflow-hidden flex items-center justify-center"
+              >
+                <i
+                  data-lucide="user"
+                  class="w-[18px] h-[18px] sm:w-5 sm:h-5 text-emerald-accent"
+                ></i>
               </div>
             </a>
           </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto custom-scrollbar bg-background-dark p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 pb-24 sm:pb-8">
-
+        <main
+          class="flex-1 overflow-y-auto custom-scrollbar bg-background-dark p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 pb-24 sm:pb-8"
+        >
           <!-- VIP Status Banner -->
-          <div id="vipBanner" class="p-5 sm:p-8 rounded-2xl bg-gradient-to-br from-surface-dark to-background-dark border border-border-dark relative overflow-hidden min-h-[160px] flex items-center">
+          <div
+            id="vipBanner"
+            class="p-5 sm:p-8 rounded-2xl bg-gradient-to-br from-surface-dark to-background-dark border border-border-dark relative overflow-hidden min-h-[160px] flex items-center"
+          >
             <div class="text-slate-500 text-sm">Loading VIP status...</div>
           </div>
 
           <!-- Active Perks -->
           <div>
-            <h3 class="text-white font-bold text-xs sm:text-sm uppercase tracking-widest mb-4 sm:mb-6 flex items-center gap-2">
+            <h3
+              class="text-white font-bold text-xs sm:text-sm uppercase tracking-widest mb-4 sm:mb-6 flex items-center gap-2"
+            >
               <span class="h-px w-6 sm:w-8 bg-emerald-accent"></span>
               Your Active Perks
             </h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-              <div class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors group">
-                <div class="h-8 w-8 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-3 sm:mb-4 group-hover:scale-110 transition-transform"><i data-lucide="activity" class="icon-lg"></i></div>
-                <h4 class="text-white font-bold text-sm sm:text-base mb-1">Real-time Signals</h4>
-                <p class="text-slate-400 text-[10px] sm:text-xs leading-relaxed">Receive trade signals inside the private VIP group with clearer direction and timely market opportunities.</p>
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
+            >
+              <div
+                class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors group"
+              >
+                <div
+                  class="h-8 w-8 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-3 sm:mb-4 group-hover:scale-110 transition-transform"
+                >
+                  <i data-lucide="activity" class="icon-lg"></i>
+                </div>
+                <h4 class="text-white font-bold text-sm sm:text-base mb-1">
+                  Real-time Signals
+                </h4>
+                <p
+                  class="text-slate-400 text-[10px] sm:text-xs leading-relaxed"
+                >
+                  Receive trade signals inside the private VIP group with
+                  clearer direction and timely market opportunities.
+                </p>
               </div>
-              <div class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors group">
-                <div class="h-8 w-8 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-3 sm:mb-4 group-hover:scale-110 transition-transform"><i data-lucide="target" class="icon-lg"></i></div>
-                <h4 class="text-white font-bold text-sm sm:text-base mb-1">Structured Setups</h4>
-                <p class="text-slate-400 text-[10px] sm:text-xs leading-relaxed">Get cleaner trade ideas with guided entries, stop loss levels, and take profit direction.</p>
+              <div
+                class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors group"
+              >
+                <div
+                  class="h-8 w-8 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-3 sm:mb-4 group-hover:scale-110 transition-transform"
+                >
+                  <i data-lucide="target" class="icon-lg"></i>
+                </div>
+                <h4 class="text-white font-bold text-sm sm:text-base mb-1">
+                  Structured Setups
+                </h4>
+                <p
+                  class="text-slate-400 text-[10px] sm:text-xs leading-relaxed"
+                >
+                  Get cleaner trade ideas with guided entries, stop loss levels,
+                  and take profit direction.
+                </p>
               </div>
-              <div class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors group">
-                <div class="h-8 w-8 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-3 sm:mb-4 group-hover:scale-110 transition-transform"><i data-lucide="headset" class="icon-lg"></i></div>
-                <h4 class="text-white font-bold text-sm sm:text-base mb-1">Priority Support</h4>
-                <p class="text-slate-400 text-[10px] sm:text-xs leading-relaxed">Enjoy a smoother premium support experience as an active VIP signals member.</p>
+              <div
+                class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors group"
+              >
+                <div
+                  class="h-8 w-8 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-3 sm:mb-4 group-hover:scale-110 transition-transform"
+                >
+                  <i data-lucide="headset" class="icon-lg"></i>
+                </div>
+                <h4 class="text-white font-bold text-sm sm:text-base mb-1">
+                  Priority Support
+                </h4>
+                <p
+                  class="text-slate-400 text-[10px] sm:text-xs leading-relaxed"
+                >
+                  Enjoy a smoother premium support experience as an active VIP
+                  signals member.
+                </p>
               </div>
-              <div class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors group">
-                <div class="h-8 w-8 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-3 sm:mb-4 group-hover:scale-110 transition-transform"><i data-lucide="shield-check" class="icon-lg"></i></div>
-                <h4 class="text-white font-bold text-sm sm:text-base mb-1">Continued Access</h4>
-                <p class="text-slate-400 text-[10px] sm:text-xs leading-relaxed">Keep your subscription active every 5 days to remain inside the private signal group.</p>
+              <div
+                class="p-4 sm:p-6 rounded-2xl bg-surface-dark border border-border-dark hover:border-emerald-accent/30 transition-colors group"
+              >
+                <div
+                  class="h-8 w-8 sm:h-12 sm:w-12 rounded-xl bg-emerald-accent/10 flex items-center justify-center text-emerald-accent mb-3 sm:mb-4 group-hover:scale-110 transition-transform"
+                >
+                  <i data-lucide="shield-check" class="icon-lg"></i>
+                </div>
+                <h4 class="text-white font-bold text-sm sm:text-base mb-1">
+                  Continued Access
+                </h4>
+                <p
+                  class="text-slate-400 text-[10px] sm:text-xs leading-relaxed"
+                >
+                  Keep your subscription active every 5 days to remain inside
+                  the private signal group.
+                </p>
               </div>
             </div>
           </div>
 
           <!-- Subscription History -->
           <div class="space-y-3 sm:space-y-4">
-            <h3 class="text-white font-bold text-xs sm:text-sm uppercase tracking-widest flex items-center gap-2">
+            <h3
+              class="text-white font-bold text-xs sm:text-sm uppercase tracking-widest flex items-center gap-2"
+            >
               <span class="h-px w-6 sm:w-8 bg-border-dark"></span>
               Subscription History
             </h3>
-            <div class="hidden sm:block bg-surface-dark border border-border-dark rounded-2xl overflow-hidden">
+            <div
+              class="hidden sm:block bg-surface-dark border border-border-dark rounded-2xl overflow-hidden"
+            >
               <div class="overflow-x-auto">
                 <table class="w-full text-left">
                   <thead>
                     <tr class="border-b border-border-dark bg-white/5">
-                      <th class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest">Plan</th>
-                      <th class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest">Term</th>
-                      <th class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest">Amount</th>
-                      <th class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest">Date</th>
-                      <th class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest">Expires</th>
-                      <th class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest text-right">Status</th>
+                      <th
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest"
+                      >
+                        Plan
+                      </th>
+                      <th
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest"
+                      >
+                        Term
+                      </th>
+                      <th
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest"
+                      >
+                        Amount
+                      </th>
+                      <th
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest"
+                      >
+                        Date
+                      </th>
+                      <th
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest"
+                      >
+                        Expires
+                      </th>
+                      <th
+                        class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest text-right"
+                      >
+                        Status
+                      </th>
                     </tr>
                   </thead>
-                  <tbody id="desktopHistoryBody" class="divide-y divide-border-dark">
-                    <tr><td colspan="6" class="px-6 py-10 text-center text-slate-500 text-xs">Loading...</td></tr>
+                  <tbody
+                    id="desktopHistoryBody"
+                    class="divide-y divide-border-dark"
+                  >
+                    <tr>
+                      <td
+                        colspan="6"
+                        class="px-6 py-10 text-center text-slate-500 text-xs"
+                      >
+                        Loading...
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
             </div>
             <div id="mobileHistoryList" class="block sm:hidden space-y-3">
-              <div class="text-center text-slate-500 text-xs py-8">Loading...</div>
+              <div class="text-center text-slate-500 text-xs py-8">
+                Loading...
+              </div>
             </div>
           </div>
         </main>
@@ -198,70 +489,159 @@
 
     <!-- Payment Modal -->
     <div id="paymentModal">
-      <div class="bg-surface-dark border border-border-dark rounded-2xl p-6 w-full max-w-lg space-y-5 max-h-[90vh] overflow-y-auto custom-scrollbar">
+      <div
+        class="bg-surface-dark border border-border-dark rounded-2xl p-6 w-full max-w-lg space-y-5 max-h-[90vh] overflow-y-auto custom-scrollbar"
+      >
         <div class="flex items-center justify-between">
           <div>
             <h3 class="text-white font-bold text-lg">Subscribe to VIP</h3>
-            <p class="text-slate-400 text-xs mt-0.5">Send exactly <span class="text-emerald-accent font-black">$56.78</span> worth of your chosen coin</p>
+            <p class="text-slate-400 text-xs mt-0.5">
+              Send exactly
+              <span class="text-emerald-accent font-black">$56.78</span> worth
+              of your chosen coin
+            </p>
           </div>
-          <button onclick="closePaymentModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="icon"></i></button>
+          <button
+            onclick="closePaymentModal()"
+            class="text-slate-400 hover:text-white"
+          >
+            <i data-lucide="x" class="icon"></i>
+          </button>
         </div>
 
         <!-- Price reminder box -->
-        <div class="flex items-center gap-3 p-4 rounded-xl bg-emerald-accent/10 border border-emerald-accent/20">
-          <i data-lucide="badge-dollar-sign" class="icon text-emerald-accent flex-shrink-0"></i>
+        <div
+          class="flex items-center gap-3 p-4 rounded-xl bg-emerald-accent/10 border border-emerald-accent/20"
+        >
+          <i
+            data-lucide="badge-dollar-sign"
+            class="icon text-emerald-accent flex-shrink-0"
+          ></i>
           <div>
             <p class="text-emerald-accent font-black text-lg">$56.78</p>
-            <p class="text-slate-400 text-xs">VIP Subscription · 5 Days Access</p>
+            <p class="text-slate-400 text-xs">
+              VIP Subscription · 5 Days Access
+            </p>
           </div>
         </div>
 
-        <div id="modalError" class="hidden text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3 text-center"></div>
-        <div id="modalSuccess" class="hidden text-sm text-emerald-accent bg-emerald-accent/10 border border-emerald-accent/20 rounded-lg px-4 py-3 text-center"></div>
+        <div
+          id="modalError"
+          class="hidden text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3 text-center"
+        ></div>
+        <div
+          id="modalSuccess"
+          class="hidden text-sm text-emerald-accent bg-emerald-accent/10 border border-emerald-accent/20 rounded-lg px-4 py-3 text-center"
+        ></div>
 
         <!-- Asset / Network -->
         <div class="space-y-2">
-          <label class="text-xs font-bold text-slate-400 uppercase tracking-widest">Asset / Network</label>
-          <select id="modalAsset" onchange="updateModalWallet()" class="block w-full px-4 py-3 bg-background-dark border border-border-dark rounded-xl text-white text-sm outline-none focus:border-emerald-accent">
-            <option value="" disabled selected>— Choose asset / network —</option>
+          <label
+            class="text-xs font-bold text-slate-400 uppercase tracking-widest"
+            >Asset / Network</label
+          >
+          <select
+            id="modalAsset"
+            onchange="updateModalWallet()"
+            class="block w-full px-4 py-3 bg-background-dark border border-border-dark rounded-xl text-white text-sm outline-none focus:border-emerald-accent"
+          >
+            <option value="" disabled selected>
+              — Choose asset / network —
+            </option>
             <option value="USDT_TRC20">USDT (TRC20)</option>
             <option value="USDT_BEP20">USDT (BEP20)</option>
             <option value="BTC">Bitcoin (BTC)</option>
           </select>
 
           <!-- Wallet address revealed on selection -->
-          <div id="modalWalletBox" class="hidden p-4 rounded-xl bg-background-dark border border-emerald-accent/30 space-y-2">
-            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Send $56.78 worth to this address</p>
+          <div
+            id="modalWalletBox"
+            class="hidden p-4 rounded-xl bg-background-dark border border-emerald-accent/30 space-y-2"
+          >
+            <p
+              class="text-[10px] font-bold text-slate-500 uppercase tracking-widest"
+            >
+              Send $56.78 worth to this address
+            </p>
             <div class="flex items-start gap-2">
-              <p id="modalWalletAddress" class="text-xs font-mono text-white break-all flex-1 leading-relaxed"></p>
-              <button onclick="copyModalAddress()" class="flex-shrink-0 p-1.5 rounded-lg bg-emerald-accent/10 hover:bg-emerald-accent/20 text-emerald-accent transition-colors">
+              <p
+                id="modalWalletAddress"
+                class="text-xs font-mono text-white break-all flex-1 leading-relaxed"
+              ></p>
+              <button
+                onclick="copyModalAddress()"
+                class="flex-shrink-0 p-1.5 rounded-lg bg-emerald-accent/10 hover:bg-emerald-accent/20 text-emerald-accent transition-colors"
+              >
                 <i data-lucide="copy" class="w-3.5 h-3.5"></i>
               </button>
             </div>
-            <p id="modalCopyConfirm" class="text-[10px] text-emerald-accent hidden">✓ Address copied!</p>
+            <p
+              id="modalCopyConfirm"
+              class="text-[10px] text-emerald-accent hidden"
+            >
+              ✓ Address copied!
+            </p>
           </div>
         </div>
 
         <!-- Transaction ID -->
         <div class="space-y-2">
-          <label class="text-xs font-bold text-slate-400 uppercase tracking-widest">Transaction ID / Hash</label>
-          <input id="modalTxId" type="text" placeholder="Enter transaction reference after payment" class="block w-full px-4 py-3 bg-background-dark border border-border-dark rounded-xl text-white font-mono text-xs outline-none focus:border-emerald-accent placeholder:text-slate-600" />
+          <label
+            class="text-xs font-bold text-slate-400 uppercase tracking-widest"
+            >Transaction ID / Hash</label
+          >
+          <input
+            id="modalTxId"
+            type="text"
+            placeholder="Enter transaction reference after payment"
+            class="block w-full px-4 py-3 bg-background-dark border border-border-dark rounded-xl text-white font-mono text-xs outline-none focus:border-emerald-accent placeholder:text-slate-600"
+          />
         </div>
 
         <!-- Proof of Payment -->
         <div class="space-y-2">
-          <label class="text-xs font-bold text-slate-400 uppercase tracking-widest">Proof of Payment</label>
-          <div id="modalDropzone" onclick="document.getElementById('modalProofFile').click()" class="border-2 border-dashed border-border-dark rounded-xl p-6 flex flex-col items-center justify-center bg-background-dark/50 hover:bg-background-dark cursor-pointer group transition-colors">
-            <i data-lucide="file-up" class="w-8 h-8 text-slate-400 group-hover:text-emerald-accent mb-2 transition-colors"></i>
-            <p class="text-white font-bold text-xs mb-1">Click to upload screenshot or receipt</p>
+          <label
+            class="text-xs font-bold text-slate-400 uppercase tracking-widest"
+            >Proof of Payment</label
+          >
+          <div
+            id="modalDropzone"
+            onclick="document.getElementById('modalProofFile').click()"
+            class="border-2 border-dashed border-border-dark rounded-xl p-6 flex flex-col items-center justify-center bg-background-dark/50 hover:bg-background-dark cursor-pointer group transition-colors"
+          >
+            <i
+              data-lucide="file-up"
+              class="w-8 h-8 text-slate-400 group-hover:text-emerald-accent mb-2 transition-colors"
+            ></i>
+            <p class="text-white font-bold text-xs mb-1">
+              Click to upload screenshot or receipt
+            </p>
             <p class="text-slate-500 text-[10px]">Image or PDF (Max 5MB)</p>
-            <img id="modalProofPreview" class="proof-preview hidden" src="" alt="Preview" />
-            <p id="modalProofName" class="text-emerald-accent text-xs mt-2 hidden"></p>
+            <img
+              id="modalProofPreview"
+              class="proof-preview hidden"
+              src=""
+              alt="Preview"
+            />
+            <p
+              id="modalProofName"
+              class="text-emerald-accent text-xs mt-2 hidden"
+            ></p>
           </div>
-          <input id="modalProofFile" type="file" accept="image/*,application/pdf" class="hidden" onchange="handleModalFile(event)" />
+          <input
+            id="modalProofFile"
+            type="file"
+            accept="image/*,application/pdf"
+            class="hidden"
+            onchange="handleModalFile(event)"
+          />
         </div>
 
-        <button id="modalSubmitBtn" onclick="submitVipPayment()" class="w-full py-4 bg-emerald-accent hover:bg-emerald-500 text-white font-black rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
+        <button
+          id="modalSubmitBtn"
+          onclick="submitVipPayment()"
+          class="w-full py-4 bg-emerald-accent hover:bg-emerald-500 text-white font-black rounded-xl transition-all flex items-center justify-center gap-2 text-sm"
+        >
           <i data-lucide="send" class="icon"></i>
           SUBMIT PAYMENT — $56.78
         </button>
@@ -277,10 +657,17 @@
 
       // ─── Auth Guard ───────────────────────────────────────────
       const user = JSON.parse(localStorage.getItem("user") || "null");
-      if (!user) window.location.href = "login.html";
+      const token = localStorage.getItem("token");
+
+      if (!user || !token) {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        window.location.href = "login.html";
+      }
 
       if (user) {
-        document.getElementById("headerName").textContent = user.name || "Trader";
+        document.getElementById("headerName").textContent =
+          user.name || "Trader";
         if (user.profile) {
           document.getElementById("headerAvatarWrap").innerHTML =
             `<img src="${user.profile}" alt="avatar" class="avatar-img" />`;
@@ -291,31 +678,37 @@
       const WALLET_ADDRESSES = {
         USDT_TRC20: "TXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         USDT_BEP20: "0xXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        BTC:        "bc1XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        BTC: "bc1XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
       };
 
       const ASSET_MAP = {
-        USDT_TRC20: { asset: "USDT", network: "TRC20"   },
-        USDT_BEP20: { asset: "USDT", network: "BEP20"   },
-        BTC:        { asset: "BTC",  network: "Bitcoin"  },
+        USDT_TRC20: { asset: "USDT", network: "TRC20" },
+        USDT_BEP20: { asset: "USDT", network: "BEP20" },
+        BTC: { asset: "BTC", network: "Bitcoin" },
       };
 
       function updateModalWallet() {
         const key = document.getElementById("modalAsset").value;
         const box = document.getElementById("modalWalletBox");
-        if (!key) { box.classList.add("hidden"); return; }
-        document.getElementById("modalWalletAddress").textContent = WALLET_ADDRESSES[key];
+        if (!key) {
+          box.classList.add("hidden");
+          return;
+        }
+        document.getElementById("modalWalletAddress").textContent =
+          WALLET_ADDRESSES[key];
         box.classList.remove("hidden");
         document.getElementById("modalCopyConfirm").classList.add("hidden");
         lucide.createIcons();
       }
 
       function copyModalAddress() {
-        navigator.clipboard.writeText(document.getElementById("modalWalletAddress").textContent).then(() => {
-          const el = document.getElementById("modalCopyConfirm");
-          el.classList.remove("hidden");
-          setTimeout(() => el.classList.add("hidden"), 2500);
-        });
+        navigator.clipboard
+          .writeText(document.getElementById("modalWalletAddress").textContent)
+          .then(() => {
+            const el = document.getElementById("modalCopyConfirm");
+            el.classList.remove("hidden");
+            setTimeout(() => el.classList.add("hidden"), 2500);
+          });
       }
 
       // ─── VIP Status Banner ────────────────────────────────────
@@ -328,7 +721,11 @@
 
           if (isVip) {
             // ── APPROVED & ACTIVE ──────────────────────────────
-            const expiryDate = new Date(expiry).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+            const expiryDate = new Date(expiry).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            });
             banner.innerHTML = `
               <div class="absolute -right-12 -top-12 opacity-[0.03] pointer-events-none">
                 <i data-lucide="badge-check" class="text-white" style="width:200px;height:200px;"></i>
@@ -369,11 +766,10 @@
                 </div>
               </div>
             `;
-
           } else {
             // Not active — check if there's a pending payment
             const payments = await API.get("/vip/my-payments");
-            const hasPending = payments.some(p => p.status === "pending");
+            const hasPending = payments.some((p) => p.status === "pending");
 
             if (hasPending) {
               // ── PENDING APPROVAL ───────────────────────────────
@@ -409,7 +805,6 @@
                   </div>
                 </div>
               `;
-
             } else {
               // ── NOT SUBSCRIBED ─────────────────────────────────
               banner.innerHTML = `
@@ -448,7 +843,6 @@
           }
 
           lucide.createIcons();
-
         } catch {
           banner.innerHTML = `<p class="text-slate-500 text-sm">Failed to load VIP status.</p>`;
         }
@@ -468,19 +862,29 @@
           }
 
           const statusStyle = {
-            approved: "bg-emerald-accent/10 text-emerald-accent border-emerald-accent/20",
-            pending:  "bg-amber-400/10 text-amber-400 border-amber-400/20",
+            approved:
+              "bg-emerald-accent/10 text-emerald-accent border-emerald-accent/20",
+            pending: "bg-amber-400/10 text-amber-400 border-amber-400/20",
             rejected: "bg-rose-500/10 text-rose-500 border-rose-500/20",
           };
 
-          tbody.innerHTML = payments.map(p => {
-            const date    = new Date(p.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-            const expires = p.vipAccessExpiry
-              ? new Date(p.vipAccessExpiry).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-              : "—";
-            const badge = statusStyle[p.status] || statusStyle.pending;
+          tbody.innerHTML = payments
+            .map((p) => {
+              const date = new Date(p.createdAt).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              });
+              const expires = p.vipAccessExpiry
+                ? new Date(p.vipAccessExpiry).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })
+                : "—";
+              const badge = statusStyle[p.status] || statusStyle.pending;
 
-            return `
+              return `
               <tr class="hover:bg-white/5 transition-colors">
                 <td class="px-4 sm:px-6 py-3 sm:py-4">
                   <div class="flex items-center gap-2 sm:gap-3">
@@ -499,16 +903,26 @@
                 </td>
               </tr>
             `;
-          }).join("");
+            })
+            .join("");
 
-          mobileList.innerHTML = payments.map(p => {
-            const date    = new Date(p.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-            const expires = p.vipAccessExpiry
-              ? new Date(p.vipAccessExpiry).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-              : "—";
-            const badge = statusStyle[p.status] || statusStyle.pending;
+          mobileList.innerHTML = payments
+            .map((p) => {
+              const date = new Date(p.createdAt).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              });
+              const expires = p.vipAccessExpiry
+                ? new Date(p.vipAccessExpiry).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })
+                : "—";
+              const badge = statusStyle[p.status] || statusStyle.pending;
 
-            return `
+              return `
               <div class="bg-surface-dark border border-border-dark rounded-xl p-4">
                 <div class="flex items-center justify-between mb-3">
                   <div class="flex items-center gap-2">
@@ -529,7 +943,8 @@
                 </div>
               </div>
             `;
-          }).join("");
+            })
+            .join("");
 
           lucide.createIcons();
         } catch {
@@ -557,9 +972,11 @@
         selectedFile = null;
       }
 
-      document.getElementById("paymentModal").addEventListener("click", function(e) {
-        if (e.target === this) closePaymentModal();
-      });
+      document
+        .getElementById("paymentModal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) closePaymentModal();
+        });
 
       // ─── File Upload ──────────────────────────────────────────
       let selectedFile = null;
@@ -572,7 +989,7 @@
         document.getElementById("modalProofName").classList.remove("hidden");
         if (file.type.startsWith("image/")) {
           const reader = new FileReader();
-          reader.onload = ev => {
+          reader.onload = (ev) => {
             const preview = document.getElementById("modalProofPreview");
             preview.src = ev.target.result;
             preview.classList.remove("hidden");
@@ -587,11 +1004,13 @@
         document.getElementById("modalSuccess").classList.add("hidden");
 
         const assetKey = document.getElementById("modalAsset").value;
-        const txId     = document.getElementById("modalTxId").value.trim();
+        const txId = document.getElementById("modalTxId").value.trim();
 
-        if (!assetKey)    return showModalError("Please select an asset / network.");
-        if (!txId)        return showModalError("Please enter your transaction ID.");
-        if (!selectedFile) return showModalError("Please upload proof of payment.");
+        if (!assetKey)
+          return showModalError("Please select an asset / network.");
+        if (!txId) return showModalError("Please enter your transaction ID.");
+        if (!selectedFile)
+          return showModalError("Please upload proof of payment.");
 
         const { asset, network } = ASSET_MAP[assetKey];
         const btn = document.getElementById("modalSubmitBtn");
@@ -600,11 +1019,11 @@
 
         try {
           const formData = new FormData();
-          formData.append("amount",         VIP_PRICE);
-          formData.append("asset",          asset);
-          formData.append("network",        network);
-          formData.append("transactionId",  txId);
-          formData.append("paymentMethod",  "crypto");
+          formData.append("amount", VIP_PRICE);
+          formData.append("asset", asset);
+          formData.append("network", network);
+          formData.append("transactionId", txId);
+          formData.append("paymentMethod", "crypto");
           formData.append("proofOfPayment", selectedFile);
 
           await API.postForm("/vip/payment", formData);
@@ -618,7 +1037,6 @@
             loadVipStatus();
             loadVipHistory();
           }, 2500);
-
         } catch (err) {
           showModalError(err.message || "Submission failed. Please try again.");
         } finally {
@@ -636,13 +1054,21 @@
 
       // ─── Logout ───────────────────────────────────────────────
       async function handleLogout() {
-        try { await API.post("/users/logout"); } catch {}
+        try {
+          await API.post("/users/logout");
+        } catch {}
+
         localStorage.removeItem("user");
+        localStorage.removeItem("token");
         window.location.href = "login.html";
       }
 
-      document.getElementById("logoutBtn").addEventListener("click", handleLogout);
-      document.getElementById("mobileLogoutBtn").addEventListener("click", handleLogout);
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", handleLogout);
+      document
+        .getElementById("mobileLogoutBtn")
+        .addEventListener("click", handleLogout);
 
       // ─── Init ─────────────────────────────────────────────────
       loadVipStatus();

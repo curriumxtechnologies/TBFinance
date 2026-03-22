@@ -496,7 +496,13 @@
       lucide.createIcons();
 
       const user = JSON.parse(localStorage.getItem("user") || "null");
-      if (!user) window.location.href = "login.html";
+      const token = localStorage.getItem("token");
+
+      if (!user || !token) {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        window.location.href = "login.html";
+      }
 
       let originalAvatar = null;
       let pendingAvatarFile = null;
@@ -635,7 +641,9 @@
         try {
           await API.post("/users/logout");
         } catch {}
+
         localStorage.removeItem("user");
+        localStorage.removeItem("token");
         window.location.href = "login.html";
       }
 

@@ -2,13 +2,33 @@
 <html class="dark" lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+    <meta
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+      name="viewport"
+    />
     <title>Deposit | TheBrave Finance</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="images/favicon-16x16.png"
+    />
     <link rel="manifest" href="images/site.webmanifest" />
     <script src="https://unpkg.com/lucide@latest"></script>
     <script id="tailwind-config">
@@ -25,53 +45,156 @@
               "border-dark": "#243049",
             },
             fontFamily: { display: ["Manrope", "sans-serif"] },
-            borderRadius: { DEFAULT: "0.375rem", lg: "0.5rem", xl: "0.75rem", "2xl": "1rem", full: "9999px" },
+            borderRadius: {
+              DEFAULT: "0.375rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              "2xl": "1rem",
+              full: "9999px",
+            },
           },
         },
       };
     </script>
     <style>
-      body { font-family: "Manrope", sans-serif; }
-      .glass-panel { background: rgba(21, 28, 44, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(36, 48, 73, 0.5); }
-      .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-      .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-      .custom-scrollbar::-webkit-scrollbar-thumb { background: #243049; border-radius: 10px; }
-      #mobileSidebar { transition: transform 0.3s ease-in-out; transform: translateX(-100%); }
-      #mobileSidebar.open { transform: translateX(0); }
-      #sidebarOverlay { transition: opacity 0.3s ease-in-out; opacity: 0; pointer-events: none; }
-      #sidebarOverlay.open { opacity: 1; pointer-events: auto; }
-      .lucide { width: 20px; height: 20px; stroke-width: 2; }
-      .avatar-img { width: 100%; height: 100%; object-fit: cover; }
-      .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
-      @keyframes spin { to { transform: rotate(360deg); } }
-      .proof-preview { max-height: 120px; object-fit: contain; border-radius: 8px; margin-top: 10px; }
-      #walletAddressBox { transition: all 0.3s ease; }
+      body {
+        font-family: "Manrope", sans-serif;
+      }
+      .glass-panel {
+        background: rgba(21, 28, 44, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(36, 48, 73, 0.5);
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #243049;
+        border-radius: 10px;
+      }
+      #mobileSidebar {
+        transition: transform 0.3s ease-in-out;
+        transform: translateX(-100%);
+      }
+      #mobileSidebar.open {
+        transform: translateX(0);
+      }
+      #sidebarOverlay {
+        transition: opacity 0.3s ease-in-out;
+        opacity: 0;
+        pointer-events: none;
+      }
+      #sidebarOverlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .lucide {
+        width: 20px;
+        height: 20px;
+        stroke-width: 2;
+      }
+      .avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .spinner {
+        width: 18px;
+        height: 18px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        display: inline-block;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .proof-preview {
+        max-height: 120px;
+        object-fit: contain;
+        border-radius: 8px;
+        margin-top: 10px;
+      }
+      #walletAddressBox {
+        transition: all 0.3s ease;
+      }
     </style>
   </head>
 
-  <body class="bg-background-dark text-slate-100 font-display transition-colors duration-300 antialiased overflow-hidden">
-
-    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"></div>
+  <body
+    class="bg-background-dark text-slate-100 font-display transition-colors duration-300 antialiased overflow-hidden"
+  >
+    <div
+      id="sidebarOverlay"
+      class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"
+    ></div>
 
     <!-- Mobile Sidebar -->
-    <aside id="mobileSidebar" class="fixed top-0 left-0 h-full w-64 bg-surface-dark border-r border-border-dark flex flex-col z-50 lg:hidden">
+    <aside
+      id="mobileSidebar"
+      class="fixed top-0 left-0 h-full w-64 bg-surface-dark border-r border-border-dark flex flex-col z-50 lg:hidden"
+    >
       <div class="p-6 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <img src="images/TBF-LOGO.png" alt="TheBrave Logo" class="h-8 w-auto sm:h-10 object-contain" />
-          <h2 class="text-white text-lg font-extrabold tracking-tight uppercase">TBF</h2>
+          <img
+            src="images/TBF-LOGO.png"
+            alt="TheBrave Logo"
+            class="h-8 w-auto sm:h-10 object-contain"
+          />
+          <h2
+            class="text-white text-lg font-extrabold tracking-tight uppercase"
+          >
+            TBF
+          </h2>
         </div>
-        <button id="closeSidebar" class="text-slate-400 hover:text-white p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <button id="closeSidebar" class="text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
       </div>
       <nav class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto">
-        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="user-dashboard.html"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</a>
-        <a class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20" href="deposit.html"><i data-lucide="wallet" class="w-5 h-5"></i> Deposit</a>
-        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="deposit-history.html"><i data-lucide="history" class="w-5 h-5"></i> Deposit History</a>
-        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="vip-sub.html"><i data-lucide="badge-check" class="w-5 h-5"></i> VIP Subscription</a>
-        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="recovery-request.html"><i data-lucide="shield-check" class="w-5 h-5"></i> Recovery Requests</a>
-        <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="profile.html"><i data-lucide="user" class="w-5 h-5"></i> Profile</a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="user-dashboard.html"
+          ><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</a
+        >
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20"
+          href="deposit.html"
+          ><i data-lucide="wallet" class="w-5 h-5"></i> Deposit</a
+        >
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="deposit-history.html"
+          ><i data-lucide="history" class="w-5 h-5"></i> Deposit History</a
+        >
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="vip-sub.html"
+          ><i data-lucide="badge-check" class="w-5 h-5"></i> VIP Subscription</a
+        >
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="recovery-request.html"
+          ><i data-lucide="shield-check" class="w-5 h-5"></i> Recovery
+          Requests</a
+        >
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+          href="profile.html"
+          ><i data-lucide="user" class="w-5 h-5"></i> Profile</a
+        >
       </nav>
       <div class="p-4 border-t border-border-dark">
-        <button id="mobileLogoutBtn" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all">
+        <button
+          id="mobileLogoutBtn"
+          class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
+        >
           <i data-lucide="log-out" class="w-5 h-5"></i> Logout
         </button>
       </div>
@@ -79,21 +202,62 @@
 
     <div class="flex h-screen overflow-hidden">
       <!-- Desktop Sidebar -->
-      <aside class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex-col hidden lg:flex">
+      <aside
+        class="w-64 flex-shrink-0 bg-surface-dark border-r border-border-dark flex-col hidden lg:flex"
+      >
         <div class="p-6 flex items-center gap-3">
-          <img src="images/TBF-LOGO.png" alt="TheBrave Logo" class="h-8 w-auto sm:h-10 object-contain" />
-          <h2 class="text-white text-lg font-extrabold tracking-tight uppercase">TBF</h2>
+          <img
+            src="images/TBF-LOGO.png"
+            alt="TheBrave Logo"
+            class="h-8 w-auto sm:h-10 object-contain"
+          />
+          <h2
+            class="text-white text-lg font-extrabold tracking-tight uppercase"
+          >
+            TBF
+          </h2>
         </div>
-        <nav class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto">
-          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="user-dashboard.html"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</a>
-          <a class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20" href="deposit.html"><i data-lucide="wallet" class="w-5 h-5"></i> Deposit</a>
-          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="deposit-history.html"><i data-lucide="history" class="w-5 h-5"></i> Deposit History</a>
-          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="vip-sub.html"><i data-lucide="badge-check" class="w-5 h-5"></i> VIP Subscription</a>
-          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="recovery-request.html"><i data-lucide="shield-check" class="w-5 h-5"></i> Recovery Requests</a>
-          <a class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="profile.html"><i data-lucide="user" class="w-5 h-5"></i> Profile</a>
+        <nav
+          class="flex-1 px-4 py-4 space-y-1 custom-scrollbar overflow-y-auto"
+        >
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+            href="user-dashboard.html"
+            ><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</a
+          >
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20"
+            href="deposit.html"
+            ><i data-lucide="wallet" class="w-5 h-5"></i> Deposit</a
+          >
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+            href="deposit-history.html"
+            ><i data-lucide="history" class="w-5 h-5"></i> Deposit History</a
+          >
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+            href="vip-sub.html"
+            ><i data-lucide="badge-check" class="w-5 h-5"></i> VIP
+            Subscription</a
+          >
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+            href="recovery-request.html"
+            ><i data-lucide="shield-check" class="w-5 h-5"></i> Recovery
+            Requests</a
+          >
+          <a
+            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+            href="profile.html"
+            ><i data-lucide="user" class="w-5 h-5"></i> Profile</a
+          >
         </nav>
         <div class="p-4 border-t border-border-dark">
-          <button id="logoutBtn" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all">
+          <button
+            id="logoutBtn"
+            class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
+          >
             <i data-lucide="log-out" class="w-5 h-5"></i> Logout
           </button>
         </div>
@@ -101,9 +265,14 @@
 
       <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         <!-- Header -->
-        <header class="h-16 flex-shrink-0 border-b border-border-dark bg-surface-dark/50 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between">
+        <header
+          class="h-16 flex-shrink-0 border-b border-border-dark bg-surface-dark/50 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between"
+        >
           <div class="flex items-center gap-3">
-            <button id="menuToggle" class="block lg:hidden p-2 text-slate-400 hover:text-white transition-colors">
+            <button
+              id="menuToggle"
+              class="block lg:hidden p-2 text-slate-400 hover:text-white transition-colors"
+            >
               <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
             <div class="flex items-center text-xs sm:text-sm font-medium">
@@ -117,60 +286,116 @@
             <a href="profile.html">
               <button class="flex items-center gap-2 sm:gap-3 group">
                 <div class="text-right hidden sm:block">
-                  <p id="headerName" class="text-xs sm:text-sm font-bold text-white group-hover:text-primary transition-colors">Loading...</p>
-                  <p class="text-[10px] sm:text-[11px] text-slate-500 uppercase tracking-widest font-bold">Trader</p>
+                  <p
+                    id="headerName"
+                    class="text-xs sm:text-sm font-bold text-white group-hover:text-primary transition-colors"
+                  >
+                    Loading...
+                  </p>
+                  <p
+                    class="text-[10px] sm:text-[11px] text-slate-500 uppercase tracking-widest font-bold"
+                  >
+                    Trader
+                  </p>
                 </div>
-                <div id="headerAvatarWrap" class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/20 border border-primary/30 overflow-hidden flex items-center justify-center">
-                  <i data-lucide="user" class="w-4 h-4 sm:w-5 sm:h-5 text-primary"></i>
+                <div
+                  id="headerAvatarWrap"
+                  class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/20 border border-primary/30 overflow-hidden flex items-center justify-center"
+                >
+                  <i
+                    data-lucide="user"
+                    class="w-4 h-4 sm:w-5 sm:h-5 text-primary"
+                  ></i>
                 </div>
               </button>
             </a>
           </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto custom-scrollbar bg-background-dark p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 pb-24 sm:pb-8">
+        <main
+          class="flex-1 overflow-y-auto custom-scrollbar bg-background-dark p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 pb-24 sm:pb-8"
+        >
           <div class="max-w-4xl mx-auto space-y-6 sm:space-y-10">
-
             <section class="space-y-2">
-              <h1 class="text-2xl sm:text-3xl font-black text-white">Fund Your Account</h1>
+              <h1 class="text-2xl sm:text-3xl font-black text-white">
+                Fund Your Account
+              </h1>
               <div class="flex items-center gap-2 text-emerald-accent">
                 <i data-lucide="info" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                <p class="text-xs sm:text-sm font-medium">Most deposits are processed within 1-2 hours after confirmation.</p>
+                <p class="text-xs sm:text-sm font-medium">
+                  Most deposits are processed within 1-2 hours after
+                  confirmation.
+                </p>
               </div>
             </section>
 
             <!-- Info Cards -->
             <div class="grid sm:grid-cols-2 gap-4">
-              <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex gap-3">
-                <i data-lucide="triangle-alert" class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5"></i>
+              <div
+                class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex gap-3"
+              >
+                <i
+                  data-lucide="triangle-alert"
+                  class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5"
+                ></i>
                 <div>
-                  <p class="text-xs font-bold text-amber-500 uppercase tracking-wider mb-1">Crypto Transfer Note</p>
-                  <p class="text-xs text-slate-300 leading-relaxed">Ensure you send the correct cryptocurrency on the selected network to avoid permanent loss of funds.</p>
+                  <p
+                    class="text-xs font-bold text-amber-500 uppercase tracking-wider mb-1"
+                  >
+                    Crypto Transfer Note
+                  </p>
+                  <p class="text-xs text-slate-300 leading-relaxed">
+                    Ensure you send the correct cryptocurrency on the selected
+                    network to avoid permanent loss of funds.
+                  </p>
                 </div>
               </div>
-              <div class="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 flex gap-3">
-                <i data-lucide="info" class="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5"></i>
+              <div
+                class="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 flex gap-3"
+              >
+                <i
+                  data-lucide="info"
+                  class="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5"
+                ></i>
                 <div>
-                  <p class="text-xs font-bold text-blue-500 uppercase tracking-wider mb-1">Network Confirmations</p>
-                  <p class="text-xs text-slate-300 leading-relaxed">Crypto deposits require at least 3 network confirmations before they are reflected in your dashboard balance.</p>
+                  <p
+                    class="text-xs font-bold text-blue-500 uppercase tracking-wider mb-1"
+                  >
+                    Network Confirmations
+                  </p>
+                  <p class="text-xs text-slate-300 leading-relaxed">
+                    Crypto deposits require at least 3 network confirmations
+                    before they are reflected in your dashboard balance.
+                  </p>
                 </div>
               </div>
             </div>
 
             <!-- Deposit Form -->
-            <div class="bg-surface-dark border border-border-dark rounded-2xl sm:rounded-3xl p-4 sm:p-8">
-
-              <div id="formError" class="hidden mb-6 text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3 text-center"></div>
-              <div id="formSuccess" class="hidden mb-6 text-sm text-emerald-accent bg-emerald-accent/10 border border-emerald-accent/20 rounded-lg px-4 py-3 text-center"></div>
+            <div
+              class="bg-surface-dark border border-border-dark rounded-2xl sm:rounded-3xl p-4 sm:p-8"
+            >
+              <div
+                id="formError"
+                class="hidden mb-6 text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3 text-center"
+              ></div>
+              <div
+                id="formSuccess"
+                class="hidden mb-6 text-sm text-emerald-accent bg-emerald-accent/10 border border-emerald-accent/20 rounded-lg px-4 py-3 text-center"
+              ></div>
 
               <div class="space-y-6 sm:space-y-8">
                 <div class="grid sm:grid-cols-2 gap-6 sm:gap-8">
-
                   <!-- Amount -->
                   <div class="space-y-2">
-                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">Deposit Amount</label>
+                    <label
+                      class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1"
+                      >Deposit Amount</label
+                    >
                     <div class="relative flex items-center">
-                      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <div
+                        class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+                      >
                         <span class="text-slate-400 font-bold">$</span>
                       </div>
                       <input
@@ -185,23 +410,38 @@
 
                   <!-- Asset / Network + Wallet Address revealed below -->
                   <div class="space-y-3">
-                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">Asset / Network</label>
+                    <label
+                      class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1"
+                      >Asset / Network</label
+                    >
                     <select
                       id="assetNetwork"
                       onchange="updateWalletAddress()"
                       class="block w-full px-4 py-3 sm:py-4 bg-background-dark border border-border-dark rounded-xl focus:ring-1 focus:ring-emerald-accent focus:border-emerald-accent text-white font-medium text-sm sm:text-base outline-none"
                     >
-                      <option value="" disabled selected>— Choose asset / network —</option>
+                      <option value="" disabled selected>
+                        — Choose asset / network —
+                      </option>
                       <option value="USDT_TRC20">USDT (TRC20)</option>
                       <option value="USDT_BEP20">USDT (BEP20)</option>
                       <option value="BTC">Bitcoin (BTC)</option>
                     </select>
 
                     <!-- Wallet address — hidden until user selects a network -->
-                    <div id="walletAddressBox" class="hidden p-4 rounded-xl bg-background-dark border border-emerald-accent/30 space-y-2">
-                      <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Send to this address</p>
+                    <div
+                      id="walletAddressBox"
+                      class="hidden p-4 rounded-xl bg-background-dark border border-emerald-accent/30 space-y-2"
+                    >
+                      <p
+                        class="text-[10px] font-bold text-slate-500 uppercase tracking-widest"
+                      >
+                        Send to this address
+                      </p>
                       <div class="flex items-start gap-2">
-                        <p id="walletAddress" class="text-xs sm:text-sm font-mono text-white break-all flex-1 leading-relaxed"></p>
+                        <p
+                          id="walletAddress"
+                          class="text-xs sm:text-sm font-mono text-white break-all flex-1 leading-relaxed"
+                        ></p>
                         <button
                           onclick="copyWalletAddress()"
                           class="flex-shrink-0 p-1.5 rounded-lg bg-emerald-accent/10 hover:bg-emerald-accent/20 text-emerald-accent transition-colors"
@@ -210,13 +450,21 @@
                           <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                         </button>
                       </div>
-                      <p id="copyConfirm" class="text-[10px] text-emerald-accent hidden">✓ Address copied!</p>
+                      <p
+                        id="copyConfirm"
+                        class="text-[10px] text-emerald-accent hidden"
+                      >
+                        ✓ Address copied!
+                      </p>
                     </div>
                   </div>
 
                   <!-- Transaction ID -->
                   <div class="sm:col-span-2 space-y-2">
-                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">Transaction ID / Hash</label>
+                    <label
+                      class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1"
+                      >Transaction ID / Hash</label
+                    >
                     <input
                       id="transactionId"
                       class="block w-full px-4 py-3 sm:py-4 bg-background-dark border border-border-dark rounded-xl focus:ring-1 focus:ring-emerald-accent focus:border-emerald-accent text-white font-mono text-xs sm:text-sm placeholder:text-slate-700 outline-none"
@@ -227,21 +475,47 @@
 
                   <!-- Proof of Payment -->
                   <div class="sm:col-span-2 space-y-2">
-                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">Proof of Payment</label>
+                    <label
+                      class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1"
+                      >Proof of Payment</label
+                    >
                     <div
                       id="dropzone"
                       onclick="document.getElementById('proofFile').click()"
                       class="border-2 border-dashed border-border-dark rounded-xl sm:rounded-2xl p-6 sm:p-10 flex flex-col items-center justify-center bg-background-dark/50 hover:bg-background-dark transition-colors cursor-pointer group"
                     >
-                      <div class="h-10 w-10 sm:h-14 sm:w-14 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-emerald-accent group-hover:bg-emerald-accent/10 transition-all mb-4">
-                        <i data-lucide="file-up" class="w-6 h-6 sm:w-8 sm:h-8"></i>
+                      <div
+                        class="h-10 w-10 sm:h-14 sm:w-14 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-emerald-accent group-hover:bg-emerald-accent/10 transition-all mb-4"
+                      >
+                        <i
+                          data-lucide="file-up"
+                          class="w-6 h-6 sm:w-8 sm:h-8"
+                        ></i>
                       </div>
-                      <p class="text-white font-bold text-xs sm:text-sm mb-1">Click to upload or drag and drop</p>
-                      <p class="text-slate-500 text-[10px] sm:text-xs">Receipt, screenshot or PDF (Max 5MB)</p>
-                      <img id="proofPreview" class="proof-preview hidden" src="" alt="Preview" />
-                      <p id="proofFileName" class="text-emerald-accent text-xs mt-2 hidden"></p>
+                      <p class="text-white font-bold text-xs sm:text-sm mb-1">
+                        Click to upload or drag and drop
+                      </p>
+                      <p class="text-slate-500 text-[10px] sm:text-xs">
+                        Receipt, screenshot or PDF (Max 5MB)
+                      </p>
+                      <img
+                        id="proofPreview"
+                        class="proof-preview hidden"
+                        src=""
+                        alt="Preview"
+                      />
+                      <p
+                        id="proofFileName"
+                        class="text-emerald-accent text-xs mt-2 hidden"
+                      ></p>
                     </div>
-                    <input id="proofFile" type="file" accept="image/*,application/pdf" class="hidden" onchange="handleFileChange(event)" />
+                    <input
+                      id="proofFile"
+                      type="file"
+                      accept="image/*,application/pdf"
+                      class="hidden"
+                      onchange="handleFileChange(event)"
+                    />
                   </div>
                 </div>
 
@@ -259,7 +533,11 @@
             <div class="text-center pt-2 sm:pt-4">
               <p class="text-slate-500 text-xs sm:text-sm">
                 Need help with your deposit?
-                <a class="text-primary font-bold hover:underline" href="contact-support.html">Contact Support</a>
+                <a
+                  class="text-primary font-bold hover:underline"
+                  href="contact-support.html"
+                  >Contact Support</a
+                >
               </p>
             </div>
           </div>
@@ -274,10 +552,17 @@
 
       // ─── Auth Guard ───────────────────────────────────────────
       const user = JSON.parse(localStorage.getItem("user") || "null");
-      if (!user) window.location.href = "login.html";
+      const token = localStorage.getItem("token");
+
+      if (!user || !token) {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        window.location.href = "login.html";
+      }
 
       if (user) {
-        document.getElementById("headerName").textContent = user.name || "Trader";
+        document.getElementById("headerName").textContent =
+          user.name || "Trader";
         if (user.profile) {
           document.getElementById("headerAvatarWrap").innerHTML =
             `<img src="${user.profile}" alt="avatar" class="avatar-img" />`;
@@ -289,14 +574,14 @@
       const WALLET_ADDRESSES = {
         USDT_TRC20: "TXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
         USDT_BEP20: "0xXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        BTC:        "bc1XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        BTC: "bc1XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
       };
 
       // ─── Show wallet address when network is selected ─────────
       function updateWalletAddress() {
         const selected = document.getElementById("assetNetwork").value;
-        const box      = document.getElementById("walletAddressBox");
-        const addrEl   = document.getElementById("walletAddress");
+        const box = document.getElementById("walletAddressBox");
+        const addrEl = document.getElementById("walletAddress");
 
         if (!selected) {
           box.classList.add("hidden");
@@ -343,9 +628,14 @@
       }
 
       const dropzone = document.getElementById("dropzone");
-      dropzone.addEventListener("dragover", e => { e.preventDefault(); dropzone.classList.add("border-emerald-accent"); });
-      dropzone.addEventListener("dragleave", () => dropzone.classList.remove("border-emerald-accent"));
-      dropzone.addEventListener("drop", e => {
+      dropzone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropzone.classList.add("border-emerald-accent");
+      });
+      dropzone.addEventListener("dragleave", () =>
+        dropzone.classList.remove("border-emerald-accent"),
+      );
+      dropzone.addEventListener("drop", (e) => {
         e.preventDefault();
         dropzone.classList.remove("border-emerald-accent");
         const file = e.dataTransfer.files[0];
@@ -389,19 +679,23 @@
         document.getElementById("formError").classList.add("hidden");
         document.getElementById("formSuccess").classList.add("hidden");
 
-        const amount        = document.getElementById("depositAmount").value.trim();
-        const assetKey      = document.getElementById("assetNetwork").value;
-        const transactionId = document.getElementById("transactionId").value.trim();
+        const amount = document.getElementById("depositAmount").value.trim();
+        const assetKey = document.getElementById("assetNetwork").value;
+        const transactionId = document
+          .getElementById("transactionId")
+          .value.trim();
 
-        if (!amount || Number(amount) <= 0) return showError("Please enter a valid deposit amount.");
-        if (!assetKey)                       return showError("Please select an asset / network.");
-        if (!transactionId)                  return showError("Please enter your transaction ID / hash.");
-        if (!selectedFile)                   return showError("Please upload proof of payment.");
+        if (!amount || Number(amount) <= 0)
+          return showError("Please enter a valid deposit amount.");
+        if (!assetKey) return showError("Please select an asset / network.");
+        if (!transactionId)
+          return showError("Please enter your transaction ID / hash.");
+        if (!selectedFile) return showError("Please upload proof of payment.");
 
         const assetMap = {
-          USDT_TRC20: { asset: "USDT", network: "TRC20"   },
-          USDT_BEP20: { asset: "USDT", network: "BEP20"   },
-          BTC:        { asset: "BTC",  network: "Bitcoin"  },
+          USDT_TRC20: { asset: "USDT", network: "TRC20" },
+          USDT_BEP20: { asset: "USDT", network: "BEP20" },
+          BTC: { asset: "BTC", network: "Bitcoin" },
         };
         const { asset, network } = assetMap[assetKey];
 
@@ -409,29 +703,32 @@
 
         try {
           const formData = new FormData();
-          formData.append("amount",         amount);
-          formData.append("asset",          asset);
-          formData.append("network",        network);
-          formData.append("transactionId",  transactionId);
-          formData.append("paymentMethod",  "crypto");
+          formData.append("amount", amount);
+          formData.append("asset", asset);
+          formData.append("network", network);
+          formData.append("transactionId", transactionId);
+          formData.append("paymentMethod", "crypto");
           formData.append("proofOfPayment", selectedFile);
 
           await API.postForm("/transactions/deposit", formData);
 
-          showSuccess("Deposit submitted successfully! Your transaction is under review.");
+          showSuccess(
+            "Deposit submitted successfully! Your transaction is under review.",
+          );
 
           // Reset form
-          document.getElementById("depositAmount").value  = "";
-          document.getElementById("assetNetwork").value   = "";
-          document.getElementById("transactionId").value  = "";
-          document.getElementById("proofFile").value      = "";
+          document.getElementById("depositAmount").value = "";
+          document.getElementById("assetNetwork").value = "";
+          document.getElementById("transactionId").value = "";
+          document.getElementById("proofFile").value = "";
           document.getElementById("proofPreview").classList.add("hidden");
           document.getElementById("proofFileName").classList.add("hidden");
           document.getElementById("walletAddressBox").classList.add("hidden");
           selectedFile = null;
-
         } catch (err) {
-          showError(err.message || "Deposit submission failed. Please try again.");
+          showError(
+            err.message || "Deposit submission failed. Please try again.",
+          );
         } finally {
           setLoading(false);
         }
@@ -439,13 +736,21 @@
 
       // ─── Logout ───────────────────────────────────────────────
       async function handleLogout() {
-        try { await API.post("/users/logout"); } catch {}
+        try {
+          await API.post("/users/logout");
+        } catch {}
+
         localStorage.removeItem("user");
+        localStorage.removeItem("token");
         window.location.href = "login.html";
       }
 
-      document.getElementById("logoutBtn").addEventListener("click", handleLogout);
-      document.getElementById("mobileLogoutBtn").addEventListener("click", handleLogout);
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", handleLogout);
+      document
+        .getElementById("mobileLogoutBtn")
+        .addEventListener("click", handleLogout);
     </script>
   </body>
 </html>

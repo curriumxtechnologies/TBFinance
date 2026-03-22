@@ -5,9 +5,20 @@ const API = (() => {
       ? "http://localhost:8000/api"
       : "https://tbfinance.onrender.com/api";
 
+  function getStoredToken(endpoint = "") {
+    const lowerEndpoint = endpoint.toLowerCase();
+
+    if (lowerEndpoint.startsWith("/admin") || lowerEndpoint.startsWith("admin")) {
+      return localStorage.getItem("admin_token");
+    }
+
+    return localStorage.getItem("token");
+  }
+
   async function request(endpoint, options = {}) {
     const url = `${BASE_URL}${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`;
     const isFormData = options.body instanceof FormData;
+    const token = getStoredToken(endpoint);
 
     const config = {
       method: options.method || "GET",
@@ -15,6 +26,7 @@ const API = (() => {
       credentials: "include",
       headers: {
         ...(isFormData ? {} : { "Content-Type": "application/json" }),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...(options.headers || {}),
       },
     };

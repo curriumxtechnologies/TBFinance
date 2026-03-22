@@ -22,24 +22,25 @@ const allowedOrigins = [
   'http://127.0.0.1:3000',
   'http://localhost:3000',
   'https://thebravefinance.vercel.app',
-  'https://www.thebravefinance.com'
+  'https://www.thebravefinance.com',
+  'https://thebravefinance.com'
 ];
 
 // ✅ CORS
 app.use(cors({
   origin: function (origin, callback) {
-    // allow requests with no origin (mobile apps, curl, postman)
     if (!origin) return callback(null, true);
+
     if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.warn(`❌ CORS blocked origin: ${origin}`);
-      callback(null, false);
+      return callback(null, true);
     }
+
+    console.warn(`❌ CORS blocked origin: ${origin}`);
+    return callback(new Error("Not allowed by CORS"));
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
 }));
 
 // ✅ Body parsers
