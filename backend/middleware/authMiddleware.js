@@ -16,21 +16,18 @@ const getToken = (req, cookieName) => {
 
 export const protect = asyncHandler(async (req, res, next) => {
   const token = getToken(req, "jwt");
-
   if (!token) {
     res.status(401);
     throw new Error("Not authorized, no user token");
   }
-
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.userId).select("-password");
-
+    const userId  = decoded.userId || decoded.id; // ← handle both
+    const user    = await User.findById(userId).select("-password");
     if (!user) {
       res.status(401);
       throw new Error("User not found");
     }
-
     req.user = user;
     next();
   } catch (err) {

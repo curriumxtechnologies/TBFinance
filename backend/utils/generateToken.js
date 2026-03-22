@@ -7,14 +7,12 @@ const generateToken = (res, userId) => {
     { expiresIn: "30d" }
   );
 
-  const isProd = process.env.NODE_ENV === "production";
-
   res.cookie("jwt", token, {
     httpOnly: true,
-    secure: isProd,
-    sameSite: isProd ? "none" : "lax",
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-    path: "/",
+    secure:   true,      // ← must be true for sameSite none
+    sameSite: "none",    // ← must be none for cross-origin
+    maxAge:   30 * 24 * 60 * 60 * 1000,
+    path:     "/",
   });
 
   return token;
