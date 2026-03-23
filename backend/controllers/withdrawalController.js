@@ -43,7 +43,15 @@ const requestWithdrawal = asyncHandler(async (req, res) => {
     {
       $group: {
         _id: null,
-        totalDeposited: { $sum: "$amount" },
+        totalDeposited: {
+          $sum: {
+            $cond: [
+              { $gt: ["$creditedAmount", 0] },
+              "$creditedAmount",
+              "$amount",
+            ],
+          },
+        },
       },
     },
   ]);
