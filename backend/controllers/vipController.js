@@ -6,6 +6,7 @@ import TradeAcceptance from "../models/tradeAcceptanceModel.js";
 import SignalOutcome from "../models/signalOutcomeModel.js";
 import Transaction from "../models/transactionModel.js";
 import Withdrawal from "../models/withdrawalModel.js";
+import User from "../models/userModel.js";
 
 // ─── Helper: compute a user's available balance ───────────────────────────────
 const getUserAvailableBalance = async (userId) => {
@@ -31,9 +32,33 @@ const getUserAvailableBalance = async (userId) => {
   ]);
 
   const totalDeposited = depositResult[0]?.totalDeposited || 0;
-  const totalReserved  = withdrawalResult[0]?.totalReserved || 0;
+  const totalReserved = withdrawalResult[0]?.totalReserved || 0;
 
   return totalDeposited - totalReserved;
+};
+
+// ─── Helper: check if all take profits have been hit ──────────────────────────
+const areAllTpsHit = async (signalId) => {
+  const signal = await Signal.findById(signalId);
+  if (!signal || !signal.takeProfits || signal.takeProfits.length === 0) return false;
+  
+  const outcomes = await SignalOutcome.find({ 
+    signal: signalId,
+    outcomeType: "profit"
+  });
+  
+  const hitLabels = new Set(outcomes.map(o => o.label));
+  return signal.takeProfits.every(tp => hitLabels.has(tp.label));
+};
+
+// ─── Helper: check if a specific level has already been hit ───────────────────
+const isLevelAlreadyHit = async (signalId, levelLabel, outcomeType) => {
+  const outcome = await SignalOutcome.findOne({
+    signal: signalId,
+    label: levelLabel,
+    outcomeType: outcomeType
+  });
+  return !!outcome;
 };
 
 // ─── VIP PAYMENT ──────────────────────────────────────────────────────────────
@@ -96,7 +121,7 @@ const updateVipPaymentStatus = asyncHandler(async (req, res) => {
 
   if (status === "approved") {
     const now = new Date();
-    payment.vipAccessStart  = now;
+    payment.vipAccessStart = now;
     payment.vipAccessExpiry = new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000);
   }
 
@@ -117,15 +142,15 @@ const getMyVipStatus = asyncHandler(async (req, res) => {
     return res.status(200).json({ isVip: false, expiry: null, daysLeft: 0 });
   }
 
-  const now     = new Date();
-  const isVip   = payment.vipAccessExpiry > now;
+  const now = new Date();
+  const isVip = payment.vipAccessExpiry > now;
   const daysLeft = isVip
     ? Math.ceil((payment.vipAccessExpiry - now) / (1000 * 60 * 60 * 24))
     : 0;
 
   res.status(200).json({
     isVip,
-    expiry:      payment.vipAccessExpiry,
+    expiry: payment.vipAccessExpiry,
     daysLeft,
     accessStart: payment.vipAccessStart,
   });
@@ -167,8 +192,6 @@ const uploadSignal = asyncHandler(async (req, res) => {
     throw new Error("Type must be buy or sell");
   }
 
-  // takeProfits and stopLosses expected as JSON arrays:
-  // [{ label: "TP1", percentage: 3.5, priceLevel: "1.2050" }, ...]
   const parseLevels = (val) => {
     if (!val) return [];
     if (Array.isArray(val)) return val;
@@ -180,15 +203,15 @@ const uploadSignal = asyncHandler(async (req, res) => {
   };
 
   const signal = await Signal.create({
-    pair:        pair.toUpperCase().trim(),
-    type:        type.toLowerCase(),
-    entry:       entry.trim(),
+    pair: pair.toUpperCase().trim(),
+    type: type.toLowerCase(),
+    entry: entry.trim(),
     takeProfits: parseLevels(takeProfits),
-    stopLosses:  parseLevels(stopLosses),
+    stopLosses: parseLevels(stopLosses),
     description: description || "",
-    image:       req.file?.path || "",
-    status:      status || "active",
-    postedBy:    req.admin?._id || null,
+    image: req.file?.path || "",
+    status: status || "active",
+    postedBy: req.admin?._id || null,
   });
 
   res.status(201).json(signal);
@@ -213,16 +236,15 @@ const getSignalById = asyncHandler(async (req, res) => {
     throw new Error("Signal not found");
   }
 
-  // Tell the frontend whether this user has already accepted the signal
   const acceptance = await TradeAcceptance.findOne({
     signal: signal._id,
-    user:   req.user._id,
+    user: req.user._id,
   });
 
   res.status(200).json({
     ...signal.toObject(),
-    userAccepted:              !!acceptance,
-    userAcceptanceStatus:      acceptance?.status || null,
+    userAccepted: !!acceptance,
+    userAcceptanceStatus: acceptance?.status || null,
     userTotalPercentageApplied: acceptance?.totalPercentageApplied || 0,
   });
 });
@@ -250,19 +272,19 @@ const updateSignal = asyncHandler(async (req, res) => {
     }
   };
 
-  if (pair)  signal.pair  = pair.toUpperCase().trim();
-  if (type)  signal.type  = type.toLowerCase();
+  if (pair) signal.pair = pair.toUpperCase().trim();
+  if (type) signal.type = type.toLowerCase();
   if (entry) signal.entry = entry.trim();
 
   const parsedTPs = parseLevels(takeProfits);
   const parsedSLs = parseLevels(stopLosses);
 
   if (parsedTPs !== undefined) signal.takeProfits = parsedTPs;
-  if (parsedSLs !== undefined) signal.stopLosses  = parsedSLs;
+  if (parsedSLs !== undefined) signal.stopLosses = parsedSLs;
 
   if (description !== undefined) signal.description = description;
-  if (status)                    signal.status      = status;
-  if (req.file?.path)            signal.image       = req.file.path;
+  if (status) signal.status = status;
+  if (req.file?.path) signal.image = req.file.path;
 
   const updated = await signal.save();
   res.status(200).json(updated);
@@ -296,15 +318,15 @@ const acceptSignal = asyncHandler(async (req, res) => {
     throw new Error("Signal not found");
   }
 
-  if (signal.status === "closed") {
+  if (signal.status === "closed" || signal.status === "completed") {
     res.status(400);
-    throw new Error("This signal is closed and no longer accepting trades");
+    throw new Error("This signal is no longer accepting trades");
   }
 
   // Check if already accepted
   const existing = await TradeAcceptance.findOne({
     signal: signal._id,
-    user:   req.user._id,
+    user: req.user._id,
   });
 
   if (existing) {
@@ -321,18 +343,18 @@ const acceptSignal = asyncHandler(async (req, res) => {
   }
 
   const acceptance = await TradeAcceptance.create({
-    signal:              signal._id,
-    user:                req.user._id,
+    signal: signal._id,
+    user: req.user._id,
     balanceAtAcceptance: availableBalance,
     totalPercentageApplied: 0,
-    status:              "active",
+    status: "active",
   });
 
   // Increment acceptance count on signal
   await Signal.findByIdAndUpdate(signal._id, { $inc: { acceptanceCount: 1 } });
 
   res.status(201).json({
-    message:             "Trade accepted successfully",
+    message: "Trade accepted successfully",
     balanceAtAcceptance: availableBalance,
     acceptance,
   });
@@ -351,10 +373,6 @@ const getSignalAcceptances = asyncHandler(async (req, res) => {
 
 // ─── SIGNAL OUTCOME (PROFIT / LOSS) ──────────────────────────────────────────
 
-// @desc    Mark a TP or SL outcome — adjusts all accepting users' balances
-// @route   POST /api/vip/signals/:id/outcome
-// @access  Private/Admin
-//
 // @desc    Mark a TP or SL outcome — adjusts all accepting users' balances
 // @route   POST /api/vip/signals/:id/outcome
 // @access  Private/Admin
@@ -378,8 +396,13 @@ const markSignalOutcome = asyncHandler(async (req, res) => {
     throw new Error("Signal not found");
   }
 
-  // Check if signal is already closed
-  if (signal.status === "closed" && outcomeType === "loss") {
+  // Check if signal is already completed or closed
+  if (signal.status === "completed") {
+    res.status(400);
+    throw new Error("This signal has already been completed (all TPs hit)");
+  }
+  
+  if (signal.status === "closed") {
     res.status(400);
     throw new Error("This signal is already closed");
   }
@@ -417,7 +440,25 @@ const markSignalOutcome = asyncHandler(async (req, res) => {
     throw new Error("Take profit can only be marked as PROFIT");
   }
 
-  // Derive the signed percentage (always positive for profit, negative for loss)
+  // Check if this TP level was already hit (prevent double-clicking)
+  if (!isStopLoss) {
+    const alreadyHit = await isLevelAlreadyHit(signal._id, level.label, "profit");
+    if (alreadyHit) {
+      res.status(400);
+      throw new Error(`Take profit level "${label}" has already been marked`);
+    }
+  }
+  
+  // Check if SL was already hit
+  if (isStopLoss) {
+    const alreadyHit = await isLevelAlreadyHit(signal._id, level.label, "loss");
+    if (alreadyHit) {
+      res.status(400);
+      throw new Error(`Stop loss "${label}" has already been triggered`);
+    }
+  }
+
+  // Derive the signed percentage
   const signedPercentage = outcomeType === "profit" 
     ? Math.abs(level.percentage) 
     : -Math.abs(level.percentage);
@@ -428,7 +469,11 @@ const markSignalOutcome = asyncHandler(async (req, res) => {
     status: "active",
   }).populate("user", "name email");
 
+  let signalCompleted = false;
+  let signalClosed = false;
+
   if (acceptances.length === 0) {
+    // Just record the outcome without balance adjustments
     await SignalOutcome.create({
       signal: signal._id,
       label: level.label,
@@ -437,17 +482,26 @@ const markSignalOutcome = asyncHandler(async (req, res) => {
       markedBy: req.admin?._id || null,
       affectedUsers: 0,
     });
-
-    // If stop loss hit with no acceptances, still close the signal
+    
     if (isStopLoss) {
       signal.status = "closed";
       await signal.save();
+      signalClosed = true;
+    } else {
+      // Check if all TPs are now hit
+      const allTpsHit = await areAllTpsHit(signal._id);
+      if (allTpsHit && signal.takeProfits.length > 0) {
+        signal.status = "completed";
+        await signal.save();
+        signalCompleted = true;
+      }
     }
 
     return res.status(200).json({
-      message: `Outcome recorded. No users had accepted this signal.${isStopLoss ? " Signal closed." : ""}`,
+      message: `Outcome recorded. No users had accepted this signal.${signalClosed ? " Signal closed." : ""}${signalCompleted ? " All TPs hit! Signal completed." : ""}`,
       affectedUsers: 0,
-      signalClosed: isStopLoss,
+      signalClosed,
+      signalCompleted
     });
   }
 
@@ -480,6 +534,11 @@ const markSignalOutcome = asyncHandler(async (req, res) => {
         note: `Signal profit: ${signal.pair} ${level.label} (+${level.percentage}%)`,
         description: `Profit from ${signal.pair} signal - ${level.label}`,
       });
+      
+      // Also update user's balance directly
+      await User.findByIdAndUpdate(acceptance.user._id, {
+        $inc: { balance: adjustmentAmount }
+      });
     } else {
       // DEBIT: Subtract loss from user's balance
       txDocs.push({
@@ -495,6 +554,11 @@ const markSignalOutcome = asyncHandler(async (req, res) => {
         status: "approved",
         note: `Signal loss: ${signal.pair} ${level.label} (-${level.percentage}%)`,
         description: `Loss from ${signal.pair} signal - ${level.label}`,
+      });
+      
+      // Also update user's balance directly
+      await User.findByIdAndUpdate(acceptance.user._id, {
+        $inc: { balance: -adjustmentAmount }
       });
     }
 
@@ -519,12 +583,19 @@ const markSignalOutcome = asyncHandler(async (req, res) => {
     await TradeAcceptance.bulkWrite(bulkOps);
   }
 
-  // If stop loss was hit, close the signal
-  let signalClosed = false;
+  // Handle signal status update
   if (isStopLoss) {
     signal.status = "closed";
     await signal.save();
     signalClosed = true;
+  } else {
+    // Check if all TPs are now hit
+    const allTpsHit = await areAllTpsHit(signal._id);
+    if (allTpsHit && signal.takeProfits.length > 0) {
+      signal.status = "completed";
+      await signal.save();
+      signalCompleted = true;
+    }
   }
 
   // Log the outcome
@@ -538,11 +609,12 @@ const markSignalOutcome = asyncHandler(async (req, res) => {
   });
 
   res.status(200).json({
-    message: `${outcomeType === "profit" ? "Profit" : "Loss"} applied successfully${signalClosed ? " and signal closed." : "."}`,
+    message: `${outcomeType === "profit" ? "Profit" : "Loss"} applied successfully${signalClosed ? " and signal closed." : ""}${signalCompleted ? " All take profits hit! Signal completed." : ""}`,
     label: level.label,
     percentage: signedPercentage,
     affectedUsers: acceptances.length,
     signalClosed,
+    signalCompleted,
     outcome,
   });
 });
