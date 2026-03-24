@@ -376,6 +376,8 @@ const getSignalAcceptances = asyncHandler(async (req, res) => {
 // @desc    Mark a TP or SL outcome — adjusts all accepting users' balances
 // @route   POST /api/vip/signals/:id/outcome
 // @access  Private/Admin
+// In vipController.js - markSignalOutcome function
+
 const markSignalOutcome = asyncHandler(async (req, res) => {
   const { label, outcomeType } = req.body;
 
@@ -396,27 +398,18 @@ const markSignalOutcome = asyncHandler(async (req, res) => {
     throw new Error("Signal not found");
   }
 
-  // Check if signal is already completed or closed
-  if (signal.status === "completed") {
+  if (["completed", "closed", "cancelled"].includes(signal.status)) {
     res.status(400);
-    throw new Error("This signal has already been completed (all TPs hit)");
-  }
-  
-  if (signal.status === "closed") {
-    res.status(400);
-    throw new Error("This signal is already closed");
+    throw new Error(`This signal is already ${signal.status}`);
   }
 
-  // Find the matching TP or SL entry
   let level;
   let isStopLoss = false;
 
-  // Check in takeProfits first
   level = signal.takeProfits.find(
     (l) => l.label.toLowerCase() === label.toLowerCase()
   );
 
-  // If not found, check in stopLosses
   if (!level) {
     level = signal.stopLosses.find(
       (l) => l.label.toLowerCase() === label.toLowerCase()
@@ -429,7 +422,6 @@ const markSignalOutcome = asyncHandler(async (req, res) => {
     throw new Error(`No level with label "${label}" found on this signal`);
   }
 
-  // Validate: Stop loss should only have loss button, TP only profit
   if (isStopLoss && outcomeType !== "loss") {
     res.status(400);
     throw new Error("Stop loss can only be marked as LOSS");
@@ -440,72 +432,27 @@ const markSignalOutcome = asyncHandler(async (req, res) => {
     throw new Error("Take profit can only be marked as PROFIT");
   }
 
-  // Check if this TP level was already hit (prevent double-clicking)
-  if (!isStopLoss) {
-    const alreadyHit = await isLevelAlreadyHit(signal._id, level.label, "profit");
-    if (alreadyHit) {
-      res.status(400);
-      throw new Error(`Take profit level "${label}" has already been marked`);
-    }
-  }
-  
-  // Check if SL was already hit
-  if (isStopLoss) {
-    const alreadyHit = await isLevelAlreadyHit(signal._id, level.label, "loss");
-    if (alreadyHit) {
-      res.status(400);
-      throw new Error(`Stop loss "${label}" has already been triggered`);
-    }
+  const existingOutcome = await SignalOutcome.findOne({
+    signal: signal._id,
+    label: level.label,
+    outcomeType,
+  });
+
+  if (existingOutcome) {
+    res.status(400);
+    throw new Error(`Level "${label}" has already been marked as ${outcomeType}`);
   }
 
-  // Derive the signed percentage
-  const signedPercentage = outcomeType === "profit" 
-    ? Math.abs(level.percentage) 
-    : -Math.abs(level.percentage);
+  const signedPercentage =
+    outcomeType === "profit"
+      ? Math.abs(level.percentage)
+      : -Math.abs(level.percentage);
 
-  // Fetch all active acceptances for this signal
   const acceptances = await TradeAcceptance.find({
     signal: signal._id,
     status: "active",
   }).populate("user", "name email");
 
-  let signalCompleted = false;
-  let signalClosed = false;
-
-  if (acceptances.length === 0) {
-    // Just record the outcome without balance adjustments
-    await SignalOutcome.create({
-      signal: signal._id,
-      label: level.label,
-      percentage: signedPercentage,
-      outcomeType,
-      markedBy: req.admin?._id || null,
-      affectedUsers: 0,
-    });
-    
-    if (isStopLoss) {
-      signal.status = "closed";
-      await signal.save();
-      signalClosed = true;
-    } else {
-      // Check if all TPs are now hit
-      const allTpsHit = await areAllTpsHit(signal._id);
-      if (allTpsHit && signal.takeProfits.length > 0) {
-        signal.status = "completed";
-        await signal.save();
-        signalCompleted = true;
-      }
-    }
-
-    return res.status(200).json({
-      message: `Outcome recorded. No users had accepted this signal.${signalClosed ? " Signal closed." : ""}${signalCompleted ? " All TPs hit! Signal completed." : ""}`,
-      affectedUsers: 0,
-      signalClosed,
-      signalCompleted
-    });
-  }
-
-  // Process transactions for each acceptance
   const txDocs = [];
   const bulkOps = [];
 
@@ -519,7 +466,6 @@ const markSignalOutcome = asyncHandler(async (req, res) => {
     const transactionId = `SIG-${signal._id}-${level.label}-${acceptance.user._id}-${Date.now()}`;
 
     if (outcomeType === "profit") {
-      // CREDIT: Add profit to user's balance
       txDocs.push({
         user: acceptance.user._id,
         type: "deposit",
@@ -528,19 +474,17 @@ const markSignalOutcome = asyncHandler(async (req, res) => {
         creditedAmount: adjustmentAmount,
         asset: "USDT",
         network: "INTERNAL",
-        transactionId: transactionId,
+        transactionId,
         paymentMethod: "signal",
         status: "approved",
         note: `Signal profit: ${signal.pair} ${level.label} (+${level.percentage}%)`,
         description: `Profit from ${signal.pair} signal - ${level.label}`,
       });
-      
-      // Also update user's balance directly
+
       await User.findByIdAndUpdate(acceptance.user._id, {
-        $inc: { balance: adjustmentAmount }
+        $inc: { balance: adjustmentAmount },
       });
     } else {
-      // DEBIT: Subtract loss from user's balance
       txDocs.push({
         user: acceptance.user._id,
         type: "withdrawal",
@@ -549,56 +493,34 @@ const markSignalOutcome = asyncHandler(async (req, res) => {
         creditedAmount: adjustmentAmount,
         asset: "USDT",
         network: "INTERNAL",
-        transactionId: transactionId,
+        transactionId,
         paymentMethod: "signal",
         status: "approved",
         note: `Signal loss: ${signal.pair} ${level.label} (-${level.percentage}%)`,
         description: `Loss from ${signal.pair} signal - ${level.label}`,
       });
-      
-      // Also update user's balance directly
+
       await User.findByIdAndUpdate(acceptance.user._id, {
-        $inc: { balance: -adjustmentAmount }
+        $inc: { balance: -adjustmentAmount },
       });
     }
 
-    // Update the acceptance record with total percentage applied
     bulkOps.push({
       updateOne: {
         filter: { _id: acceptance._id },
-        update: {
-          $inc: { totalPercentageApplied: signedPercentage },
-        },
+        update: { $inc: { totalPercentageApplied: signedPercentage } },
       },
     });
   }
 
-  // Insert all adjustment transactions
   if (txDocs.length > 0) {
     await Transaction.insertMany(txDocs);
   }
 
-  // Bulk update all acceptances
   if (bulkOps.length > 0) {
     await TradeAcceptance.bulkWrite(bulkOps);
   }
 
-  // Handle signal status update
-  if (isStopLoss) {
-    signal.status = "closed";
-    await signal.save();
-    signalClosed = true;
-  } else {
-    // Check if all TPs are now hit
-    const allTpsHit = await areAllTpsHit(signal._id);
-    if (allTpsHit && signal.takeProfits.length > 0) {
-      signal.status = "completed";
-      await signal.save();
-      signalCompleted = true;
-    }
-  }
-
-  // Log the outcome
   const outcome = await SignalOutcome.create({
     signal: signal._id,
     label: level.label,
@@ -608,13 +530,41 @@ const markSignalOutcome = asyncHandler(async (req, res) => {
     affectedUsers: acceptances.length,
   });
 
+  let signalCompleted = false;
+  let signalClosed = false;
+
+  if (isStopLoss) {
+    signal.status = "completed";
+    signalClosed = false;
+    signalCompleted = true;
+    await signal.save();
+  } else {
+    const allProfitOutcomes = await SignalOutcome.find({
+      signal: signal._id,
+      outcomeType: "profit",
+    });
+
+    const hitLabels = new Set(allProfitOutcomes.map((o) => o.label));
+    const allTpsHit =
+      signal.takeProfits.length > 0 &&
+      signal.takeProfits.every((tp) => hitLabels.has(tp.label));
+
+    if (allTpsHit) {
+      signal.status = "completed";
+      signalCompleted = true;
+      await signal.save();
+    }
+  }
+
   res.status(200).json({
-    message: `${outcomeType === "profit" ? "Profit" : "Loss"} applied successfully${signalClosed ? " and signal closed." : ""}${signalCompleted ? " All take profits hit! Signal completed." : ""}`,
+    message: `${outcomeType === "profit" ? "Profit" : "Loss"} applied successfully${
+      signalCompleted ? " and signal completed." : ""
+    }`,
     label: level.label,
     percentage: signedPercentage,
     affectedUsers: acceptances.length,
-    signalClosed,
     signalCompleted,
+    signalClosed,
     outcome,
   });
 });

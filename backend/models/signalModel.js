@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 
 const tpSlSchema = new mongoose.Schema(
   {
-    label: { type: String, required: true, trim: true },    // "TP1", "TP2", "SL1"
-    percentage: { type: Number, required: true },            // 3.5 means 3.5%
-    priceLevel: { type: String, trim: true, default: "" },  // optional price string
+    label: { type: String, required: true, trim: true }, // "TP1", "TP2", "SL1"
+    percentage: { type: Number, required: true }, // 3.5 means 3.5%
+    priceLevel: { type: String, trim: true, default: "" }, // optional price string
   },
-  { _id: false }
+  { _id: false },
 );
 
 const signalSchema = new mongoose.Schema(
@@ -16,14 +16,14 @@ const signalSchema = new mongoose.Schema(
     entry: { type: String, required: true, trim: true },
 
     takeProfits: [tpSlSchema],
-    stopLosses:  [tpSlSchema],
+    stopLosses: [tpSlSchema],
 
     description: { type: String, default: "" },
-    image:       { type: String, default: "" },
+    image: { type: String, default: "" },
 
     status: {
       type: String,
-      enum: ["active", "closed"],
+      enum: ["active", "completed", "closed", "cancelled"],
       default: "active",
     },
 
@@ -35,7 +35,7 @@ const signalSchema = new mongoose.Schema(
 
     acceptanceCount: { type: Number, default: 0 },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Signal = mongoose.model("Signal", signalSchema);
