@@ -1,106 +1,151 @@
-<!doctype html>
+<!DOCTYPE html>
 <html class="dark" lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>VIP Signals | TheBrave Admin</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-      * { font-family: "Manrope", sans-serif; }
-      body { background: #0a0f18; overflow: hidden; }
-      .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-      .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-      .custom-scrollbar::-webkit-scrollbar-thumb { background: #243049; border-radius: 10px; }
-      .lucide { width: 20px; height: 20px; stroke-width: 2; }
-      .mobile-sidebar {
-        position: fixed; top: 0; left: 0; width: 260px; height: 100%;
-        background: #0f1219; border-right: 1px solid #1e293b;
-        transform: translateX(-100%);
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 1000; overflow-y: auto;
-      }
-      .mobile-sidebar.open { transform: translateX(0); }
-      .sidebar-overlay {
-        position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-        backdrop-filter: blur(4px); z-index: 999;
-        opacity: 0; visibility: hidden;
-        transition: opacity 0.3s, visibility 0.3s;
-      }
-      .sidebar-overlay.open { opacity: 1; visibility: visible; }
-      .modal-backdrop {
-        position: fixed; inset: 0; background: rgba(0,0,0,0.85);
-        z-index: 200; display: flex; align-items: center;
-        justify-content: center; padding: 1rem;
-      }
-      .modal-backdrop.hidden { display: none; }
-      .nav-active {
-        background: rgba(17,82,212,0.1); color: #6090ff;
-        border: 1px solid rgba(17,82,212,0.2); font-weight: 700;
-      }
-      .nav-inactive { color: #94a3b8; }
-      .nav-inactive:hover { color: white; background: rgba(255,255,255,0.05); }
-      .spinner {
-        width: 16px; height: 16px;
-        border: 2px solid rgba(255,255,255,0.25);
-        border-top-color: white; border-radius: 50%;
-        animation: spin 0.7s linear infinite; display: inline-block;
-      }
-      @keyframes spin { to { transform: rotate(360deg); } }
-      .badge-buy { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
-      .badge-sell { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
-      .badge-active { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
-      .badge-closed { background: rgba(100,116,139,0.12); color: #94a3b8; border: 1px solid rgba(100,116,139,0.25); }
-      .badge-cancelled { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
-      .status-pill {
-        padding: 2px 8px; border-radius: 9999px;
-        font-size: 10px; font-weight: 700;
-        text-transform: uppercase; letter-spacing: 0.05em;
-      }
-      #toast {
-        position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999;
-        transform: translateY(80px); opacity: 0;
-        transition: all 0.3s ease; pointer-events: none;
-      }
-      #toast.show { transform: translateY(0); opacity: 1; }
-      .tp-row, .sl-row {
-        display: grid; grid-template-columns: 80px 1fr 1fr auto;
-        gap: 8px; align-items: center;
-      }
-      .outcome-btn {
-        padding: 6px 12px; border-radius: 10px; font-size: 11px;
-        font-weight: 700; cursor: pointer; transition: all 0.2s;
-        border: 1px solid transparent;
-      }
-      .outcome-profit { background: rgba(16,185,129,0.12); color: #10b981; border-color: rgba(16,185,129,0.25); }
-      .outcome-profit:hover { background: #10b981; color: white; }
-      .outcome-loss { background: rgba(239,68,68,0.12); color: #ef4444; border-color: rgba(239,68,68,0.25); }
-      .outcome-loss:hover { background: #ef4444; color: white; }
-    </style>
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>VIP Signals | TheBrave Admin</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * { font-family: "Manrope", sans-serif; }
+    body { background: #0a0f18; overflow: hidden; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #243049; border-radius: 10px; }
+    .lucide { width: 20px; height: 20px; stroke-width: 2; }
+    .mobile-sidebar {
+      position: fixed; top: 0; left: 0; width: 260px; height: 100%;
+      background: #0f1219; border-right: 1px solid #1e293b;
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000; overflow-y: auto;
+    }
+    .mobile-sidebar.open { transform: translateX(0); }
+    .sidebar-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px); z-index: 999;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    .sidebar-overlay.open { opacity: 1; visibility: visible; }
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      z-index: 200; display: flex; align-items: center;
+      justify-content: center; padding: 1rem;
+    }
+    .modal-backdrop.hidden { display: none; }
+    .nav-active {
+      background: rgba(17,82,212,0.1); color: #6090ff;
+      border: 1px solid rgba(17,82,212,0.2); font-weight: 700;
+    }
+    .nav-inactive { color: #94a3b8; }
+    .nav-inactive:hover { color: white; background: rgba(255,255,255,0.05); }
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.25);
+      border-top-color: white; border-radius: 50%;
+      animation: spin 0.7s linear infinite; display: inline-block;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .badge-buy { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
+    .badge-sell { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
+    .badge-active { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
+    .badge-closed { background: rgba(100,116,139,0.12); color: #94a3b8; border: 1px solid rgba(100,116,139,0.25); }
+    .badge-cancelled { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+    .badge-completed { background: rgba(16,185,129,0.2); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+    .status-pill {
+      padding: 2px 8px; border-radius: 9999px;
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    #toast {
+      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999;
+      transform: translateY(80px); opacity: 0;
+      transition: all 0.3s ease; pointer-events: none;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+    .tp-row, .sl-row {
+      display: grid; grid-template-columns: 80px 1fr 1fr auto;
+      gap: 8px; align-items: center;
+    }
+    .outcome-btn {
+      padding: 8px 16px; border-radius: 10px; font-size: 12px;
+      font-weight: 700; cursor: pointer; transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+    .outcome-profit { background: rgba(16,185,129,0.12); color: #10b981; border-color: rgba(16,185,129,0.25); }
+    .outcome-profit:hover:not(:disabled) { background: #10b981; color: white; transform: scale(1.02); }
+    .outcome-loss { background: rgba(239,68,68,0.12); color: #ef4444; border-color: rgba(239,68,68,0.25); }
+    .outcome-loss:hover:not(:disabled) { background: #ef4444; color: white; transform: scale(1.02); }
+    .outcome-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .level-hit-badge {
+      background: rgba(16,185,129,0.2);
+      color: #10b981;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: bold;
+      display: inline-block;
+    }
+    .level-completed-badge {
+      background: rgba(16,185,129,0.3);
+      color: #10b981;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
 
-  <body class="text-slate-100 antialiased">
-    <div id="toast" class="px-4 py-3 rounded-xl border text-sm font-medium flex items-center gap-2 shadow-2xl max-w-sm"></div>
-    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+<body class="text-slate-100 antialiased">
+  <div id="toast" class="px-4 py-3 rounded-xl border text-sm font-medium flex items-center gap-2 shadow-2xl max-w-sm"></div>
+  <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
-    <!-- Mobile Sidebar -->
-    <div id="mobileSidebar" class="mobile-sidebar lg:hidden">
-      <div class="p-5 flex items-center justify-between border-b border-[#1e293b]">
-        <div class="flex items-center gap-3">
-          <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
-            <i data-lucide="shield" class="w-4 h-4 text-white"></i>
-          </div>
-          <div>
-            <p class="text-white font-extrabold text-sm leading-none">Admin Portal</p>
-            <p class="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">TheBrave Finance</p>
-          </div>
+  <!-- Mobile Sidebar -->
+  <div id="mobileSidebar" class="mobile-sidebar lg:hidden">
+    <div class="p-5 flex items-center justify-between border-b border-[#1e293b]">
+      <div class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
+          <i data-lucide="shield" class="w-4 h-4 text-white"></i>
         </div>
-        <button id="closeMobileSidebar" class="text-slate-400 hover:text-white p-1">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+        <div>
+          <p class="text-white font-extrabold text-sm leading-none">Admin Portal</p>
+          <p class="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">TheBrave Finance</p>
+        </div>
       </div>
-      <nav class="px-3 py-5 space-y-1">
+      <button id="closeMobileSidebar" class="text-slate-400 hover:text-white p-1">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+    <nav class="px-3 py-5 space-y-1">
+      <a href="admin-panel.html" class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="banknote" class="w-4 h-4"></i> Deposit Reviews</a>
+      <a href="admin-vip.html" class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="badge-check" class="w-4 h-4"></i> VIP Payments</a>
+      <a href="admin-recovery.html" class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="shield-check" class="w-4 h-4"></i> Recovery Requests</a>
+      <a href="admin-users.html" class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="users" class="w-4 h-4"></i> Users & MT5</a>
+      <a href="admin-signals.html" class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-active"><i data-lucide="radio" class="w-4 h-4"></i> VIP Signals</a>
+    </nav>
+    <div class="p-4 border-t border-[#1e293b]">
+      <button id="mobileLogoutBtn" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all">
+        <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+      </button>
+    </div>
+  </div>
+
+  <div class="flex h-screen overflow-hidden">
+    <!-- Desktop Sidebar -->
+    <aside class="w-60 flex-shrink-0 bg-[#0f1219] border-r border-[#1e293b] flex-col hidden lg:flex">
+      <div class="p-5 flex items-center gap-3 border-b border-[#1e293b]">
+        <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
+          <i data-lucide="shield" class="w-4 h-4 text-white"></i>
+        </div>
+        <div>
+          <p class="text-white font-extrabold text-sm leading-none">Admin Portal</p>
+          <p class="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">TheBrave Finance</p>
+        </div>
+      </div>
+      <nav class="flex-1 px-3 py-5 space-y-1">
         <a href="admin-panel.html" class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="banknote" class="w-4 h-4"></i> Deposit Reviews</a>
         <a href="admin-vip.html" class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="badge-check" class="w-4 h-4"></i> VIP Payments</a>
         <a href="admin-recovery.html" class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="shield-check" class="w-4 h-4"></i> Recovery Requests</a>
@@ -108,829 +153,854 @@
         <a href="admin-signals.html" class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-active"><i data-lucide="radio" class="w-4 h-4"></i> VIP Signals</a>
       </nav>
       <div class="p-4 border-t border-[#1e293b]">
-        <button id="mobileLogoutBtn" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all">
+        <button id="adminLogoutBtn" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all">
           <i data-lucide="log-out" class="w-4 h-4"></i> Logout
         </button>
       </div>
-    </div>
+    </aside>
 
-    <div class="flex h-screen overflow-hidden">
-      <!-- Desktop Sidebar -->
-      <aside class="w-60 flex-shrink-0 bg-[#0f1219] border-r border-[#1e293b] flex-col hidden lg:flex">
-        <div class="p-5 flex items-center gap-3 border-b border-[#1e293b]">
-          <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
-            <i data-lucide="shield" class="w-4 h-4 text-white"></i>
-          </div>
-          <div>
-            <p class="text-white font-extrabold text-sm leading-none">Admin Portal</p>
-            <p class="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">TheBrave Finance</p>
-          </div>
-        </div>
-        <nav class="flex-1 px-3 py-5 space-y-1">
-          <a href="admin-panel.html" class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="banknote" class="w-4 h-4"></i> Deposit Reviews</a>
-          <a href="admin-vip.html" class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="badge-check" class="w-4 h-4"></i> VIP Payments</a>
-          <a href="admin-recovery.html" class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="shield-check" class="w-4 h-4"></i> Recovery Requests</a>
-          <a href="admin-users.html" class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-inactive"><i data-lucide="users" class="w-4 h-4"></i> Users & MT5</a>
-          <a href="admin-signals.html" class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl nav-active"><i data-lucide="radio" class="w-4 h-4"></i> VIP Signals</a>
-        </nav>
-        <div class="p-4 border-t border-[#1e293b]">
-          <button id="adminLogoutBtn" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all">
-            <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <header class="h-14 flex-shrink-0 border-b border-[#1e293b] bg-[#0f1219]/80 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="menuToggle" class="lg:hidden p-2 text-slate-400 hover:text-white">
+            <i data-lucide="menu" class="w-5 h-5"></i>
           </button>
+          <h1 class="text-base font-bold text-white">📡 VIP Signals</h1>
         </div>
-      </aside>
+        <div class="flex items-center gap-3">
+          <button onclick="openSignalModal()" class="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition-all">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span class="hidden sm:inline">Post Signal</span>
+          </button>
+          <div class="h-6 w-px bg-[#1e293b]"></div>
+          <div class="flex items-center gap-2">
+            <div class="h-8 w-8 rounded-full bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
+              <span id="adminInitial" class="text-xs font-bold text-white">A</span>
+            </div>
+            <span id="adminName" class="text-sm font-medium hidden sm:block text-slate-300">Admin</span>
+          </div>
+        </div>
+      </header>
 
-      <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <header class="h-14 flex-shrink-0 border-b border-[#1e293b] bg-[#0f1219]/80 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <button id="menuToggle" class="lg:hidden p-2 text-slate-400 hover:text-white">
-              <i data-lucide="menu" class="w-5 h-5"></i>
+      <main class="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 bg-[#0a0f18] space-y-5">
+        <!-- Stats + Filters -->
+        <div class="flex flex-wrap justify-between items-center gap-3">
+          <div class="flex gap-3 flex-wrap">
+            <div class="bg-[#0f1219] border border-[#1e293b] rounded-xl px-4 py-2.5 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span class="text-xs text-slate-400">Active: <span id="countActive" class="text-white font-bold">—</span></span>
+            </div>
+            <div class="bg-[#0f1219] border border-[#1e293b] rounded-xl px-4 py-2.5 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+              <span class="text-xs text-slate-400">Closed: <span id="countClosed" class="text-white font-bold">—</span></span>
+            </div>
+            <div class="bg-[#0f1219] border border-[#1e293b] rounded-xl px-4 py-2.5 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-rose-400"></span>
+              <span class="text-xs text-slate-400">Cancelled: <span id="countCancelled" class="text-white font-bold">—</span></span>
+            </div>
+            <div class="bg-[#0f1219] border border-[#1e293b] rounded-xl px-4 py-2.5 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+              <span class="text-xs text-slate-400">Completed: <span id="countCompleted" class="text-white font-bold">—</span></span>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <select id="filterType" onchange="renderSignals()" class="bg-[#0f1219] border border-[#1e293b] rounded-xl px-3 py-2 text-sm text-slate-300 focus:border-blue-600 outline-none">
+              <option value="">Buy & Sell</option>
+              <option value="buy">Buy Only</option>
+              <option value="sell">Sell Only</option>
+            </select>
+            <select id="filterStatus" onchange="renderSignals()" class="bg-[#0f1219] border border-[#1e293b] rounded-xl px-3 py-2 text-sm text-slate-300 focus:border-blue-600 outline-none">
+              <option value="">All Status</option>
+              <option value="active">Active</option>
+              <option value="closed">Closed</option>
+              <option value="cancelled">Cancelled</option>
+              <option value="completed">Completed</option>
+            </select>
+            <button onclick="loadSignals()" class="bg-[#1e293b] hover:bg-[#2d3a4e] text-slate-300 px-3 py-2 rounded-xl text-sm flex items-center gap-2 transition-all">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i>
             </button>
-            <h1 class="text-base font-bold text-white">📡 VIP Signals</h1>
           </div>
-          <div class="flex items-center gap-3">
-            <button onclick="openSignalModal()" class="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition-all">
-              <i data-lucide="plus" class="w-4 h-4"></i>
-              <span class="hidden sm:inline">Post Signal</span>
-            </button>
-            <div class="h-6 w-px bg-[#1e293b]"></div>
-            <div class="flex items-center gap-2">
-              <div class="h-8 w-8 rounded-full bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
-                <span id="adminInitial" class="text-xs font-bold text-white">A</span>
-              </div>
-              <span id="adminName" class="text-sm font-medium hidden sm:block text-slate-300">Admin</span>
-            </div>
-          </div>
-        </header>
+        </div>
 
-        <main class="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 bg-[#0a0f18] space-y-5">
-          <!-- Stats + Filters -->
-          <div class="flex flex-wrap justify-between items-center gap-3">
-            <div class="flex gap-3 flex-wrap">
-              <div class="bg-[#0f1219] border border-[#1e293b] rounded-xl px-4 py-2.5 flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                <span class="text-xs text-slate-400">Active: <span id="countActive" class="text-white font-bold">—</span></span>
-              </div>
-              <div class="bg-[#0f1219] border border-[#1e293b] rounded-xl px-4 py-2.5 flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-slate-400"></span>
-                <span class="text-xs text-slate-400">Closed: <span id="countClosed" class="text-white font-bold">—</span></span>
-              </div>
-              <div class="bg-[#0f1219] border border-[#1e293b] rounded-xl px-4 py-2.5 flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-rose-400"></span>
-                <span class="text-xs text-slate-400">Cancelled: <span id="countCancelled" class="text-white font-bold">—</span></span>
-              </div>
-            </div>
-            <div class="flex gap-2">
-              <select id="filterType" onchange="renderSignals()" class="bg-[#0f1219] border border-[#1e293b] rounded-xl px-3 py-2 text-sm text-slate-300 focus:border-blue-600 outline-none">
-                <option value="">Buy & Sell</option>
-                <option value="buy">Buy Only</option>
-                <option value="sell">Sell Only</option>
-              </select>
-              <select id="filterStatus" onchange="renderSignals()" class="bg-[#0f1219] border border-[#1e293b] rounded-xl px-3 py-2 text-sm text-slate-300 focus:border-blue-600 outline-none">
-                <option value="">All Status</option>
-                <option value="active">Active</option>
-                <option value="closed">Closed</option>
-                <option value="cancelled">Cancelled</option>
-              </select>
-              <button onclick="loadSignals()" class="bg-[#1e293b] hover:bg-[#2d3a4e] text-slate-300 px-3 py-2 rounded-xl text-sm flex items-center gap-2 transition-all">
-                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-              </button>
-            </div>
-          </div>
-
-          <!-- Signals Grid -->
-          <div id="signalsGrid" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
-            <div class="sm:col-span-2 xl:col-span-3 text-center py-16 text-slate-500 text-sm">Loading signals...</div>
-          </div>
-        </main>
-      </div>
+        <!-- Signals Grid -->
+        <div id="signalsGrid" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div class="sm:col-span-2 xl:col-span-3 text-center py-16 text-slate-500 text-sm">Loading signals...</div>
+        </div>
+      </main>
     </div>
+  </div>
 
-    <!-- ═══════════════════════════════════════════════════════════
-         SIGNAL CREATE / EDIT MODAL
-    ════════════════════════════════════════════════════════════ -->
-    <div id="signalModal" class="modal-backdrop hidden">
-      <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl w-full max-w-2xl p-6 shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
-        <div class="flex justify-between items-center mb-5">
-          <h3 class="text-lg font-bold text-white" id="signalModalTitle">Post Signal</h3>
-          <button onclick="closeSignalModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
-        </div>
-        <div id="signalModalError" class="hidden mb-4 text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3"></div>
-
-        <div class="space-y-5">
-          <!-- Pair / Type / Entry -->
-          <div class="grid grid-cols-3 gap-4">
-            <div>
-              <label class="text-xs font-bold uppercase text-slate-400 block mb-1.5">Pair *</label>
-              <input type="text" id="sigPair" placeholder="XAUUSD"
-                class="w-full bg-black/40 border border-[#1e293b] rounded-xl px-4 py-2.5 text-white placeholder:text-slate-600 outline-none focus:border-blue-600" />
-            </div>
-            <div>
-              <label class="text-xs font-bold uppercase text-slate-400 block mb-1.5">Type *</label>
-              <select id="sigType" class="w-full bg-black/40 border border-[#1e293b] rounded-xl px-4 py-2.5 text-white outline-none focus:border-blue-600">
-                <option value="buy">BUY</option>
-                <option value="sell">SELL</option>
-              </select>
-            </div>
-            <div>
-              <label class="text-xs font-bold uppercase text-slate-400 block mb-1.5">Entry *</label>
-              <input type="text" id="sigEntry" placeholder="4676.60"
-                class="w-full bg-black/40 border border-[#1e293b] rounded-xl px-4 py-2.5 text-white placeholder:text-slate-600 outline-none focus:border-blue-600" />
-            </div>
-          </div>
-
-          <!-- Take Profits -->
-          <div>
-            <div class="flex items-center justify-between mb-2">
-              <label class="text-xs font-bold uppercase text-slate-400">Take Profits</label>
-              <button type="button" onclick="addTpRow()" class="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1 font-bold">
-                <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add TP
-              </button>
-            </div>
-            <!-- Column headers -->
-            <div class="tp-row mb-1.5 px-1">
-              <span class="text-[10px] text-slate-600 uppercase font-bold">Label</span>
-              <span class="text-[10px] text-slate-600 uppercase font-bold">Price Level</span>
-              <span class="text-[10px] text-slate-600 uppercase font-bold">% Profit</span>
-              <span></span>
-            </div>
-            <div id="tpContainer" class="space-y-2"></div>
-          </div>
-
-          <!-- Stop Losses -->
-          <div>
-            <div class="flex items-center justify-between mb-2">
-              <label class="text-xs font-bold uppercase text-slate-400">Stop Losses</label>
-              <button type="button" onclick="addSlRow()" class="text-xs text-rose-400 hover:text-rose-300 flex items-center gap-1 font-bold">
-                <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add SL
-              </button>
-            </div>
-            <!-- Column headers -->
-            <div class="sl-row mb-1.5 px-1">
-              <span class="text-[10px] text-slate-600 uppercase font-bold">Label</span>
-              <span class="text-[10px] text-slate-600 uppercase font-bold">Price Level</span>
-              <span class="text-[10px] text-slate-600 uppercase font-bold">% Loss</span>
-              <span></span>
-            </div>
-            <div id="slContainer" class="space-y-2"></div>
-          </div>
-
-          <!-- Status / Description -->
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="text-xs font-bold uppercase text-slate-400 block mb-1.5">Status</label>
-              <select id="sigStatus" class="w-full bg-black/40 border border-[#1e293b] rounded-xl px-4 py-2.5 text-white outline-none focus:border-blue-600">
-                <option value="active">Active</option>
-                <option value="closed">Closed</option>
-                <option value="cancelled">Cancelled</option>
-              </select>
-            </div>
-            <div>
-              <label class="text-xs font-bold uppercase text-slate-400 block mb-1.5">Description <span class="text-slate-600 normal-case font-normal">(optional)</span></label>
-              <textarea id="sigDesc" rows="1" placeholder="Analyst notes..."
-                class="w-full bg-black/40 border border-[#1e293b] rounded-xl px-4 py-2.5 text-white placeholder:text-slate-600 outline-none focus:border-blue-600 resize-none text-sm"></textarea>
-            </div>
-          </div>
-
-          <div class="flex gap-3 pt-2">
-            <button id="signalSaveBtn" onclick="saveSignal()"
-              class="flex-1 py-3 bg-blue-700 hover:bg-blue-600 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2">
-              <i data-lucide="send" class="w-4 h-4"></i>
-              <span id="signalSaveBtnText">Post Signal</span>
-            </button>
-            <button onclick="closeSignalModal()" class="px-4 py-3 bg-[#1e293b] hover:bg-[#2d3a4e] text-slate-300 rounded-xl text-sm">Cancel</button>
-          </div>
-        </div>
+  <!-- SIGNAL CREATE / EDIT MODAL -->
+  <div id="signalModal" class="modal-backdrop hidden">
+    <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl w-full max-w-2xl p-6 shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="text-lg font-bold text-white" id="signalModalTitle">Post Signal</h3>
+        <button onclick="closeSignalModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
-    </div>
+      <div id="signalModalError" class="hidden mb-4 text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3"></div>
 
-    <!-- ═══════════════════════════════════════════════════════════
-         OUTCOME MODAL — Mark TP / SL as Profit or Loss
-    ════════════════════════════════════════════════════════════ -->
-    <div id="outcomeModal" class="modal-backdrop hidden">
-      <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl w-full max-w-md p-6 shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
-        <div class="flex justify-between items-center mb-2">
-          <h3 class="text-lg font-bold text-white">Mark Outcome</h3>
-          <button onclick="closeOutcomeModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
-        </div>
-        <p id="outcomePairLabel" class="text-slate-500 text-sm mb-5"></p>
-
-        <div id="outcomeError" class="hidden mb-4 text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3"></div>
-
-        <!-- TP levels -->
-        <div id="outcomeTpSection">
-          <p class="text-xs font-bold uppercase text-slate-400 mb-2 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span> Take Profits
-          </p>
-          <div id="outcomeTpRows" class="space-y-2 mb-5"></div>
+      <div class="space-y-5">
+        <div class="grid grid-cols-3 gap-4">
+          <div>
+            <label class="text-xs font-bold uppercase text-slate-400 block mb-1.5">Pair *</label>
+            <input type="text" id="sigPair" placeholder="XAUUSD" class="w-full bg-black/40 border border-[#1e293b] rounded-xl px-4 py-2.5 text-white placeholder:text-slate-600 outline-none focus:border-blue-600" />
+          </div>
+          <div>
+            <label class="text-xs font-bold uppercase text-slate-400 block mb-1.5">Type *</label>
+            <select id="sigType" class="w-full bg-black/40 border border-[#1e293b] rounded-xl px-4 py-2.5 text-white outline-none focus:border-blue-600">
+              <option value="buy">BUY</option>
+              <option value="sell">SELL</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-bold uppercase text-slate-400 block mb-1.5">Entry *</label>
+            <input type="text" id="sigEntry" placeholder="4676.60" class="w-full bg-black/40 border border-[#1e293b] rounded-xl px-4 py-2.5 text-white placeholder:text-slate-600 outline-none focus:border-blue-600" />
+          </div>
         </div>
 
-        <!-- SL levels -->
-        <div id="outcomeSlSection">
-          <p class="text-xs font-bold uppercase text-slate-400 mb-2 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-rose-400 inline-block"></span> Stop Losses
-          </p>
-          <div id="outcomeSlRows" class="space-y-2 mb-5"></div>
-        </div>
-
-        <!-- Outcome history -->
+        <!-- Take Profits -->
         <div>
-          <p class="text-xs font-bold uppercase text-slate-400 mb-2 flex items-center gap-1.5">
-            <i data-lucide="history" class="w-3.5 h-3.5"></i> Outcome History
-          </p>
-          <div id="outcomeHistoryList" class="space-y-2">
-            <p class="text-slate-600 text-xs text-center py-4">Loading...</p>
+          <div class="flex items-center justify-between mb-2">
+            <label class="text-xs font-bold uppercase text-slate-400">Take Profits (Multiple)</label>
+            <button type="button" onclick="addTpRow()" class="text-xs text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-bold">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add TP Level
+            </button>
+          </div>
+          <div class="tp-row mb-1.5 px-1">
+            <span class="text-[10px] text-slate-600 uppercase font-bold">Label</span>
+            <span class="text-[10px] text-slate-600 uppercase font-bold">Price Level</span>
+            <span class="text-[10px] text-slate-600 uppercase font-bold">% Profit</span>
+            <span></span>
+          </div>
+          <div id="tpContainer" class="space-y-2"></div>
+        </div>
+
+        <!-- Stop Loss (Single) -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <label class="text-xs font-bold uppercase text-slate-400">Stop Loss (Only One)</label>
+            <span class="text-[10px] text-rose-400/70">⚠️ Hitting SL closes the trade</span>
+          </div>
+          <div class="sl-row mb-1.5 px-1">
+            <span class="text-[10px] text-slate-600 uppercase font-bold">Label</span>
+            <span class="text-[10px] text-slate-600 uppercase font-bold">Price Level</span>
+            <span class="text-[10px] text-slate-600 uppercase font-bold">% Loss</span>
+            <span></span>
+          </div>
+          <div id="slContainer" class="space-y-2"></div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs font-bold uppercase text-slate-400 block mb-1.5">Status</label>
+            <select id="sigStatus" class="w-full bg-black/40 border border-[#1e293b] rounded-xl px-4 py-2.5 text-white outline-none focus:border-blue-600">
+              <option value="active">Active</option>
+              <option value="closed">Closed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-bold uppercase text-slate-400 block mb-1.5">Description</label>
+            <textarea id="sigDesc" rows="1" placeholder="Analyst notes..." class="w-full bg-black/40 border border-[#1e293b] rounded-xl px-4 py-2.5 text-white placeholder:text-slate-600 outline-none focus:border-blue-600 resize-none text-sm"></textarea>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- ═══════════════════════════════════════════════════════════
-         ACCEPTANCES MODAL
-    ════════════════════════════════════════════════════════════ -->
-    <div id="acceptancesModal" class="modal-backdrop hidden">
-      <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl w-full max-w-lg p-6 shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
-        <div class="flex justify-between items-center mb-5">
-          <h3 class="text-lg font-bold text-white">Traders Who Accepted</h3>
-          <button onclick="closeAcceptancesModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
-        </div>
-        <div id="acceptancesList" class="space-y-3">
-          <p class="text-slate-600 text-xs text-center py-8">Loading...</p>
+        <div class="flex gap-3 pt-2">
+          <button id="signalSaveBtn" onclick="saveSignal()" class="flex-1 py-3 bg-blue-700 hover:bg-blue-600 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span id="signalSaveBtnText">Post Signal</span>
+          </button>
+          <button onclick="closeSignalModal()" class="px-4 py-3 bg-[#1e293b] hover:bg-[#2d3a4e] text-slate-300 rounded-xl text-sm">Cancel</button>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Delete Modal -->
-    <div id="deleteModal" class="modal-backdrop hidden">
-      <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl w-full max-w-sm p-6 shadow-2xl text-center space-y-4">
-        <div class="h-14 w-14 rounded-full bg-rose-500/10 flex items-center justify-center mx-auto">
-          <i data-lucide="trash-2" class="w-6 h-6 text-rose-400"></i>
+  <!-- OUTCOME MODAL - TP only profit, SL only loss -->
+  <div id="outcomeModal" class="modal-backdrop hidden">
+    <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl w-full max-w-md p-6 shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
+      <div class="flex justify-between items-center mb-2">
+        <h3 class="text-lg font-bold text-white">Mark Trade Outcome</h3>
+        <button onclick="closeOutcomeModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <p id="outcomePairLabel" class="text-slate-500 text-sm mb-5"></p>
+      <div id="outcomeError" class="hidden mb-4 text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3"></div>
+
+      <!-- Take Profit Levels (Profit only) -->
+      <div id="outcomeTpSection" class="mb-6">
+        <p class="text-xs font-bold uppercase text-slate-400 mb-3 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span> Take Profit Levels
+        </p>
+        <div id="outcomeTpRows" class="space-y-3"></div>
+        <div id="tpProgressIndicator" class="mt-3 text-center hidden">
+          <div class="bg-[#1e293b] rounded-full h-2 overflow-hidden">
+            <div id="tpProgressBar" class="bg-emerald-400 h-2 transition-all duration-300" style="width: 0%"></div>
+          </div>
+          <p id="tpProgressText" class="text-xs text-slate-400 mt-2"></p>
         </div>
-        <h3 class="text-white font-bold text-lg">Delete Signal</h3>
-        <p id="deleteMessage" class="text-slate-400 text-sm">Are you sure?</p>
-        <div class="flex gap-3">
-          <button id="confirmDeleteBtn" class="flex-1 py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl transition-all">Delete</button>
-          <button onclick="closeDeleteModal()" class="flex-1 py-3 bg-[#1e293b] hover:bg-[#2d3a4e] text-slate-300 rounded-xl">Cancel</button>
+      </div>
+
+      <!-- Stop Loss Level (Loss only - closes trade) -->
+      <div id="outcomeSlSection">
+        <p class="text-xs font-bold uppercase text-slate-400 mb-3 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-rose-400 inline-block"></span> Stop Loss
+        </p>
+        <div id="outcomeSlRows" class="space-y-3"></div>
+      </div>
+
+      <!-- Outcome history -->
+      <div class="mt-6">
+        <p class="text-xs font-bold uppercase text-slate-400 mb-3 flex items-center gap-1.5">
+          <i data-lucide="history" class="w-3.5 h-3.5"></i> Outcome History
+        </p>
+        <div id="outcomeHistoryList" class="space-y-2 max-h-48 overflow-y-auto custom-scrollbar">
+          <p class="text-slate-600 text-xs text-center py-4">Loading...</p>
         </div>
       </div>
     </div>
+  </div>
 
-    <script src="./js/api.js"></script>
-    <script>
+  <!-- ACCEPTANCES MODAL -->
+  <div id="acceptancesModal" class="modal-backdrop hidden">
+    <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl w-full max-w-lg p-6 shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="text-lg font-bold text-white">Traders Who Accepted</h3>
+        <button onclick="closeAcceptancesModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div id="acceptancesList" class="space-y-3">
+        <p class="text-slate-600 text-xs text-center py-8">Loading...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Modal -->
+  <div id="deleteModal" class="modal-backdrop hidden">
+    <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl w-full max-w-sm p-6 shadow-2xl text-center space-y-4">
+      <div class="h-14 w-14 rounded-full bg-rose-500/10 flex items-center justify-center mx-auto">
+        <i data-lucide="trash-2" class="w-6 h-6 text-rose-400"></i>
+      </div>
+      <h3 class="text-white font-bold text-lg">Delete Signal</h3>
+      <p id="deleteMessage" class="text-slate-400 text-sm">Are you sure?</p>
+      <div class="flex gap-3">
+        <button id="confirmDeleteBtn" class="flex-1 py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl transition-all">Delete</button>
+        <button onclick="closeDeleteModal()" class="flex-1 py-3 bg-[#1e293b] hover:bg-[#2d3a4e] text-slate-300 rounded-xl">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./js/api.js"></script>
+  <script>
+    lucide.createIcons();
+
+    // Auth
+    const admin = JSON.parse(localStorage.getItem("admin") || "null");
+    const adminToken = localStorage.getItem("admin_token");
+    if (!admin || !adminToken) {
+      localStorage.removeItem("admin");
+      localStorage.removeItem("admin_token");
+      window.location.href = "admin-login.html";
+    }
+    if (admin) {
+      document.getElementById("adminName").textContent = admin.name || "Admin";
+      document.getElementById("adminInitial").textContent = (admin.name || "A")[0].toUpperCase();
+    }
+
+    // Toast
+    function toast(msg, type = "success") {
+      const el = document.getElementById("toast");
+      const colors = {
+        success: "bg-emerald-900/90 border-emerald-500/40 text-emerald-300",
+        error: "bg-rose-900/90 border-rose-500/40 text-rose-300",
+        info: "bg-blue-900/90 border-blue-500/40 text-blue-300"
+      };
+      el.className = `px-4 py-3 rounded-xl border text-sm font-medium flex items-center gap-2 shadow-2xl max-w-sm ${colors[type] || colors.success}`;
+      el.innerHTML = `<span>${msg}</span>`;
+      el.classList.add("show");
+      setTimeout(() => el.classList.remove("show"), 3500);
+    }
+
+    // Mobile sidebar
+    document.getElementById("menuToggle").addEventListener("click", () => {
+      document.getElementById("mobileSidebar").classList.add("open");
+      document.getElementById("sidebarOverlay").classList.add("open");
+    });
+    document.getElementById("closeMobileSidebar").addEventListener("click", () => {
+      document.getElementById("mobileSidebar").classList.remove("open");
+      document.getElementById("sidebarOverlay").classList.remove("open");
+    });
+    document.getElementById("sidebarOverlay").addEventListener("click", () => {
+      document.getElementById("mobileSidebar").classList.remove("open");
+      document.getElementById("sidebarOverlay").classList.remove("open");
+    });
+
+    // Delete modal
+    let deleteCallback = null;
+    function openDeleteModal(msg, cb) {
+      document.getElementById("deleteMessage").textContent = msg;
+      deleteCallback = cb;
+      document.getElementById("deleteModal").classList.remove("hidden");
+    }
+    function closeDeleteModal() {
+      document.getElementById("deleteModal").classList.add("hidden");
+      deleteCallback = null;
+    }
+    document.getElementById("confirmDeleteBtn").addEventListener("click", async () => {
+      if (deleteCallback) await deleteCallback();
+      closeDeleteModal();
+    });
+
+    function fmtDate(d) {
+      return new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    }
+    function fmtTime(d) {
+      return new Date(d).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+    }
+
+    let signalsData = [];
+    let editingSignalId = null;
+    let outcomeSignalId = null;
+
+    // Load signals
+    async function loadSignals() {
+      const grid = document.getElementById("signalsGrid");
+      grid.innerHTML = `<div class="sm:col-span-2 xl:col-span-3 text-center py-16 text-slate-500 text-sm">Loading signals...</div>`;
+      try {
+        signalsData = await API.get("/vip/admin/signals");
+        const active = signalsData.filter(s => s.status === "active").length;
+        const closed = signalsData.filter(s => s.status === "closed").length;
+        const cancelled = signalsData.filter(s => s.status === "cancelled").length;
+        const completed = signalsData.filter(s => s.status === "completed").length;
+        document.getElementById("countActive").textContent = active;
+        document.getElementById("countClosed").textContent = closed;
+        document.getElementById("countCancelled").textContent = cancelled;
+        document.getElementById("countCompleted").textContent = completed;
+        renderSignals();
+      } catch (err) {
+        grid.innerHTML = `<div class="sm:col-span-2 xl:col-span-3 text-center py-16 text-slate-500 text-sm">Failed to load: ${err.message}</div>`;
+      }
+    }
+
+    function renderSignals() {
+      const grid = document.getElementById("signalsGrid");
+      const typeFilter = document.getElementById("filterType").value;
+      const statFilter = document.getElementById("filterStatus").value;
+      let filtered = [...signalsData];
+      if (typeFilter) filtered = filtered.filter(s => s.type === typeFilter);
+      if (statFilter) filtered = filtered.filter(s => s.status === statFilter);
+
+      if (!filtered.length) {
+        grid.innerHTML = `<div class="sm:col-span-2 xl:col-span-3 flex flex-col items-center justify-center py-20 text-center space-y-3">
+          <div class="h-16 w-16 rounded-full bg-[#0f1219] border border-[#1e293b] flex items-center justify-center">
+            <i data-lucide="radio" class="text-slate-600" style="width:28px;height:28px;"></i>
+          </div>
+          <p class="text-white font-bold">No signals found</p>
+          <p class="text-slate-500 text-xs">Post a new signal or change your filters.</p>
+        </div>`;
+        lucide.createIcons();
+        return;
+      }
+
+      grid.innerHTML = filtered.map(s => {
+        const isBuy = s.type === "buy";
+        const typeColor = isBuy ? "text-emerald-400" : "text-rose-400";
+        const typeBadge = isBuy ? "badge-buy" : "badge-sell";
+        let statusBadge = { active: "badge-active", closed: "badge-closed", cancelled: "badge-cancelled", completed: "badge-completed" }[s.status] || "badge-active";
+        
+        // Show status text
+        let statusText = s.status;
+        if (s.status === "completed") statusText = "ALL TPS HIT ✓";
+
+        const tps = (s.takeProfits || []).map(tp => `
+          <div class="flex justify-between items-center text-xs py-1.5 border-b border-[#1e293b]/40 last:border-0">
+            <span class="text-slate-500 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block flex-shrink-0"></span>
+              ${tp.label || "TP"}
+            </span>
+            <div class="flex items-center gap-3">
+              ${tp.priceLevel ? `<span class="text-slate-400 font-mono">${tp.priceLevel}</span>` : ""}
+              <span class="text-emerald-400 font-black">+${tp.percentage}%</span>
+            </div>
+          </div>`).join("");
+
+        const sls = (s.stopLosses || []).map(sl => `
+          <div class="flex justify-between items-center text-xs py-1.5 border-b border-[#1e293b]/40 last:border-0">
+            <span class="text-slate-500 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-rose-400 inline-block flex-shrink-0"></span>
+              ${sl.label || "SL"}
+            </span>
+            <div class="flex items-center gap-3">
+              ${sl.priceLevel ? `<span class="text-slate-400 font-mono">${sl.priceLevel}</span>` : ""}
+              <span class="text-rose-400 font-black">-${sl.percentage}%</span>
+            </div>
+          </div>`).join("");
+
+        return `<div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl overflow-hidden hover:border-[#2d3a4e] transition-all">
+          <div class="px-5 pt-5 pb-4 border-b border-[#1e293b]">
+            <div class="flex items-start justify-between gap-3 mb-3">
+              <div>
+                <div class="flex items-center gap-2 mb-1.5">
+                  <span class="status-pill border ${typeBadge}">${s.type.toUpperCase()}</span>
+                  <span class="status-pill ${statusBadge}">${statusText}</span>
+                </div>
+                <h3 class="text-2xl font-black ${typeColor} tracking-tight">${s.pair}</h3>
+              </div>
+              <div class="flex gap-1.5 flex-wrap justify-end">
+                <button onclick="openOutcomeModal('${s._id}')" 
+                  ${s.status === "completed" || s.status === "closed" ? 'disabled style="opacity:0.5;cursor:not-allowed"' : ''}
+                  class="p-2 rounded-lg bg-amber-500/20 hover:bg-amber-500 text-amber-400 hover:text-white transition-all" 
+                  title="Mark Profit / Loss">
+                  <i data-lucide="trending-up" class="w-4 h-4"></i>
+                </button>
+                <button onclick="openAcceptancesModal('${s._id}')" class="p-2 rounded-lg bg-violet-500/20 hover:bg-violet-500 text-violet-400 hover:text-white transition-all" title="View Acceptances">
+                  <i data-lucide="users" class="w-4 h-4"></i>
+                </button>
+                <button onclick="openEditSignal('${s._id}')" class="p-2 rounded-lg bg-blue-700/20 hover:bg-blue-700 text-blue-400 hover:text-white transition-all" title="Edit">
+                  <i data-lucide="edit-2" class="w-4 h-4"></i>
+                </button>
+                <button onclick="confirmDeleteSignal('${s._id}', '${s.pair.replace(/'/g, "\\'")}')" class="p-2 rounded-lg bg-rose-500/20 hover:bg-rose-500 text-rose-400 hover:text-white transition-all" title="Delete">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+            <div class="flex justify-between text-xs py-2 border-t border-[#1e293b]/50">
+              <span class="text-slate-500 flex items-center gap-1.5"><i data-lucide="crosshair" class="w-3.5 h-3.5 text-blue-400"></i> Entry</span>
+              <span class="text-white font-black font-mono">${s.entry}</span>
+            </div>
+          </div>
+          <div class="px-5 py-2">
+            ${tps || '<p class="text-slate-600 text-xs py-3 text-center">No take profit levels set</p>'}
+            ${sls || '<p class="text-slate-600 text-xs py-3 text-center">No stop loss set</p>'}
+          </div>
+          ${s.description ? `<div class="px-5 pb-4"><p class="text-slate-500 text-xs leading-relaxed border-t border-[#1e293b] pt-3">${s.description}</p></div>` : ""}
+          <div class="px-5 py-3 border-t border-[#1e293b] bg-black/20 flex justify-between items-center">
+            <span class="text-[10px] text-slate-600">${fmtDate(s.createdAt)} · ${fmtTime(s.createdAt)}</span>
+            <span class="text-[10px] text-violet-400 font-bold flex items-center gap-1">
+              <i data-lucide="users" class="w-3 h-3"></i>
+              ${s.acceptanceCount || 0} trader${(s.acceptanceCount || 0) === 1 ? "" : "s"} in
+            </span>
+          </div>
+        </div>`;
+      }).join("");
       lucide.createIcons();
+    }
 
-      // ─── Auth ─────────────────────────────────────────────────
-      const admin = JSON.parse(localStorage.getItem("admin") || "null");
-      const adminToken = localStorage.getItem("admin_token");
-      if (!admin || !adminToken) {
-        localStorage.removeItem("admin");
-        localStorage.removeItem("admin_token");
-        window.location.href = "admin-login.html";
-      }
-      if (admin) {
-        document.getElementById("adminName").textContent = admin.name || "Admin";
-        document.getElementById("adminInitial").textContent = (admin.name || "A")[0].toUpperCase();
+    // TP/SL rows for signal modal
+    let tpCounter = 0, slCounter = 0;
+
+    function addTpRow(label = "", priceLevel = "", percentage = "") {
+      tpCounter++;
+      const id = `tp_${tpCounter}`;
+      const div = document.createElement("div");
+      div.className = "tp-row";
+      div.id = id;
+      div.innerHTML = `
+        <input type="text" placeholder="TP${tpCounter}" value="${label}" data-field="label" class="bg-black/40 border border-[#1e293b] rounded-lg px-3 py-2 text-white text-xs placeholder:text-slate-600 outline-none focus:border-emerald-600 w-full" />
+        <input type="text" placeholder="Price" value="${priceLevel}" data-field="priceLevel" class="bg-black/40 border border-[#1e293b] rounded-lg px-3 py-2 text-white text-xs placeholder:text-slate-600 outline-none focus:border-emerald-600 w-full font-mono" />
+        <div class="relative">
+          <input type="number" placeholder="3.5" min="0" step="0.1" value="${percentage}" data-field="percentage" class="bg-black/40 border border-[#1e293b] rounded-lg px-3 py-2 text-emerald-400 text-xs placeholder:text-slate-600 outline-none focus:border-emerald-500 w-full font-bold" />
+          <span class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 text-xs">%</span>
+        </div>
+        <button type="button" onclick="document.getElementById('${id}').remove()" class="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/30 text-rose-400 transition-all flex-shrink-0"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>`;
+      document.getElementById("tpContainer").appendChild(div);
+      lucide.createIcons();
+    }
+
+    function addSlRow(label = "", priceLevel = "", percentage = "") {
+      slCounter++;
+      const id = `sl_${slCounter}`;
+      const div = document.createElement("div");
+      div.className = "sl-row";
+      div.id = id;
+      div.innerHTML = `
+        <input type="text" placeholder="SL${slCounter}" value="${label}" data-field="label" class="bg-black/40 border border-[#1e293b] rounded-lg px-3 py-2 text-white text-xs placeholder:text-slate-600 outline-none focus:border-rose-600 w-full" />
+        <input type="text" placeholder="Price" value="${priceLevel}" data-field="priceLevel" class="bg-black/40 border border-[#1e293b] rounded-lg px-3 py-2 text-white text-xs placeholder:text-slate-600 outline-none focus:border-rose-600 w-full font-mono" />
+        <div class="relative">
+          <input type="number" placeholder="2" min="0" step="0.1" value="${percentage}" data-field="percentage" class="bg-black/40 border border-[#1e293b] rounded-lg px-3 py-2 text-rose-400 text-xs placeholder:text-slate-600 outline-none focus:border-rose-500 w-full font-bold" />
+          <span class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 text-xs">%</span>
+        </div>
+        <button type="button" onclick="document.getElementById('${id}').remove()" class="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/30 text-rose-400 transition-all flex-shrink-0"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>`;
+      document.getElementById("slContainer").appendChild(div);
+      lucide.createIcons();
+    }
+
+    function collectLevels(containerId) {
+      return [...document.getElementById(containerId).children].map(row => ({
+        label: row.querySelector("[data-field='label']").value.trim(),
+        priceLevel: row.querySelector("[data-field='priceLevel']").value.trim(),
+        percentage: parseFloat(row.querySelector("[data-field='percentage']").value) || 0,
+      })).filter(l => l.label);
+    }
+
+    // Signal Modal
+    function openSignalModal() {
+      editingSignalId = null;
+      document.getElementById("signalModalTitle").textContent = "Post Signal";
+      document.getElementById("signalSaveBtnText").textContent = "Post Signal";
+      document.getElementById("sigPair").value = "";
+      document.getElementById("sigType").value = "buy";
+      document.getElementById("sigEntry").value = "";
+      document.getElementById("sigStatus").value = "active";
+      document.getElementById("sigDesc").value = "";
+      document.getElementById("tpContainer").innerHTML = "";
+      document.getElementById("slContainer").innerHTML = "";
+      document.getElementById("signalModalError").classList.add("hidden");
+      tpCounter = 0; slCounter = 0;
+      addTpRow();
+      addSlRow();
+      document.getElementById("signalModal").classList.remove("hidden");
+    }
+
+    function openEditSignal(id) {
+      const s = signalsData.find(x => x._id === id);
+      if (!s) return;
+      editingSignalId = id;
+      document.getElementById("signalModalTitle").textContent = "Edit Signal";
+      document.getElementById("signalSaveBtnText").textContent = "Save Changes";
+      document.getElementById("sigPair").value = s.pair;
+      document.getElementById("sigType").value = s.type;
+      document.getElementById("sigEntry").value = s.entry;
+      document.getElementById("sigStatus").value = s.status;
+      document.getElementById("sigDesc").value = s.description || "";
+      document.getElementById("tpContainer").innerHTML = "";
+      document.getElementById("slContainer").innerHTML = "";
+      tpCounter = 0; slCounter = 0;
+      (s.takeProfits || []).forEach(tp => addTpRow(tp.label, tp.priceLevel || "", tp.percentage));
+      (s.stopLosses || []).forEach(sl => addSlRow(sl.label, sl.priceLevel || "", sl.percentage));
+      if (!s.takeProfits?.length) addTpRow();
+      if (!s.stopLosses?.length) addSlRow();
+      document.getElementById("signalModal").classList.remove("hidden");
+    }
+
+    function closeSignalModal() {
+      document.getElementById("signalModal").classList.add("hidden");
+      editingSignalId = null;
+    }
+
+    async function saveSignal() {
+      const pair = document.getElementById("sigPair").value.trim().toUpperCase();
+      const entry = document.getElementById("sigEntry").value.trim();
+      const errEl = document.getElementById("signalModalError");
+
+      if (!pair || !entry) {
+        errEl.textContent = "Pair and entry are required.";
+        errEl.classList.remove("hidden");
+        return;
       }
 
-      // ─── Toast ────────────────────────────────────────────────
-      function toast(msg, type = "success") {
-        const el = document.getElementById("toast");
-        const colors = {
-          success: "bg-emerald-900/90 border-emerald-500/40 text-emerald-300",
-          error:   "bg-rose-900/90 border-rose-500/40 text-rose-300",
-        };
-        el.className = `px-4 py-3 rounded-xl border text-sm font-medium flex items-center gap-2 shadow-2xl max-w-sm ${colors[type]}`;
-        el.innerHTML = `<span>${msg}</span>`;
-        el.classList.add("show");
-        setTimeout(() => el.classList.remove("show"), 3500);
-      }
+      const btn = document.getElementById("signalSaveBtn");
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner"></span>`;
 
-      // ─── Mobile sidebar ───────────────────────────────────────
-      document.getElementById("menuToggle").addEventListener("click", () => {
-        document.getElementById("mobileSidebar").classList.add("open");
-        document.getElementById("sidebarOverlay").classList.add("open");
-      });
-      document.getElementById("closeMobileSidebar").addEventListener("click", () => {
-        document.getElementById("mobileSidebar").classList.remove("open");
-        document.getElementById("sidebarOverlay").classList.remove("open");
-      });
-      document.getElementById("sidebarOverlay").addEventListener("click", () => {
-        document.getElementById("mobileSidebar").classList.remove("open");
-        document.getElementById("sidebarOverlay").classList.remove("open");
-      });
+      const payload = {
+        pair,
+        type: document.getElementById("sigType").value,
+        entry,
+        takeProfits: JSON.stringify(collectLevels("tpContainer")),
+        stopLosses: JSON.stringify(collectLevels("slContainer")),
+        status: document.getElementById("sigStatus").value,
+        description: document.getElementById("sigDesc").value.trim(),
+      };
 
-      // ─── Delete modal ─────────────────────────────────────────
-      let deleteCallback = null;
-      function openDeleteModal(msg, cb) {
-        document.getElementById("deleteMessage").textContent = msg;
-        deleteCallback = cb;
-        document.getElementById("deleteModal").classList.remove("hidden");
+      try {
+        if (editingSignalId) {
+          await API.put(`/vip/signals/${editingSignalId}`, payload);
+          toast("Signal updated ✓", "success");
+        } else {
+          await API.post("/vip/signals", payload);
+          toast("Signal posted ✓", "success");
+        }
+        closeSignalModal();
+        loadSignals();
+      } catch (err) {
+        errEl.textContent = err.message || "Failed to save signal.";
+        errEl.classList.remove("hidden");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i> <span id="signalSaveBtnText">${editingSignalId ? "Save Changes" : "Post Signal"}</span>`;
+        lucide.createIcons();
       }
-      function closeDeleteModal() {
-        document.getElementById("deleteModal").classList.add("hidden");
-        deleteCallback = null;
-      }
-      document.getElementById("confirmDeleteBtn").addEventListener("click", async () => {
-        if (deleteCallback) await deleteCallback();
-        closeDeleteModal();
-      });
+    }
 
-      // ─── Helpers ──────────────────────────────────────────────
-      function fmtDate(d) {
-        return new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-      }
-      function fmtTime(d) {
-        return new Date(d).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
-      }
-
-      // ─── State ────────────────────────────────────────────────
-      let signalsData    = [];
-      let editingSignalId = null;
-      let outcomeSignalId = null;
-
-      // ══════════════════════════════════════════════════════════
-      // LOAD + RENDER SIGNALS
-      // ══════════════════════════════════════════════════════════
-      async function loadSignals() {
-        const grid = document.getElementById("signalsGrid");
-        grid.innerHTML = `<div class="sm:col-span-2 xl:col-span-3 text-center py-16 text-slate-500 text-sm">Loading signals...</div>`;
+    function confirmDeleteSignal(id, pair) {
+      openDeleteModal(`Delete signal "${pair}"? This cannot be undone.`, async () => {
         try {
-          signalsData = await API.get("/vip/admin/signals");
-          document.getElementById("countActive").textContent    = signalsData.filter(s => s.status === "active").length;
-          document.getElementById("countClosed").textContent    = signalsData.filter(s => s.status === "closed").length;
-          document.getElementById("countCancelled").textContent = signalsData.filter(s => s.status === "cancelled").length;
-          renderSignals();
-        } catch (err) {
-          grid.innerHTML = `<div class="sm:col-span-2 xl:col-span-3 text-center py-16 text-slate-500 text-sm">Failed to load: ${err.message}</div>`;
-        }
-      }
-
-      function renderSignals() {
-        const grid       = document.getElementById("signalsGrid");
-        const typeFilter = document.getElementById("filterType").value;
-        const statFilter = document.getElementById("filterStatus").value;
-        let filtered     = [...signalsData];
-        if (typeFilter) filtered = filtered.filter(s => s.type   === typeFilter);
-        if (statFilter) filtered = filtered.filter(s => s.status === statFilter);
-
-        if (!filtered.length) {
-          grid.innerHTML = `
-            <div class="sm:col-span-2 xl:col-span-3 flex flex-col items-center justify-center py-20 text-center space-y-3">
-              <div class="h-16 w-16 rounded-full bg-[#0f1219] border border-[#1e293b] flex items-center justify-center">
-                <i data-lucide="radio" class="text-slate-600" style="width:28px;height:28px;"></i>
-              </div>
-              <p class="text-white font-bold">No signals found</p>
-              <p class="text-slate-500 text-xs">Post a new signal or change your filters.</p>
-            </div>`;
-          lucide.createIcons();
-          return;
-        }
-
-        grid.innerHTML = filtered.map(s => {
-          const isBuy      = s.type === "buy";
-          const typeColor  = isBuy ? "text-emerald-400" : "text-rose-400";
-          const typeBadge  = isBuy ? "badge-buy" : "badge-sell";
-          const statusBadge = { active: "badge-active", closed: "badge-closed", cancelled: "badge-cancelled" }[s.status] || "badge-active";
-
-          // TP rows — now objects { label, percentage, priceLevel }
-          const tps = (s.takeProfits || []).map(tp => `
-            <div class="flex justify-between items-center text-xs py-1.5 border-b border-[#1e293b]/40 last:border-0">
-              <span class="text-slate-500 flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block flex-shrink-0"></span>
-                ${tp.label || "TP"}
-              </span>
-              <div class="flex items-center gap-3">
-                ${tp.priceLevel ? `<span class="text-slate-400 font-mono">${tp.priceLevel}</span>` : ""}
-                <span class="text-emerald-400 font-black">+${tp.percentage}%</span>
-              </div>
-            </div>`).join("");
-
-          // SL rows
-          const sls = (s.stopLosses || []).map(sl => `
-            <div class="flex justify-between items-center text-xs py-1.5 border-b border-[#1e293b]/40 last:border-0">
-              <span class="text-slate-500 flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-rose-400 inline-block flex-shrink-0"></span>
-                ${sl.label || "SL"}
-              </span>
-              <div class="flex items-center gap-3">
-                ${sl.priceLevel ? `<span class="text-slate-400 font-mono">${sl.priceLevel}</span>` : ""}
-                <span class="text-rose-400 font-black">-${sl.percentage}%</span>
-              </div>
-            </div>`).join("");
-
-          return `
-            <div class="bg-[#0f1219] border border-[#1e293b] rounded-2xl overflow-hidden hover:border-[#2d3a4e] transition-all">
-              <!-- Card header -->
-              <div class="px-5 pt-5 pb-4 border-b border-[#1e293b]">
-                <div class="flex items-start justify-between gap-3 mb-3">
-                  <div>
-                    <div class="flex items-center gap-2 mb-1.5">
-                      <span class="status-pill border ${typeBadge}">${s.type.toUpperCase()}</span>
-                      <span class="status-pill ${statusBadge}">${s.status}</span>
-                    </div>
-                    <h3 class="text-2xl font-black ${typeColor} tracking-tight">${s.pair}</h3>
-                  </div>
-                  <div class="flex gap-1.5 flex-wrap justify-end">
-                    <!-- Mark outcome -->
-                    <button onclick="openOutcomeModal('${s._id}')"
-                      class="p-2 rounded-lg bg-amber-500/20 hover:bg-amber-500 text-amber-400 hover:text-white transition-all"
-                      title="Mark Profit / Loss">
-                      <i data-lucide="trending-up" class="w-4 h-4"></i>
-                    </button>
-                    <!-- Acceptances -->
-                    <button onclick="openAcceptancesModal('${s._id}')"
-                      class="p-2 rounded-lg bg-violet-500/20 hover:bg-violet-500 text-violet-400 hover:text-white transition-all"
-                      title="View Acceptances">
-                      <i data-lucide="users" class="w-4 h-4"></i>
-                    </button>
-                    <!-- Edit -->
-                    <button onclick="openEditSignal('${s._id}')"
-                      class="p-2 rounded-lg bg-blue-700/20 hover:bg-blue-700 text-blue-400 hover:text-white transition-all"
-                      title="Edit">
-                      <i data-lucide="edit-2" class="w-4 h-4"></i>
-                    </button>
-                    <!-- Delete -->
-                    <button onclick="confirmDeleteSignal('${s._id}', '${s.pair.replace(/'/g, "\\'")}')"
-                      class="p-2 rounded-lg bg-rose-500/20 hover:bg-rose-500 text-rose-400 hover:text-white transition-all"
-                      title="Delete">
-                      <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    </button>
-                  </div>
-                </div>
-                <div class="flex justify-between text-xs py-2 border-t border-[#1e293b]/50">
-                  <span class="text-slate-500 flex items-center gap-1.5">
-                    <i data-lucide="crosshair" class="w-3.5 h-3.5 text-blue-400"></i> Entry
-                  </span>
-                  <span class="text-white font-black font-mono">${s.entry}</span>
-                </div>
-              </div>
-
-              <!-- TP / SL list -->
-              <div class="px-5 py-2">
-                ${tps}
-                ${sls}
-                ${!tps && !sls ? `<p class="text-slate-600 text-xs py-3 text-center">No TP / SL set</p>` : ""}
-              </div>
-
-              ${s.description ? `<div class="px-5 pb-4"><p class="text-slate-500 text-xs leading-relaxed border-t border-[#1e293b] pt-3">${s.description}</p></div>` : ""}
-
-              <!-- Footer -->
-              <div class="px-5 py-3 border-t border-[#1e293b] bg-black/20 flex justify-between items-center">
-                <span class="text-[10px] text-slate-600">${fmtDate(s.createdAt)} · ${fmtTime(s.createdAt)}</span>
-                <span class="text-[10px] text-violet-400 font-bold flex items-center gap-1">
-                  <i data-lucide="users" class="w-3 h-3"></i>
-                  ${s.acceptanceCount || 0} trader${(s.acceptanceCount || 0) === 1 ? "" : "s"} in
-                </span>
-              </div>
-            </div>`;
-        }).join("");
-
-        lucide.createIcons();
-      }
-
-      // ══════════════════════════════════════════════════════════
-      // TP / SL DYNAMIC ROWS (Signal Modal)
-      // ══════════════════════════════════════════════════════════
-      let tpCounter = 0;
-      let slCounter = 0;
-
-      function addTpRow(label = "", priceLevel = "", percentage = "") {
-        tpCounter++;
-        const id  = `tp_${tpCounter}`;
-        const div = document.createElement("div");
-        div.className = "tp-row";
-        div.id = id;
-        div.innerHTML = `
-          <input type="text" placeholder="TP${tpCounter}" value="${label}"
-            data-field="label"
-            class="bg-black/40 border border-[#1e293b] rounded-lg px-3 py-2 text-white text-xs placeholder:text-slate-600 outline-none focus:border-blue-600 w-full" />
-          <input type="text" placeholder="Price" value="${priceLevel}"
-            data-field="priceLevel"
-            class="bg-black/40 border border-[#1e293b] rounded-lg px-3 py-2 text-white text-xs placeholder:text-slate-600 outline-none focus:border-blue-600 w-full font-mono" />
-          <div class="relative">
-            <input type="number" placeholder="3.5" min="0" step="0.1" value="${percentage}"
-              data-field="percentage"
-              class="bg-black/40 border border-[#1e293b] rounded-lg px-3 py-2 text-emerald-400 text-xs placeholder:text-slate-600 outline-none focus:border-emerald-500 w-full font-bold" />
-            <span class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 text-xs">%</span>
-          </div>
-          <button type="button" onclick="document.getElementById('${id}').remove()"
-            class="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/30 text-rose-400 transition-all flex-shrink-0">
-            <i data-lucide="x" class="w-3.5 h-3.5"></i>
-          </button>`;
-        document.getElementById("tpContainer").appendChild(div);
-        lucide.createIcons();
-      }
-
-      function addSlRow(label = "", priceLevel = "", percentage = "") {
-        slCounter++;
-        const id  = `sl_${slCounter}`;
-        const div = document.createElement("div");
-        div.className = "sl-row";
-        div.id = id;
-        div.innerHTML = `
-          <input type="text" placeholder="SL${slCounter}" value="${label}"
-            data-field="label"
-            class="bg-black/40 border border-[#1e293b] rounded-lg px-3 py-2 text-white text-xs placeholder:text-slate-600 outline-none focus:border-rose-600 w-full" />
-          <input type="text" placeholder="Price" value="${priceLevel}"
-            data-field="priceLevel"
-            class="bg-black/40 border border-[#1e293b] rounded-lg px-3 py-2 text-white text-xs placeholder:text-slate-600 outline-none focus:border-rose-600 w-full font-mono" />
-          <div class="relative">
-            <input type="number" placeholder="2" min="0" step="0.1" value="${percentage}"
-              data-field="percentage"
-              class="bg-black/40 border border-[#1e293b] rounded-lg px-3 py-2 text-rose-400 text-xs placeholder:text-slate-600 outline-none focus:border-rose-500 w-full font-bold" />
-            <span class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 text-xs">%</span>
-          </div>
-          <button type="button" onclick="document.getElementById('${id}').remove()"
-            class="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/30 text-rose-400 transition-all flex-shrink-0">
-            <i data-lucide="x" class="w-3.5 h-3.5"></i>
-          </button>`;
-        document.getElementById("slContainer").appendChild(div);
-        lucide.createIcons();
-      }
-
-      function collectLevels(containerId) {
-        return [...document.getElementById(containerId).children].map(row => ({
-          label:      row.querySelector("[data-field='label']").value.trim(),
-          priceLevel: row.querySelector("[data-field='priceLevel']").value.trim(),
-          percentage: parseFloat(row.querySelector("[data-field='percentage']").value) || 0,
-        })).filter(l => l.label);
-      }
-
-      // ══════════════════════════════════════════════════════════
-      // SIGNAL MODAL — open / close / save
-      // ══════════════════════════════════════════════════════════
-      function openSignalModal() {
-        editingSignalId = null;
-        document.getElementById("signalModalTitle").textContent   = "Post Signal";
-        document.getElementById("signalSaveBtnText").textContent  = "Post Signal";
-        document.getElementById("sigPair").value   = "";
-        document.getElementById("sigType").value   = "buy";
-        document.getElementById("sigEntry").value  = "";
-        document.getElementById("sigStatus").value = "active";
-        document.getElementById("sigDesc").value   = "";
-        document.getElementById("tpContainer").innerHTML = "";
-        document.getElementById("slContainer").innerHTML = "";
-        document.getElementById("signalModalError").classList.add("hidden");
-        tpCounter = 0; slCounter = 0;
-        // Start with one row each
-        addTpRow(); addSlRow();
-        document.getElementById("signalModal").classList.remove("hidden");
-      }
-
-      function openEditSignal(id) {
-        const s = signalsData.find(x => x._id === id);
-        if (!s) return;
-        editingSignalId = id;
-        document.getElementById("signalModalTitle").textContent   = "Edit Signal";
-        document.getElementById("signalSaveBtnText").textContent  = "Save Changes";
-        document.getElementById("sigPair").value   = s.pair;
-        document.getElementById("sigType").value   = s.type;
-        document.getElementById("sigEntry").value  = s.entry;
-        document.getElementById("sigStatus").value = s.status;
-        document.getElementById("sigDesc").value   = s.description || "";
-        document.getElementById("tpContainer").innerHTML = "";
-        document.getElementById("slContainer").innerHTML = "";
-        document.getElementById("signalModalError").classList.add("hidden");
-        tpCounter = 0; slCounter = 0;
-        (s.takeProfits || []).forEach(tp => addTpRow(tp.label, tp.priceLevel || "", tp.percentage));
-        (s.stopLosses  || []).forEach(sl => addSlRow(sl.label, sl.priceLevel || "", sl.percentage));
-        if (!s.takeProfits?.length) addTpRow();
-        if (!s.stopLosses?.length)  addSlRow();
-        document.getElementById("signalModal").classList.remove("hidden");
-      }
-
-      function closeSignalModal() {
-        document.getElementById("signalModal").classList.add("hidden");
-        editingSignalId = null;
-      }
-
-      async function saveSignal() {
-        const pair  = document.getElementById("sigPair").value.trim().toUpperCase();
-        const entry = document.getElementById("sigEntry").value.trim();
-        const errEl = document.getElementById("signalModalError");
-
-        if (!pair || !entry) {
-          errEl.textContent = "Pair and entry are required.";
-          errEl.classList.remove("hidden");
-          return;
-        }
-
-        const btn = document.getElementById("signalSaveBtn");
-        btn.disabled = true;
-        btn.innerHTML = `<span class="spinner"></span>`;
-
-        const payload = {
-          pair,
-          type:        document.getElementById("sigType").value,
-          entry,
-          takeProfits: JSON.stringify(collectLevels("tpContainer")),
-          stopLosses:  JSON.stringify(collectLevels("slContainer")),
-          status:      document.getElementById("sigStatus").value,
-          description: document.getElementById("sigDesc").value.trim(),
-        };
-
-        try {
-          if (editingSignalId) {
-            await API.put(`/vip/signals/${editingSignalId}`, payload);
-            toast("Signal updated ✓", "success");
-          } else {
-            await API.post("/vip/signals", payload);
-            toast("Signal posted ✓", "success");
-          }
-          closeSignalModal();
+          await API.delete(`/vip/signals/${id}`);
+          toast("Signal deleted", "success");
           loadSignals();
         } catch (err) {
-          errEl.textContent = err.message || "Failed to save signal.";
-          errEl.classList.remove("hidden");
-        } finally {
-          btn.disabled = false;
-          btn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i> <span id="signalSaveBtnText">${editingSignalId ? "Save Changes" : "Post Signal"}</span>`;
-          lucide.createIcons();
+          toast(err.message || "Failed to delete", "error");
         }
+      });
+    }
+
+    // Check if level already hit
+    let outcomesCache = {};
+
+    async function checkIfLevelHit(signalId, levelLabel) {
+      if (outcomesCache[signalId]) {
+        return outcomesCache[signalId].some(o => o.label === levelLabel);
+      }
+      try {
+        const outcomes = await API.get(`/vip/signals/${signalId}/outcomes`);
+        outcomesCache[signalId] = outcomes;
+        return outcomes.some(o => o.label === levelLabel);
+      } catch {
+        return false;
+      }
+    }
+
+    // Get hit count for TP levels
+    async function getHitTpCount(signalId, totalTps) {
+      if (outcomesCache[signalId]) {
+        return outcomesCache[signalId].filter(o => o.outcomeType === "profit").length;
+      }
+      try {
+        const outcomes = await API.get(`/vip/signals/${signalId}/outcomes`);
+        outcomesCache[signalId] = outcomes;
+        return outcomes.filter(o => o.outcomeType === "profit").length;
+      } catch {
+        return 0;
+      }
+    }
+
+    // Outcome Modal
+    async function openOutcomeModal(signalId) {
+      outcomeSignalId = signalId;
+      const s = signalsData.find(x => x._id === signalId);
+      if (!s) return;
+
+      document.getElementById("outcomePairLabel").textContent = `${s.pair} — ${s.type.toUpperCase()} @ ${s.entry}`;
+      document.getElementById("outcomeError").classList.add("hidden");
+      document.getElementById("outcomeModal").classList.remove("hidden");
+
+      const tpRows = document.getElementById("outcomeTpRows");
+      const slRows = document.getElementById("outcomeSlRows");
+      tpRows.innerHTML = "";
+      slRows.innerHTML = "";
+
+      // Clear cache for this signal to get fresh outcomes
+      delete outcomesCache[signalId];
+
+      const isClosed = s.status === "closed" || s.status === "completed";
+      const totalTps = s.takeProfits?.length || 0;
+      const hitTps = await getHitTpCount(signalId, totalTps);
+      const allTpsHit = totalTps > 0 && hitTps === totalTps;
+
+      // Show progress indicator if there are TPs
+      const progressDiv = document.getElementById("tpProgressIndicator");
+      if (totalTps > 0 && !isClosed) {
+        progressDiv.classList.remove("hidden");
+        const percentage = (hitTps / totalTps) * 100;
+        document.getElementById("tpProgressBar").style.width = `${percentage}%`;
+        document.getElementById("tpProgressText").textContent = `${hitTps}/${totalTps} Take Profits Hit`;
+      } else {
+        progressDiv.classList.add("hidden");
       }
 
-      function confirmDeleteSignal(id, pair) {
-        openDeleteModal(`Delete signal "${pair}"? This cannot be undone.`, async () => {
-          try {
-            await API.delete(`/vip/signals/${id}`);
-            toast("Signal deleted", "success");
-            loadSignals();
-          } catch (err) {
-            toast(err.message || "Failed to delete", "error");
-          }
-        });
-      }
-
-      // ══════════════════════════════════════════════════════════
-      // OUTCOME MODAL — mark TP / SL profit or loss
-      // ══════════════════════════════════════════════════════════
-      async function openOutcomeModal(signalId) {
-        outcomeSignalId = signalId;
-        const s = signalsData.find(x => x._id === signalId);
-        document.getElementById("outcomePairLabel").textContent =
-          s ? `${s.pair} — ${s.type.toUpperCase()} @ ${s.entry}` : "";
-        document.getElementById("outcomeError").classList.add("hidden");
-        document.getElementById("outcomeModal").classList.remove("hidden");
-
-        // Build TP buttons
-        const tpRows = document.getElementById("outcomeTpRows");
-        const slRows = document.getElementById("outcomeSlRows");
-        tpRows.innerHTML = "";
-        slRows.innerHTML = "";
-
-        if (s) {
-          (s.takeProfits || []).forEach(tp => {
+      if (isClosed) {
+        tpRows.innerHTML = `<div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-center">
+          <p class="text-amber-400 text-xs font-bold">⚠️ This signal is already ${s.status === "completed" ? "COMPLETED (All TPs Hit)" : "CLOSED"}</p>
+          <p class="text-slate-500 text-xs mt-1">No further outcomes can be marked.</p>
+        </div>`;
+        slRows.innerHTML = `<div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-center">
+          <p class="text-amber-400 text-xs font-bold">Signal ${s.status === "completed" ? "completed" : "closed"}</p>
+        </div>`;
+      } else if (allTpsHit) {
+        // If all TPs are hit, show completion message
+        tpRows.innerHTML = `<div class="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 text-center">
+          <p class="text-emerald-400 text-xs font-bold">✓ ALL TAKE PROFITS HIT ✓</p>
+          <p class="text-slate-500 text-xs mt-1">This trade has been automatically completed.</p>
+        </div>`;
+        slRows.innerHTML = `<div class="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 text-center">
+          <p class="text-emerald-400 text-xs font-bold">Trade completed successfully</p>
+        </div>`;
+      } else {
+        // Take Profit levels - only PROFIT button
+        if (s.takeProfits && s.takeProfits.length > 0) {
+          for (const tp of s.takeProfits) {
+            const alreadyHit = await checkIfLevelHit(signalId, tp.label);
             tpRows.innerHTML += `
               <div class="flex items-center justify-between bg-black/30 border border-[#1e293b] rounded-xl px-4 py-3">
-                <div>
+                <div class="flex-1">
                   <p class="text-white text-sm font-bold">${tp.label}</p>
-                  <p class="text-slate-500 text-xs font-mono">${tp.priceLevel || "—"} &nbsp;·&nbsp; <span class="text-emerald-400">+${tp.percentage}%</span></p>
+                  <p class="text-slate-500 text-xs font-mono">${tp.priceLevel || "Market price"} · <span class="text-emerald-400">+${tp.percentage}%</span></p>
+                  ${alreadyHit ? '<span class="level-hit-badge inline-block mt-1">✓ Already Hit</span>' : ''}
                 </div>
-                <div class="flex gap-2">
-                  <button onclick="submitOutcome('${tp.label}', 'profit')"
-                    class="outcome-btn outcome-profit">✓ Profit</button>
-                  <button onclick="submitOutcome('${tp.label}', 'loss')"
-                    class="outcome-btn outcome-loss">✗ Loss</button>
-                </div>
+                <button onclick="submitOutcome('${tp.label}', 'profit')" ${alreadyHit ? 'disabled' : ''} class="outcome-btn outcome-profit ${alreadyHit ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'} transition-all">
+                  ${alreadyHit ? '✓ ALREADY HIT' : '💰 MARK PROFIT'}
+                </button>
               </div>`;
-          });
+          }
+        } else {
+          tpRows.innerHTML = `<p class="text-slate-600 text-xs text-center py-3">No take profit levels set</p>`;
+        }
 
-          (s.stopLosses || []).forEach(sl => {
+        // Stop Loss - only LOSS button (closes trade)
+        if (s.stopLosses && s.stopLosses.length > 0) {
+          for (const sl of s.stopLosses) {
+            const alreadyHit = await checkIfLevelHit(signalId, sl.label);
             slRows.innerHTML += `
               <div class="flex items-center justify-between bg-black/30 border border-[#1e293b] rounded-xl px-4 py-3">
-                <div>
+                <div class="flex-1">
                   <p class="text-white text-sm font-bold">${sl.label}</p>
-                  <p class="text-slate-500 text-xs font-mono">${sl.priceLevel || "—"} &nbsp;·&nbsp; <span class="text-rose-400">-${sl.percentage}%</span></p>
+                  <p class="text-slate-500 text-xs font-mono">${sl.priceLevel || "Market price"} · <span class="text-rose-400">-${sl.percentage}%</span></p>
+                  ${alreadyHit ? '<span class="level-hit-badge inline-block mt-1" style="background:rgba(239,68,68,0.2);color:#ef4444;">⚠️ Stop Loss Triggered</span>' : ''}
+                  ${!alreadyHit ? '<p class="text-rose-400/70 text-[10px] mt-1">⚠️ Hitting SL will close this signal</p>' : ''}
                 </div>
-                <div class="flex gap-2">
-                  <button onclick="submitOutcome('${sl.label}', 'profit')"
-                    class="outcome-btn outcome-profit">✓ Profit</button>
-                  <button onclick="submitOutcome('${sl.label}', 'loss')"
-                    class="outcome-btn outcome-loss">✗ Loss</button>
-                </div>
+                <button onclick="submitOutcome('${sl.label}', 'loss')" ${alreadyHit ? 'disabled' : ''} class="outcome-btn outcome-loss ${alreadyHit ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'} transition-all">
+                  ${alreadyHit ? '❌ ALREADY HIT' : '🔴 MARK LOSS (CLOSE TRADE)'}
+                </button>
               </div>`;
-          });
-
-          if (!s.takeProfits?.length && !s.stopLosses?.length) {
-            tpRows.innerHTML = `<p class="text-slate-600 text-xs text-center py-3">No levels defined on this signal.</p>`;
           }
-        }
-
-        // Load outcome history
-        await loadOutcomeHistory(signalId);
-        lucide.createIcons();
-      }
-
-      function closeOutcomeModal() {
-        document.getElementById("outcomeModal").classList.add("hidden");
-        outcomeSignalId = null;
-      }
-
-      async function loadOutcomeHistory(signalId) {
-        const list = document.getElementById("outcomeHistoryList");
-        list.innerHTML = `<p class="text-slate-600 text-xs text-center py-4">Loading...</p>`;
-        try {
-          const outcomes = await API.get(`/vip/signals/${signalId}/outcomes`);
-          if (!outcomes.length) {
-            list.innerHTML = `<p class="text-slate-600 text-xs text-center py-4">No outcomes recorded yet.</p>`;
-            return;
-          }
-          list.innerHTML = outcomes.map(o => {
-            const isProfit = o.outcomeType === "profit";
-            return `
-              <div class="flex items-center justify-between bg-black/20 border border-[#1e293b] rounded-xl px-3 py-2.5">
-                <div class="flex items-center gap-2.5">
-                  <span class="w-2 h-2 rounded-full ${isProfit ? "bg-emerald-400" : "bg-rose-400"} flex-shrink-0"></span>
-                  <div>
-                    <p class="text-white text-xs font-bold">${o.label} — <span class="${isProfit ? "text-emerald-400" : "text-rose-400"}">${isProfit ? "+" : ""}${o.percentage}%</span></p>
-                    <p class="text-slate-600 text-[10px]">${fmtDate(o.createdAt)} · ${fmtTime(o.createdAt)} · ${o.affectedUsers} trader${o.affectedUsers === 1 ? "" : "s"} affected</p>
-                  </div>
-                </div>
-                <span class="status-pill ${isProfit ? "badge-active" : "badge-cancelled"}">${o.outcomeType}</span>
-              </div>`;
-          }).join("");
-        } catch (err) {
-          list.innerHTML = `<p class="text-rose-400 text-xs text-center py-4">${err.message}</p>`;
+        } else {
+          slRows.innerHTML = `<p class="text-slate-600 text-xs text-center py-3">No stop loss set</p>`;
         }
       }
 
-      async function submitOutcome(label, outcomeType) {
-        if (!outcomeSignalId) return;
-        const errEl = document.getElementById("outcomeError");
-        errEl.classList.add("hidden");
+      await loadOutcomeHistory(signalId);
+      lucide.createIcons();
+    }
 
-        const confirmed = confirm(
-          `Mark "${label}" as ${outcomeType.toUpperCase()} for all traders who accepted this signal?\n\nThis will adjust their balances immediately.`
-        );
-        if (!confirmed) return;
+    function closeOutcomeModal() {
+      document.getElementById("outcomeModal").classList.add("hidden");
+      outcomeSignalId = null;
+    }
 
-        try {
-          const result = await API.post(`/vip/signals/${outcomeSignalId}/outcome`, { label, outcomeType });
-          toast(`${outcomeType === "profit" ? "✓ Profit" : "✗ Loss"} applied to ${result.affectedUsers} trader${result.affectedUsers === 1 ? "" : "s"}`, outcomeType === "profit" ? "success" : "error");
-          await loadOutcomeHistory(outcomeSignalId);
-          loadSignals(); // refresh acceptance count
-        } catch (err) {
-          errEl.textContent = err.message || "Failed to mark outcome.";
-          errEl.classList.remove("hidden");
+    async function loadOutcomeHistory(signalId) {
+      const list = document.getElementById("outcomeHistoryList");
+      list.innerHTML = `<p class="text-slate-600 text-xs text-center py-4">Loading...</p>`;
+      try {
+        const outcomes = await API.get(`/vip/signals/${signalId}/outcomes`);
+        outcomesCache[signalId] = outcomes;
+        if (!outcomes.length) {
+          list.innerHTML = `<p class="text-slate-600 text-xs text-center py-4">No outcomes recorded yet.</p>`;
+          return;
         }
+        list.innerHTML = outcomes.map(o => {
+          const isProfit = o.outcomeType === "profit";
+          return `<div class="flex items-center justify-between bg-black/20 border border-[#1e293b] rounded-xl px-3 py-2.5">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2 h-2 rounded-full ${isProfit ? "bg-emerald-400" : "bg-rose-400"} flex-shrink-0"></span>
+              <div>
+                <p class="text-white text-xs font-bold">${o.label} — <span class="${isProfit ? "text-emerald-400" : "text-rose-400"}">${isProfit ? "+" : ""}${o.percentage}%</span></p>
+                <p class="text-slate-600 text-[10px]">${fmtDate(o.createdAt)} · ${fmtTime(o.createdAt)} · ${o.affectedUsers} trader${o.affectedUsers === 1 ? "" : "s"} affected</p>
+              </div>
+            </div>
+            <span class="status-pill ${isProfit ? "badge-active" : "badge-cancelled"}">${o.outcomeType}</span>
+          </div>`;
+        }).join("");
+      } catch (err) {
+        list.innerHTML = `<p class="text-rose-400 text-xs text-center py-4">${err.message}</p>`;
+      }
+    }
+
+    async function submitOutcome(label, outcomeType) {
+      if (!outcomeSignalId) return;
+      const errEl = document.getElementById("outcomeError");
+      errEl.classList.add("hidden");
+
+      const s = signalsData.find(x => x._id === outcomeSignalId);
+      const isStopLoss = outcomeType === "loss";
+      const totalTps = s?.takeProfits?.length || 0;
+      
+      // Get current hit count to check if this is the last TP
+      const hitTps = await getHitTpCount(outcomeSignalId, totalTps);
+      const isLastTp = outcomeType === "profit" && (hitTps + 1) === totalTps;
+
+      let confirmMessage = `Mark "${label}" as ${outcomeType.toUpperCase()}?`;
+      if (isStopLoss) {
+        confirmMessage += `\n\n⚠️ This will CLOSE the signal and apply ${label} to all traders who accepted it.\nThis action cannot be undone.`;
+      } else if (isLastTp) {
+        confirmMessage += `\n\n🎯 This is the LAST take profit level!\n\nAfter marking this, the signal will be COMPLETED and no more outcomes can be marked.`;
+      } else {
+        confirmMessage += `\n\nThis will add profit to all traders who accepted this signal.`;
       }
 
-      // ══════════════════════════════════════════════════════════
-      // ACCEPTANCES MODAL
-      // ══════════════════════════════════════════════════════════
-      async function openAcceptancesModal(signalId) {
-        document.getElementById("acceptancesModal").classList.remove("hidden");
-        const list = document.getElementById("acceptancesList");
-        list.innerHTML = `<p class="text-slate-600 text-xs text-center py-8">Loading...</p>`;
-        try {
-          const data = await API.get(`/vip/signals/${signalId}/acceptances`);
-          if (!data.length) {
-            list.innerHTML = `<p class="text-slate-600 text-xs text-center py-8">No traders have accepted this signal yet.</p>`;
-            return;
-          }
-          list.innerHTML = data.map(a => {
-            const pct = a.totalPercentageApplied || 0;
-            const pctColor = pct > 0 ? "text-emerald-400" : pct < 0 ? "text-rose-400" : "text-slate-400";
-            return `
-              <div class="flex items-center justify-between bg-black/30 border border-[#1e293b] rounded-xl px-4 py-3">
-                <div class="flex items-center gap-3">
-                  <div class="h-9 w-9 rounded-full bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center flex-shrink-0">
-                    <span class="text-xs font-bold text-white">${(a.user?.name || "U")[0].toUpperCase()}</span>
-                  </div>
-                  <div>
-                    <p class="text-white text-sm font-bold">${a.user?.name || "Unknown"}</p>
-                    <p class="text-slate-500 text-xs">${a.user?.email || ""}</p>
-                  </div>
-                </div>
-                <div class="text-right">
-                  <p class="text-slate-400 text-xs">Balance at entry</p>
-                  <p class="text-white text-sm font-black font-mono">$${a.balanceAtAcceptance?.toLocaleString("en-US", { minimumFractionDigits: 2 })}</p>
-                  <p class="text-xs font-bold ${pctColor}">${pct >= 0 ? "+" : ""}${pct.toFixed(2)}% applied</p>
-                </div>
-              </div>`;
-          }).join("");
-        } catch (err) {
-          list.innerHTML = `<p class="text-rose-400 text-xs text-center py-8">${err.message}</p>`;
+      if (!confirm(confirmMessage)) return;
+
+      try {
+        const result = await API.post(`/vip/signals/${outcomeSignalId}/outcome`, { label, outcomeType });
+        
+        let message = `${outcomeType === "profit" ? "✓ Profit" : "✗ Loss"} applied to ${result.affectedUsers} trader${result.affectedUsers === 1 ? "" : "s"}`;
+        
+        if (result.signalClosed) {
+          message = "🔒 Trade closed by Stop Loss! " + message;
+          toast(message, "info");
+        } else if (result.signalCompleted) {
+          message = "🎉 ALL TAKE PROFITS HIT! Trade completed! " + message;
+          toast(message, "success");
+        } else {
+          toast(message, outcomeType === "profit" ? "success" : "error");
         }
-        lucide.createIcons();
-      }
 
-      function closeAcceptancesModal() {
-        document.getElementById("acceptancesModal").classList.add("hidden");
-      }
+        // Clear cache and refresh
+        delete outcomesCache[outcomeSignalId];
+        await loadOutcomeHistory(outcomeSignalId);
+        await loadSignals();
 
-      // ─── Logout ───────────────────────────────────────────────
-      async function handleLogout() {
-        try { await API.post("/admin/logout"); } catch {}
-        localStorage.removeItem("admin");
-        localStorage.removeItem("admin_token");
-        window.location.href = "admin-login.html";
+        // Close modal if signal is closed or completed
+        if (result.signalClosed || result.signalCompleted) {
+          setTimeout(() => closeOutcomeModal(), 1500);
+        }
+      } catch (err) {
+        errEl.textContent = err.message || "Failed to mark outcome.";
+        errEl.classList.remove("hidden");
       }
-      document.getElementById("adminLogoutBtn").addEventListener("click", handleLogout);
-      document.getElementById("mobileLogoutBtn").addEventListener("click", handleLogout);
+    }
 
-      // ─── Init ─────────────────────────────────────────────────
-      loadSignals();
-    </script>
-  </body>
+    // Acceptances Modal
+    async function openAcceptancesModal(signalId) {
+      document.getElementById("acceptancesModal").classList.remove("hidden");
+      const list = document.getElementById("acceptancesList");
+      list.innerHTML = `<p class="text-slate-600 text-xs text-center py-8">Loading...</p>`;
+      try {
+        const data = await API.get(`/vip/signals/${signalId}/acceptances`);
+        if (!data.length) {
+          list.innerHTML = `<p class="text-slate-600 text-xs text-center py-8">No traders have accepted this signal yet.</p>`;
+          return;
+        }
+        list.innerHTML = data.map(a => {
+          const pct = a.totalPercentageApplied || 0;
+          const pctColor = pct > 0 ? "text-emerald-400" : pct < 0 ? "text-rose-400" : "text-slate-400";
+          return `<div class="flex items-center justify-between bg-black/30 border border-[#1e293b] rounded-xl px-4 py-3">
+            <div class="flex items-center gap-3">
+              <div class="h-9 w-9 rounded-full bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center flex-shrink-0">
+                <span class="text-xs font-bold text-white">${(a.user?.name || "U")[0].toUpperCase()}</span>
+              </div>
+              <div>
+                <p class="text-white text-sm font-bold">${a.user?.name || "Unknown"}</p>
+                <p class="text-slate-500 text-xs">${a.user?.email || ""}</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-slate-400 text-xs">Balance at entry</p>
+              <p class="text-white text-sm font-black font-mono">$${a.balanceAtAcceptance?.toLocaleString("en-US", { minimumFractionDigits: 2 })}</p>
+              <p class="text-xs font-bold ${pctColor}">${pct >= 0 ? "+" : ""}${pct.toFixed(2)}% applied</p>
+            </div>
+          </div>`;
+        }).join("");
+      } catch (err) {
+        list.innerHTML = `<p class="text-rose-400 text-xs text-center py-8">${err.message}</p>`;
+      }
+      lucide.createIcons();
+    }
+
+    function closeAcceptancesModal() {
+      document.getElementById("acceptancesModal").classList.add("hidden");
+    }
+
+    // Logout
+    async function handleLogout() {
+      try { await API.post("/admin/logout"); } catch {}
+      localStorage.removeItem("admin");
+      localStorage.removeItem("admin_token");
+      window.location.href = "admin-login.html";
+    }
+    document.getElementById("adminLogoutBtn").addEventListener("click", handleLogout);
+    document.getElementById("mobileLogoutBtn").addEventListener("click", handleLogout);
+
+    // Init
+    loadSignals();
+  </script>
+</body>
 </html>

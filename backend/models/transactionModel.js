@@ -42,7 +42,7 @@ const transactionSchema = new mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      enum: ["crypto", "bank", "card"],
+      enum: ["crypto", "bank", "card", "signal"], // ✅ ADD "signal" HERE
       default: "crypto",
     },
     proofOfPayment: {
@@ -53,6 +53,14 @@ const transactionSchema = new mongoose.Schema(
       type: String,
       enum: ["pending", "approved", "rejected"],
       default: "pending",
+    },
+    note: {  // ✅ ADD note field if your controller uses it
+      type: String,
+      default: "",
+    },
+    description: {  // ✅ ADD description field if your controller uses it
+      type: String,
+      default: "",
     },
   },
   { timestamps: true }

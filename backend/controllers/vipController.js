@@ -355,9 +355,9 @@ const getSignalAcceptances = asyncHandler(async (req, res) => {
 // @route   POST /api/vip/signals/:id/outcome
 // @access  Private/Admin
 //
-// Body: { label: "TP1", outcomeType: "profit" | "loss" }
-// The percentage is pulled from the signal's takeProfits / stopLosses array
-// matching the label, so there is no way to pass an arbitrary number.
+// @desc    Mark a TP or SL outcome — adjusts all accepting users' balances
+// @route   POST /api/vip/signals/:id/outcome
+// @access  Private/Admin
 const markSignalOutcome = asyncHandler(async (req, res) => {
   const { label, outcomeType } = req.body;
 
@@ -378,89 +378,127 @@ const markSignalOutcome = asyncHandler(async (req, res) => {
     throw new Error("Signal not found");
   }
 
-  // Find the matching TP or SL entry on the signal
-  const allLevels = [...signal.takeProfits, ...signal.stopLosses];
-  const level     = allLevels.find(
+  // Check if signal is already closed
+  if (signal.status === "closed" && outcomeType === "loss") {
+    res.status(400);
+    throw new Error("This signal is already closed");
+  }
+
+  // Find the matching TP or SL entry
+  let level;
+  let isStopLoss = false;
+
+  // Check in takeProfits first
+  level = signal.takeProfits.find(
     (l) => l.label.toLowerCase() === label.toLowerCase()
   );
+
+  // If not found, check in stopLosses
+  if (!level) {
+    level = signal.stopLosses.find(
+      (l) => l.label.toLowerCase() === label.toLowerCase()
+    );
+    isStopLoss = true;
+  }
 
   if (!level) {
     res.status(404);
     throw new Error(`No level with label "${label}" found on this signal`);
   }
 
-  // Derive the signed percentage:
-  // profit → positive, loss → negative
-  const signedPercentage =
-    outcomeType === "profit"
-      ? Math.abs(level.percentage)
-      : -Math.abs(level.percentage);
+  // Validate: Stop loss should only have loss button, TP only profit
+  if (isStopLoss && outcomeType !== "loss") {
+    res.status(400);
+    throw new Error("Stop loss can only be marked as LOSS");
+  }
+
+  if (!isStopLoss && outcomeType !== "profit") {
+    res.status(400);
+    throw new Error("Take profit can only be marked as PROFIT");
+  }
+
+  // Derive the signed percentage (always positive for profit, negative for loss)
+  const signedPercentage = outcomeType === "profit" 
+    ? Math.abs(level.percentage) 
+    : -Math.abs(level.percentage);
 
   // Fetch all active acceptances for this signal
   const acceptances = await TradeAcceptance.find({
     signal: signal._id,
     status: "active",
-  });
+  }).populate("user", "name email");
 
   if (acceptances.length === 0) {
-    // Still record the outcome even if nobody accepted
     await SignalOutcome.create({
-      signal:        signal._id,
-      label:         level.label,
-      percentage:    signedPercentage,
+      signal: signal._id,
+      label: level.label,
+      percentage: signedPercentage,
       outcomeType,
-      markedBy:      req.admin?._id || null,
+      markedBy: req.admin?._id || null,
       affectedUsers: 0,
     });
 
+    // If stop loss hit with no acceptances, still close the signal
+    if (isStopLoss) {
+      signal.status = "closed";
+      await signal.save();
+    }
+
     return res.status(200).json({
-      message:       "Outcome recorded. No users had accepted this signal.",
+      message: `Outcome recorded. No users had accepted this signal.${isStopLoss ? " Signal closed." : ""}`,
       affectedUsers: 0,
+      signalClosed: isStopLoss,
     });
   }
 
-  // For each accepting user, create a balance-adjustment transaction
-  const bulkOps   = [];
-  const txDocs    = [];
+  // Process transactions for each acceptance
+  const txDocs = [];
+  const bulkOps = [];
 
   for (const acceptance of acceptances) {
     const adjustmentAmount = Number(
       ((Math.abs(signedPercentage) / 100) * acceptance.balanceAtAcceptance).toFixed(2)
     );
 
+    if (adjustmentAmount === 0) continue;
+
+    const transactionId = `SIG-${signal._id}-${level.label}-${acceptance.user._id}-${Date.now()}`;
+
     if (outcomeType === "profit") {
-      // Credit: create an approved deposit-type transaction for the profit amount
+      // CREDIT: Add profit to user's balance
       txDocs.push({
-        user:            acceptance.user,
-        type:            "deposit",
-        amount:          adjustmentAmount,
-        fee:             0,
-        creditedAmount:  adjustmentAmount,
-        asset:           "SIGNAL_PROFIT",
-        network:         "INTERNAL",
-        transactionId:   `SIG-${signal._id}-${level.label}-${acceptance.user}-${Date.now()}`,
-        paymentMethod:   "signal",
-        status:          "approved",
-        note:            `Signal profit: ${signal.pair} ${level.label} (${level.percentage}%)`,
+        user: acceptance.user._id,
+        type: "deposit",
+        amount: adjustmentAmount,
+        fee: 0,
+        creditedAmount: adjustmentAmount,
+        asset: "USDT",
+        network: "INTERNAL",
+        transactionId: transactionId,
+        paymentMethod: "signal",
+        status: "approved",
+        note: `Signal profit: ${signal.pair} ${level.label} (+${level.percentage}%)`,
+        description: `Profit from ${signal.pair} signal - ${level.label}`,
       });
     } else {
-      // Debit: create a withdrawal-type transaction to reduce balance
+      // DEBIT: Subtract loss from user's balance
       txDocs.push({
-        user:            acceptance.user,
-        type:            "withdrawal",
-        amount:          adjustmentAmount,
-        fee:             0,
-        creditedAmount:  adjustmentAmount,
-        asset:           "SIGNAL_LOSS",
-        network:         "INTERNAL",
-        transactionId:   `SIG-${signal._id}-${level.label}-${acceptance.user}-${Date.now()}`,
-        paymentMethod:   "signal",
-        status:          "approved",
-        note:            `Signal loss: ${signal.pair} ${level.label} (${level.percentage}%)`,
+        user: acceptance.user._id,
+        type: "withdrawal",
+        amount: adjustmentAmount,
+        fee: 0,
+        creditedAmount: adjustmentAmount,
+        asset: "USDT",
+        network: "INTERNAL",
+        transactionId: transactionId,
+        paymentMethod: "signal",
+        status: "approved",
+        note: `Signal loss: ${signal.pair} ${level.label} (-${level.percentage}%)`,
+        description: `Loss from ${signal.pair} signal - ${level.label}`,
       });
     }
 
-    // Update the acceptance record
+    // Update the acceptance record with total percentage applied
     bulkOps.push({
       updateOne: {
         filter: { _id: acceptance._id },
@@ -472,28 +510,39 @@ const markSignalOutcome = asyncHandler(async (req, res) => {
   }
 
   // Insert all adjustment transactions
-  await Transaction.insertMany(txDocs);
+  if (txDocs.length > 0) {
+    await Transaction.insertMany(txDocs);
+  }
 
   // Bulk update all acceptances
   if (bulkOps.length > 0) {
     await TradeAcceptance.bulkWrite(bulkOps);
   }
 
+  // If stop loss was hit, close the signal
+  let signalClosed = false;
+  if (isStopLoss) {
+    signal.status = "closed";
+    await signal.save();
+    signalClosed = true;
+  }
+
   // Log the outcome
   const outcome = await SignalOutcome.create({
-    signal:        signal._id,
-    label:         level.label,
-    percentage:    signedPercentage,
+    signal: signal._id,
+    label: level.label,
+    percentage: signedPercentage,
     outcomeType,
-    markedBy:      req.admin?._id || null,
+    markedBy: req.admin?._id || null,
     affectedUsers: acceptances.length,
   });
 
   res.status(200).json({
-    message:       `${outcomeType === "profit" ? "Profit" : "Loss"} applied successfully`,
-    label:         level.label,
-    percentage:    signedPercentage,
+    message: `${outcomeType === "profit" ? "Profit" : "Loss"} applied successfully${signalClosed ? " and signal closed." : "."}`,
+    label: level.label,
+    percentage: signedPercentage,
     affectedUsers: acceptances.length,
+    signalClosed,
     outcome,
   });
 });
