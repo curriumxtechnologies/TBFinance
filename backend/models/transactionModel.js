@@ -7,58 +7,70 @@ const transactionSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+
     type: {
       type: String,
-      enum: ["deposit", "withdrawal"],
+      enum: ["deposit", "withdrawal", "balance_adjustment"],
       default: "deposit",
     },
+
     amount: {
       type: Number,
       required: true,
     },
+
     fee: {
       type: Number,
       default: 0,
     },
+
     creditedAmount: {
       type: Number,
       default: 0,
     },
+
     asset: {
       type: String,
       required: true,
       trim: true,
     },
+
     network: {
       type: String,
       required: true,
       trim: true,
     },
+
     transactionId: {
       type: String,
       required: true,
       unique: true,
       trim: true,
     },
+
     paymentMethod: {
       type: String,
-      enum: ["crypto", "bank", "card", "signal"], // ✅ ADD "signal" HERE
+      enum: ["crypto", "bank", "card", "signal", "admin_adjustment"],
       default: "crypto",
     },
+
     proofOfPayment: {
       type: String,
       default: "",
     },
+
     status: {
       type: String,
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
-    note: {  // ✅ ADD note field if your controller uses it
+
+    note: {
       type: String,
       default: "",
     },
-    description: {  // ✅ ADD description field if your controller uses it
+
+    description: {
       type: String,
       default: "",
     },

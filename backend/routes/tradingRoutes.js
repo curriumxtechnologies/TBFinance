@@ -9,15 +9,14 @@ import {
   getUsersEligibleForLive,
   deleteAccount,
 } from "../controllers/tradingController.js";
-import { protect } from "../middleware/authMiddleware.js";
-import { adminProtect } from "../middleware/authMiddleware.js";
+import { protect, adminProtect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// ✅ User routes
+// User routes
 router.get("/my", protect, getMyAccounts);
 
-// ✅ Admin routes
+// Admin routes
 router.get("/", adminProtect, getAllAccounts);
 router.get("/eligible-for-live", adminProtect, getUsersEligibleForLive);
 router.post("/demo/:userId", adminProtect, assignDemoAccount);

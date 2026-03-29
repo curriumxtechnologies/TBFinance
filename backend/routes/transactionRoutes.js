@@ -3,26 +3,25 @@ import {
   depositPayment,
   getMyTransactions,
   getMyTotalDeposit,
+  getUserTotalByAdmin,
+  setUserBalanceByAdmin,
   getAllTransactions,
   updateTransactionStatus,
   getTransactionById,
 } from "../controllers/transactionController.js";
-import { protect } from "../middleware/authMiddleware.js";
-import { adminProtect } from "../middleware/authMiddleware.js";
+import { protect, adminProtect } from "../middleware/authMiddleware.js";
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 
 const router = express.Router();
 
-// ✅ Cloudinary config
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
 });
 
-// ✅ Multer -> Cloudinary storage
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
@@ -33,14 +32,16 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage });
 
-// ✅ User routes
+// User routes
 router.post("/deposit", protect, upload.single("proofOfPayment"), depositPayment);
 router.get("/my", protect, getMyTransactions);
 router.get("/my/total", protect, getMyTotalDeposit);
 router.get("/:id", protect, getTransactionById);
 
-// ✅ Admin routes
-router.get("/",  adminProtect, getAllTransactions);
+// Admin routes
+router.get("/", adminProtect, getAllTransactions);
+router.get("/admin/user-total/:userId", adminProtect, getUserTotalByAdmin);
+router.post("/admin/set-balance/:userId", adminProtect, setUserBalanceByAdmin);
 router.put("/:id/status", adminProtect, updateTransactionStatus);
 
 export default router;

@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Transaction from "../models/transactionModel.js";
 import Withdrawal from "../models/withdrawalModel.js";
+import User from "../models/userModel.js";
 
 // @desc    Create a deposit request
 // @route   POST /api/transactions/deposit
@@ -64,8 +65,8 @@ const getMyTotalDeposit = asyncHandler(async (req, res) => {
     {
       $match: {
         user: userId,
-        type: "deposit",
         status: "approved",
+        type: { $in: ["deposit", "balance_adjustment"] },
       },
     },
     {
@@ -104,6 +105,163 @@ const getMyTotalDeposit = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc    Get a specific user's balance summary (admin)
+// @route   GET /api/transactions/admin/user-total/:userId
+// @access  Private/Admin
+const getUserTotalByAdmin = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  const user = await User.findById(userId);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  const depositResult = await Transaction.aggregate([
+    {
+      $match: {
+        user: user._id,
+        status: "approved",
+        type: { $in: ["deposit", "balance_adjustment"] },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalDeposited: { $sum: "$creditedAmount" },
+      },
+    },
+  ]);
+
+  const withdrawalResult = await Withdrawal.aggregate([
+    {
+      $match: {
+        user: user._id,
+        status: { $in: ["pending", "processing", "completed"] },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalReservedWithdrawals: { $sum: "$amount" },
+      },
+    },
+  ]);
+
+  const totalDeposited = depositResult[0]?.totalDeposited || 0;
+  const totalReservedWithdrawals =
+    withdrawalResult[0]?.totalReservedWithdrawals || 0;
+
+  const availableBalance = totalDeposited - totalReservedWithdrawals;
+
+  res.status(200).json({
+    userId: user._id,
+    totalDeposited,
+    totalReservedWithdrawals,
+    availableBalance,
+  });
+});
+
+// @desc    Set a user's exact dashboard balance (admin)
+// @route   POST /api/transactions/admin/set-balance/:userId
+// @access  Private/Admin
+const setUserBalanceByAdmin = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+  const { balance, note } = req.body;
+
+  const desiredBalance = Number(balance);
+
+  if (Number.isNaN(desiredBalance) || desiredBalance < 0) {
+    res.status(400);
+    throw new Error("Valid balance is required");
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  const depositResult = await Transaction.aggregate([
+    {
+      $match: {
+        user: user._id,
+        status: "approved",
+        type: { $in: ["deposit", "balance_adjustment"] },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalDeposited: { $sum: "$creditedAmount" },
+      },
+    },
+  ]);
+
+  const withdrawalResult = await Withdrawal.aggregate([
+    {
+      $match: {
+        user: user._id,
+        status: { $in: ["pending", "processing", "completed"] },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalReservedWithdrawals: { $sum: "$amount" },
+      },
+    },
+  ]);
+
+  const totalDeposited = depositResult[0]?.totalDeposited || 0;
+  const totalReservedWithdrawals =
+    withdrawalResult[0]?.totalReservedWithdrawals || 0;
+
+  const currentAvailableBalance = totalDeposited - totalReservedWithdrawals;
+  const difference = Number((desiredBalance - currentAvailableBalance).toFixed(2));
+
+  if (difference === 0) {
+    return res.status(200).json({
+      message: "Balance already matches requested value",
+      availableBalance: currentAvailableBalance,
+    });
+  }
+
+  if (difference > 0) {
+    await Transaction.create({
+      user: user._id,
+      type: "balance_adjustment",
+      amount: difference,
+      fee: 0,
+      creditedAmount: difference,
+      asset: "USD",
+      network: "internal",
+      transactionId: `ADJ-PLUS-${Date.now()}-${user._id}`,
+      paymentMethod: "admin_adjustment",
+      proofOfPayment: "",
+      status: "approved",
+      note: note || "Admin balance increase",
+      description: `Balance set by admin from ${currentAvailableBalance} to ${desiredBalance}`,
+    });
+  } else {
+    await Withdrawal.create({
+      user: user._id,
+      amount: Math.abs(difference),
+      walletAddress: "ADMIN-BALANCE-ADJUSTMENT",
+      network: "internal",
+      status: "completed",
+      note: note || "Admin balance decrease",
+    });
+  }
+
+  res.status(200).json({
+    message: "User balance updated successfully",
+    previousBalance: currentAvailableBalance,
+    newBalance: desiredBalance,
+    difference,
+  });
+});
+
 // @desc    Get all transactions (admin)
 // @route   GET /api/transactions
 // @access  Private/Admin
@@ -133,20 +291,25 @@ const updateTransactionStatus = asyncHandler(async (req, res) => {
     throw new Error("Transaction not found");
   }
 
-  // Prevent re-processing already finalized transactions
   if (transaction.status !== "pending") {
     res.status(400);
     throw new Error("Only pending transactions can be updated");
   }
 
   if (status === "approved") {
-    const FEE_PERCENT = 0.05;
-    const fee = transaction.amount * FEE_PERCENT;
-    const creditedAmount = transaction.amount - fee;
+    if (transaction.type === "balance_adjustment") {
+      transaction.status = "approved";
+      transaction.fee = 0;
+      transaction.creditedAmount = Number(transaction.amount.toFixed(2));
+    } else {
+      const FEE_PERCENT = 0.05;
+      const fee = transaction.amount * FEE_PERCENT;
+      const creditedAmount = transaction.amount - fee;
 
-    transaction.status = "approved";
-    transaction.fee = Number(fee.toFixed(2));
-    transaction.creditedAmount = Number(creditedAmount.toFixed(2));
+      transaction.status = "approved";
+      transaction.fee = Number(fee.toFixed(2));
+      transaction.creditedAmount = Number(creditedAmount.toFixed(2));
+    }
   }
 
   if (status === "rejected") {
@@ -174,7 +337,6 @@ const getTransactionById = asyncHandler(async (req, res) => {
     throw new Error("Transaction not found");
   }
 
-  // Only allow owner or admin to view
   if (transaction.user._id.toString() !== req.user._id.toString()) {
     res.status(401);
     throw new Error("Not authorized to view this transaction");
@@ -187,6 +349,8 @@ export {
   depositPayment,
   getMyTransactions,
   getMyTotalDeposit,
+  getUserTotalByAdmin,
+  setUserBalanceByAdmin,
   getAllTransactions,
   updateTransactionStatus,
   getTransactionById,

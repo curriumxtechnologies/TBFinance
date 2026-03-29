@@ -506,6 +506,95 @@
       </div>
     </div>
 
+    <!-- Balance Modal -->
+    <div id="balanceModal" class="modal-backdrop hidden">
+      <div
+        class="bg-[#0f1219] border border-[#1e293b] rounded-2xl w-full max-w-md p-6 shadow-2xl max-h-[90vh] overflow-y-auto custom-scrollbar"
+      >
+        <div class="flex justify-between items-center mb-5">
+          <h3 class="text-lg font-bold text-white" id="balanceModalTitle">
+            Edit User Balance
+          </h3>
+          <button
+            onclick="closeBalanceModal()"
+            class="text-slate-400 hover:text-white"
+          >
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <div
+          id="balanceModalError"
+          class="hidden mb-4 text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3"
+        ></div>
+
+        <div class="mb-4 p-3 bg-black/20 rounded-xl text-sm space-y-1">
+          <p class="text-slate-400">
+            User:
+            <span id="balanceUserName" class="text-white font-medium">—</span>
+          </p>
+          <p class="text-slate-500 text-xs">
+            ID:
+            <span
+              id="balanceUserId"
+              class="text-slate-400 font-mono text-[10px]"
+              >—</span
+            >
+          </p>
+          <p class="text-slate-400 text-sm pt-2">
+            Current Balance:
+            <span id="balanceCurrentValue" class="text-emerald-400 font-bold"
+              >$0.00</span
+            >
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <label
+              class="text-xs font-bold uppercase text-slate-400 block mb-1.5"
+              >Set Exact Balance (USD)</label
+            >
+            <input
+              type="number"
+              id="balanceInput"
+              placeholder="0"
+              class="w-full bg-black/40 border border-[#1e293b] rounded-xl px-4 py-2.5 text-white placeholder:text-slate-600 outline-none focus:border-blue-600"
+            />
+          </div>
+
+          <div>
+            <label
+              class="text-xs font-bold uppercase text-slate-400 block mb-1.5"
+              >Note</label
+            >
+            <input
+              type="text"
+              id="balanceNote"
+              placeholder="Admin balance adjustment"
+              class="w-full bg-black/40 border border-[#1e293b] rounded-xl px-4 py-2.5 text-white placeholder:text-slate-600 outline-none focus:border-blue-600"
+            />
+          </div>
+
+          <div class="flex gap-3 pt-2">
+            <button
+              id="balanceSaveBtn"
+              onclick="saveUserBalance()"
+              class="flex-1 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2"
+            >
+              <i data-lucide="check" class="w-4 h-4"></i> Save Balance
+            </button>
+            <button
+              onclick="closeBalanceModal()"
+              class="px-4 py-3 bg-[#1e293b] hover:bg-[#2d3a4e] text-slate-300 rounded-xl text-sm"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="./js/api.js"></script>
     <script>
       lucide.createIcons();
@@ -545,12 +634,14 @@
         document.getElementById("mobileSidebar").classList.add("open");
         document.getElementById("sidebarOverlay").classList.add("open");
       });
+
       document
         .getElementById("closeMobileSidebar")
         .addEventListener("click", () => {
           document.getElementById("mobileSidebar").classList.remove("open");
           document.getElementById("sidebarOverlay").classList.remove("open");
         });
+
       document
         .getElementById("sidebarOverlay")
         .addEventListener("click", () => {
@@ -560,15 +651,18 @@
 
       // ─── Delete Modal ─────────────────────────────────────────
       let deleteCallback = null;
+
       function openDeleteModal(msg, cb) {
         document.getElementById("deleteMessage").textContent = msg;
         deleteCallback = cb;
         document.getElementById("deleteModal").classList.remove("hidden");
       }
+
       function closeDeleteModal() {
         document.getElementById("deleteModal").classList.add("hidden");
         deleteCallback = null;
       }
+
       document
         .getElementById("confirmDeleteBtn")
         .addEventListener("click", async () => {
@@ -581,6 +675,40 @@
       let allAccounts = [];
       let mt5EditingId = null;
       let mt5TargetUser = null;
+
+      let userBalances = {};
+      let balanceTargetUser = null;
+      let balanceCurrentValue = 0;
+
+      // ─── Helpers ──────────────────────────────────────────────
+      function formatMoney(value) {
+        return `$${Number(value || 0).toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}`;
+      }
+
+      function escapeForAttr(value = "") {
+        return String(value).replace(/'/g, "\\'").replace(/"/g, "&quot;");
+      }
+
+      async function fetchUserBalance(userId) {
+        try {
+          const data = await API.get(
+            `/transactions/admin/user-total/${userId}`,
+          );
+          return Number(data.availableBalance || 0);
+        } catch {
+          return 0;
+        }
+      }
+
+      async function loadAllUserBalances(users) {
+        const entries = await Promise.all(
+          users.map(async (u) => [u._id, await fetchUserBalance(u._id)]),
+        );
+        userBalances = Object.fromEntries(entries);
+      }
 
       // ─── Load Users ───────────────────────────────────────────
       async function loadUsers() {
@@ -597,14 +725,18 @@
           usersData = users;
           allAccounts = accounts;
 
+          await loadAllUserBalances(usersData);
+
           const banner = document.getElementById("eligibleBanner");
           const count = document.getElementById("eligibleCount");
+
           if (eligible.length > 0) {
             count.textContent = `${eligible.length} user${eligible.length > 1 ? "s" : ""} eligible for live account`;
             banner.classList.remove("hidden");
             banner.classList.add("flex");
           } else {
             banner.classList.add("hidden");
+            banner.classList.remove("flex");
           }
 
           renderUsersGrid();
@@ -618,6 +750,7 @@
         const search = document
           .getElementById("searchUsers")
           .value.toLowerCase();
+
         const filtered = usersData.filter(
           (u) =>
             u.name?.toLowerCase().includes(search) ||
@@ -645,142 +778,162 @@
             const live = allAccounts.find(
               (a) => a.user?._id === u._id && a.type === "live",
             );
+
             const color =
               colors[parseInt(u._id?.slice(-1), 16) % colors.length] ||
               colors[0];
-            const safeName = (u.name || "")
-              .replace(/'/g, "\\'")
-              .replace(/"/g, "&quot;");
+
+            const safeName = escapeForAttr(u.name || "");
+            const currentUserBalance = Number(userBalances[u._id] || 0);
 
             return `
-            <div class="bg-[#0f1219] border border-[#1e293b] rounded-xl overflow-hidden">
-
-              <!-- User Header -->
-              <div class="p-4 flex items-center gap-3 cursor-pointer hover:bg-white/5 transition" onclick="toggleCard('${u._id}')">
-                <div class="h-10 w-10 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center flex-shrink-0 overflow-hidden">
-                  ${
-                    u.profile
-                      ? `<img src="${u.profile}" alt="" class="w-full h-full object-cover" />`
-                      : `<span class="text-white font-bold text-sm">${(u.name || "U")[0].toUpperCase()}</span>`
-                  }
-                </div>
-                <div class="flex-1 min-w-0">
-                  <p class="text-white font-bold text-sm truncate">${u.name || "—"}</p>
-                  <p class="text-slate-500 text-xs truncate">${u.email || ""}</p>
-                </div>
-                <div class="flex items-center gap-2">
-                  <button onclick="event.stopPropagation(); openAssignModal('${u._id}', '${safeName}', 'demo')"
-                    class="bg-blue-700/20 hover:bg-blue-700 text-blue-400 hover:text-white px-3 py-1.5 rounded-lg text-xs flex items-center gap-1 transition-all whitespace-nowrap">
-                    <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Assign
-                  </button>
-                  <i data-lucide="chevron-down" class="chevron-icon w-4 h-4 text-slate-500 flex-shrink-0" id="chevron-${u._id}"></i>
-                </div>
+          <div class="bg-[#0f1219] border border-[#1e293b] rounded-xl overflow-hidden">
+            <div class="p-4 flex items-center gap-3 cursor-pointer hover:bg-white/5 transition" onclick="toggleCard('${u._id}')">
+              <div class="h-10 w-10 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center flex-shrink-0 overflow-hidden">
+                ${
+                  u.profile
+                    ? `<img src="${u.profile}" alt="" class="w-full h-full object-cover" />`
+                    : `<span class="text-white font-bold text-sm">${(u.name || "U")[0].toUpperCase()}</span>`
+                }
               </div>
-
-              <!-- Collapsible Body -->
-              <div class="collapse-content" id="collapse-${u._id}">
-                <div class="border-t border-[#1e293b] p-4 space-y-3">
-
-                  <!-- Demo -->
-                  <div class="bg-black/20 rounded-xl p-3">
-                    <div class="flex items-center justify-between mb-2">
-                      <div class="flex items-center gap-2">
-                        <i data-lucide="laptop" class="w-4 h-4 text-slate-400"></i>
-                        <span class="text-xs font-bold text-slate-400 uppercase">Demo</span>
-                        ${
-                          demo
-                            ? `<span class="text-[9px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400">Active</span>`
-                            : `<span class="text-[9px] px-2 py-0.5 rounded bg-slate-500/20 text-slate-400">Not Assigned</span>`
-                        }
-                      </div>
-                      <div class="flex gap-1">
-                        ${
-                          demo
-                            ? `
-                          <button onclick="openEditMt5('${u._id}', '${safeName}', '${demo._id}', 'demo', '${demo.loginId}', '${demo.password || ""}', '${demo.server}', ${demo.balance})"
-                            class="p-1.5 hover:bg-blue-700/20 rounded-lg transition">
-                            <i data-lucide="edit-2" class="w-3.5 h-3.5 text-slate-400"></i>
-                          </button>
-                          <button onclick="confirmDeleteAccount('${demo._id}', 'demo')"
-                            class="p-1.5 hover:bg-rose-500/20 rounded-lg transition">
-                            <i data-lucide="trash-2" class="w-3.5 h-3.5 text-slate-400"></i>
-                          </button>
-                        `
-                            : `
-                          <button onclick="openAssignModal('${u._id}', '${safeName}', 'demo')"
-                            class="p-1.5 hover:bg-blue-700/20 rounded-lg transition">
-                            <i data-lucide="plus" class="w-3.5 h-3.5 text-blue-400"></i>
-                          </button>
-                        `
-                        }
-                      </div>
-                    </div>
-                    ${
-                      demo
-                        ? `
-                      <div class="grid grid-cols-2 gap-2 text-xs">
-                        <div><span class="text-slate-500">Login: </span><span class="text-white font-mono">${demo.loginId}</span></div>
-                        <div><span class="text-slate-500">Password: </span><span class="text-white font-mono">${demo.password || "—"}</span></div>
-                        <div><span class="text-slate-500">Server: </span><span class="text-white">${demo.server}</span></div>
-                        <div><span class="text-slate-500">Balance: </span><span class="text-emerald-400 font-bold">$${Number(demo.balance).toLocaleString()}</span></div>
-                      </div>
-                    `
-                        : `<p class="text-slate-600 text-xs text-center py-1">No demo account assigned</p>`
-                    }
-                  </div>
-
-                  <!-- Live -->
-                  <div class="bg-black/20 rounded-xl p-3">
-                    <div class="flex items-center justify-between mb-2">
-                      <div class="flex items-center gap-2">
-                        <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
-                        <span class="text-xs font-bold text-slate-400 uppercase">Live</span>
-                        ${
-                          live
-                            ? `<span class="text-[9px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400">Active</span>`
-                            : `<span class="text-[9px] px-2 py-0.5 rounded bg-slate-500/20 text-slate-400">Not Assigned</span>`
-                        }
-                      </div>
-                      <div class="flex gap-1">
-                        ${
-                          live
-                            ? `
-                          <button onclick="openEditMt5('${u._id}', '${safeName}', '${live._id}', 'live', '${live.loginId}', '${live.password || ""}', '${live.server}', ${live.balance})"
-                            class="p-1.5 hover:bg-blue-700/20 rounded-lg transition">
-                            <i data-lucide="edit-2" class="w-3.5 h-3.5 text-slate-400"></i>
-                          </button>
-                          <button onclick="confirmDeleteAccount('${live._id}', 'live')"
-                            class="p-1.5 hover:bg-rose-500/20 rounded-lg transition">
-                            <i data-lucide="trash-2" class="w-3.5 h-3.5 text-slate-400"></i>
-                          </button>
-                        `
-                            : `
-                          <button onclick="openAssignModal('${u._id}', '${safeName}', 'live')"
-                            class="p-1.5 hover:bg-blue-700/20 rounded-lg transition">
-                            <i data-lucide="plus" class="w-3.5 h-3.5 text-blue-400"></i>
-                          </button>
-                        `
-                        }
-                      </div>
-                    </div>
-                    ${
-                      live
-                        ? `
-                      <div class="grid grid-cols-2 gap-2 text-xs">
-                        <div><span class="text-slate-500">Login: </span><span class="text-white font-mono">${live.loginId}</span></div>
-                        <div><span class="text-slate-500">Password: </span><span class="text-white font-mono">${live.password || "—"}</span></div>
-                        <div><span class="text-slate-500">Server: </span><span class="text-white">${live.server}</span></div>
-                        <div><span class="text-slate-500">Balance: </span><span class="text-emerald-400 font-bold">$${Number(live.balance).toLocaleString()}</span></div>
-                      </div>
-                    `
-                        : `<p class="text-slate-600 text-xs text-center py-1">No live account assigned</p>`
-                    }
-                  </div>
-
-                </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-white font-bold text-sm truncate">${u.name || "—"}</p>
+                <p class="text-slate-500 text-xs truncate">${u.email || ""}</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button
+                  onclick="event.stopPropagation(); openAssignModal('${u._id}', '${safeName}', 'demo')"
+                  class="bg-blue-700/20 hover:bg-blue-700 text-blue-400 hover:text-white px-3 py-1.5 rounded-lg text-xs flex items-center gap-1 transition-all whitespace-nowrap"
+                >
+                  <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Assign
+                </button>
+                <i data-lucide="chevron-down" class="chevron-icon w-4 h-4 text-slate-500 flex-shrink-0" id="chevron-${u._id}"></i>
               </div>
             </div>
-          `;
+
+            <div class="collapse-content" id="collapse-${u._id}">
+              <div class="border-t border-[#1e293b] p-4 space-y-3">
+
+                <!-- Dashboard Balance -->
+                <div class="bg-black/20 rounded-xl p-3">
+                  <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-2">
+                      <i data-lucide="wallet" class="w-4 h-4 text-slate-400"></i>
+                      <span class="text-xs font-bold text-slate-400 uppercase">Dashboard Balance</span>
+                    </div>
+                    <button
+                      onclick="openBalanceModal('${u._id}', '${safeName}', ${currentUserBalance})"
+                      class="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-white rounded-lg text-xs font-medium transition-all"
+                    >
+                      Edit Balance
+                    </button>
+                  </div>
+                  <div class="text-xs">
+                    <span class="text-slate-500">Available: </span>
+                    <span class="text-emerald-400 font-bold">${formatMoney(currentUserBalance)}</span>
+                  </div>
+                </div>
+
+                <!-- Demo -->
+                <div class="bg-black/20 rounded-xl p-3">
+                  <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-2">
+                      <i data-lucide="laptop" class="w-4 h-4 text-slate-400"></i>
+                      <span class="text-xs font-bold text-slate-400 uppercase">Demo</span>
+                      ${
+                        demo
+                          ? `<span class="text-[9px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400">Active</span>`
+                          : `<span class="text-[9px] px-2 py-0.5 rounded bg-slate-500/20 text-slate-400">Not Assigned</span>`
+                      }
+                    </div>
+                    <div class="flex gap-1">
+                      ${
+                        demo
+                          ? `
+                        <button onclick="openEditMt5('${u._id}', '${safeName}', '${demo._id}', 'demo', '${escapeForAttr(demo.loginId || "")}', '${escapeForAttr(demo.password || "")}', '${escapeForAttr(demo.server || "")}', ${Number(demo.balance || 0)})"
+                          class="p-1.5 hover:bg-blue-700/20 rounded-lg transition">
+                          <i data-lucide="edit-2" class="w-3.5 h-3.5 text-slate-400"></i>
+                        </button>
+                        <button onclick="confirmDeleteAccount('${demo._id}', 'demo')"
+                          class="p-1.5 hover:bg-rose-500/20 rounded-lg transition">
+                          <i data-lucide="trash-2" class="w-3.5 h-3.5 text-slate-400"></i>
+                        </button>
+                      `
+                          : `
+                        <button onclick="openAssignModal('${u._id}', '${safeName}', 'demo')"
+                          class="p-1.5 hover:bg-blue-700/20 rounded-lg transition">
+                          <i data-lucide="plus" class="w-3.5 h-3.5 text-blue-400"></i>
+                        </button>
+                      `
+                      }
+                    </div>
+                  </div>
+                  ${
+                    demo
+                      ? `
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                      <div><span class="text-slate-500">Login: </span><span class="text-white font-mono">${demo.loginId}</span></div>
+                      <div><span class="text-slate-500">Password: </span><span class="text-white font-mono">${demo.password || "—"}</span></div>
+                      <div><span class="text-slate-500">Server: </span><span class="text-white">${demo.server}</span></div>
+                      <div><span class="text-slate-500">Balance: </span><span class="text-emerald-400 font-bold">$${Number(demo.balance || 0).toLocaleString()}</span></div>
+                    </div>
+                  `
+                      : `<p class="text-slate-600 text-xs text-center py-1">No demo account assigned</p>`
+                  }
+                </div>
+
+                <!-- Live -->
+                <div class="bg-black/20 rounded-xl p-3">
+                  <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-2">
+                      <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
+                      <span class="text-xs font-bold text-slate-400 uppercase">Live</span>
+                      ${
+                        live
+                          ? `<span class="text-[9px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400">Active</span>`
+                          : `<span class="text-[9px] px-2 py-0.5 rounded bg-slate-500/20 text-slate-400">Not Assigned</span>`
+                      }
+                    </div>
+                    <div class="flex gap-1">
+                      ${
+                        live
+                          ? `
+                        <button onclick="openEditMt5('${u._id}', '${safeName}', '${live._id}', 'live', '${escapeForAttr(live.loginId || "")}', '${escapeForAttr(live.password || "")}', '${escapeForAttr(live.server || "")}', ${Number(live.balance || 0)})"
+                          class="p-1.5 hover:bg-blue-700/20 rounded-lg transition">
+                          <i data-lucide="edit-2" class="w-3.5 h-3.5 text-slate-400"></i>
+                        </button>
+                        <button onclick="confirmDeleteAccount('${live._id}', 'live')"
+                          class="p-1.5 hover:bg-rose-500/20 rounded-lg transition">
+                          <i data-lucide="trash-2" class="w-3.5 h-3.5 text-slate-400"></i>
+                        </button>
+                      `
+                          : `
+                        <button onclick="openAssignModal('${u._id}', '${safeName}', 'live')"
+                          class="p-1.5 hover:bg-blue-700/20 rounded-lg transition">
+                          <i data-lucide="plus" class="w-3.5 h-3.5 text-blue-400"></i>
+                        </button>
+                      `
+                      }
+                    </div>
+                  </div>
+                  ${
+                    live
+                      ? `
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                      <div><span class="text-slate-500">Login: </span><span class="text-white font-mono">${live.loginId}</span></div>
+                      <div><span class="text-slate-500">Password: </span><span class="text-white font-mono">${live.password || "—"}</span></div>
+                      <div><span class="text-slate-500">Server: </span><span class="text-white">${live.server}</span></div>
+                      <div><span class="text-slate-500">Balance: </span><span class="text-emerald-400 font-bold">$${Number(live.balance || 0).toLocaleString()}</span></div>
+                    </div>
+                  `
+                      : `<p class="text-slate-600 text-xs text-center py-1">No live account assigned</p>`
+                  }
+                </div>
+
+              </div>
+            </div>
+          </div>
+        `;
           })
           .join("");
 
@@ -797,6 +950,71 @@
       document
         .getElementById("searchUsers")
         .addEventListener("input", renderUsersGrid);
+
+      // ─── Balance Modal ────────────────────────────────────────
+      function openBalanceModal(userId, userName, currentBalance = 0) {
+        balanceTargetUser = userId;
+        balanceCurrentValue = Number(currentBalance || 0);
+
+        document.getElementById("balanceUserName").textContent = userName;
+        document.getElementById("balanceUserId").textContent = userId;
+        document.getElementById("balanceCurrentValue").textContent =
+          formatMoney(balanceCurrentValue);
+        document.getElementById("balanceInput").value = balanceCurrentValue;
+        document.getElementById("balanceNote").value =
+          "Admin balance adjustment";
+        document.getElementById("balanceModalError").classList.add("hidden");
+        document.getElementById("balanceModal").classList.remove("hidden");
+        lucide.createIcons();
+      }
+
+      function closeBalanceModal() {
+        document.getElementById("balanceModal").classList.add("hidden");
+        balanceTargetUser = null;
+        balanceCurrentValue = 0;
+      }
+
+      async function saveUserBalance() {
+        const desiredBalance = Number(
+          document.getElementById("balanceInput").value,
+        );
+        const note =
+          document.getElementById("balanceNote").value.trim() ||
+          "Admin balance adjustment";
+        const errEl = document.getElementById("balanceModalError");
+        const btn = document.getElementById("balanceSaveBtn");
+
+        if (Number.isNaN(desiredBalance) || desiredBalance < 0) {
+          errEl.textContent = "Please enter a valid balance.";
+          errEl.classList.remove("hidden");
+          return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = `<span class="spinner"></span>`;
+
+        try {
+          await API.post(
+            `/transactions/admin/set-balance/${balanceTargetUser}`,
+            {
+              balance: desiredBalance,
+              note,
+            },
+          );
+
+          userBalances[balanceTargetUser] = desiredBalance;
+          closeBalanceModal();
+          toast("User balance updated successfully", "success");
+          await loadUsers();
+        } catch (err) {
+          errEl.textContent = err.message || "Failed to update user balance.";
+          errEl.classList.remove("hidden");
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> Save Balance`;
+          lucide.createIcons();
+        }
+      }
 
       // ─── MT5 Modal ────────────────────────────────────────────
       function openAssignModal(userId, userName, type = "demo") {
@@ -889,8 +1107,9 @@
               "success",
             );
           }
+
           closeMt5Modal();
-          loadUsers();
+          await loadUsers();
         } catch (err) {
           errEl.textContent = err.message || "Failed to save account.";
           errEl.classList.remove("hidden");
@@ -908,7 +1127,7 @@
             try {
               await API.delete(`/trading/${accountId}`);
               toast("Account removed", "success");
-              loadUsers();
+              await loadUsers();
             } catch (err) {
               toast(err.message || "Failed to remove", "error");
             }
@@ -921,10 +1140,12 @@
         try {
           await API.post("/admin/logout");
         } catch {}
+
         localStorage.removeItem("admin");
         localStorage.removeItem("admin_token");
         window.location.href = "admin-login.html";
       }
+
       document
         .getElementById("adminLogoutBtn")
         .addEventListener("click", handleLogout);
